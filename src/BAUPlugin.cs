@@ -83,6 +83,7 @@ internal partial class BAUPlugin : BasePlugin
     public override void Load()
     {
         Instance = this;
+        MigrateLegacyConfig();
 
         try
         {
@@ -134,6 +135,38 @@ internal partial class BAUPlugin : BasePlugin
 
         string SupportedVersions = string.Join(" ", ModInfo.SupportedAmongUsVersions);
         Logger.Log($"{ModInfo.PLUGIN_NAME} {ModInfo.VERSION_STRING}-{ModInfo.BuildDate} - [{AppVersion} --> {SupportedVersions}] {Utils.GetPlatformName(PlatformData.Platform)}");
+    }
+
+    private void MigrateLegacyConfig()
+    {
+        var legacyPath = Path.Combine(Paths.ConfigPath, "com.d1gq.betteramongus.cfg");
+        var currentPath = Config.ConfigFilePath;
+        var markerPath = $"{currentPath}.legacy-migration-complete";
+        if (!File.Exists(legacyPath) || File.Exists(markerPath))
+            return;
+
+        try
+        {
+            if (File.Exists(currentPath))
+            {
+                var backupPath = $"{currentPath}.bak";
+                if (!File.Exists(backupPath))
+                    File.Copy(currentPath, backupPath);
+            }
+
+            File.Copy(legacyPath, currentPath, overwrite: true);
+            Config.Reload();
+
+            using var markerFile = new FileStream(markerPath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+            using var markerWriter = new StreamWriter(markerFile);
+            markerWriter.WriteLine(DateTime.UtcNow.ToString("O"));
+            markerWriter.Flush();
+            markerFile.Flush(flushToDisk: true);
+        }
+        catch (Exception ex)
+        {
+            Log.LogError($"Failed to migrate legacy HoryTweaks configuration: {ex}");
+        }
     }
 
     /// <summary>

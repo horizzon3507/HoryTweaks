@@ -16,9 +16,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Release version label used in package filenames (for example, v1.0.0)
+        description: Release version label used in package filenames (for example, v0.1.0)
         required: true
-        default: v1.0.0
+        default: v0.1.0
         type: string
 
 permissions:
@@ -56,7 +56,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ ! "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][A-Za-z0-9.-]+)?$ ]]; then
-            echo "Version must look like v1.0.0: $RELEASE_TAG" >&2
+            echo "Version must look like v0.1.0: $RELEASE_TAG" >&2
             exit 1
           fi
 

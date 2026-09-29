@@ -10,7 +10,7 @@ HoryTweaks is a client-side Among Us mod forked from D1GQ's BetterAmongUs. It ad
 
 ## Compatibility
 
-HoryTweaks 1.0.0 targets **Among Us v19.0.0 / 2026.9.29**. It is not intended for older or newer game versions unless a later release says otherwise.
+HoryTweaks 0.1.0 targets **Among Us v19.0.0 / 2026.9.29**. It is not intended for older or newer game versions unless a later release says otherwise.
 
 Release downloads: [HoryTweaks releases](https://github.com/horizzon3507/HoryTweaks/releases)
 
@@ -61,6 +61,8 @@ Install packages are produced for Steam, Epic Games, Microsoft Store and itch.io
 ## Credits and license
 
 HoryTweaks is based on [D1GQ's BetterAmongUs](https://github.com/D1GQ/BetterAmongUs), including its code, artwork and GPL-licensed components. Thank you to D1GQ and the BetterAmongUs contributors, including [Nyx](https://github.com/DeveloperNyx) and [At0mBomba](https://github.com/At0mBomba). See [LICENSE](LICENSE) for the preserved GPL license and its terms.
+
+HoryTweaks follows the Option versioning convention documented in [VERSIONING.md](VERSIONING.md). Release history is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Disclaimer
 

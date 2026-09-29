@@ -1,7 +1,7 @@
 ﻿using BetterAmongUs.Attributes;
 using BetterAmongUs.Commands.Arguments;
 using BetterAmongUs.Data;
-using BetterAmongUs.Utilities;
+using BetterAmongUs.Generated;
 
 namespace BetterAmongUs.Commands;
 
@@ -9,7 +9,7 @@ namespace BetterAmongUs.Commands;
 internal sealed class RemovePlayerCommand : BaseCommand
 {
     internal override string Name => "removeplayer";
-    internal override string Description => "Remove player from local <color=#4f92ff>Anti-Cheat</color> data";
+    internal override string Description => TranslationStrings.Command_RemovePlayer_Description.LocalizedString;
 
     public RemovePlayerCommand()
     {
@@ -28,11 +28,11 @@ internal sealed class RemovePlayerCommand : BaseCommand
         {
             if (BetterDataManager.RemovePlayer(identifierArgument) == true)
             {
-                Utils.AddChatPrivate($"{identifierArgument} successfully removed from local <color=#4f92ff>Anti-Cheat</color> data!");
+                CommandResultText(TranslationStrings.Command_RemovePlayer_Success.Format(identifierArgument));
             }
             else
             {
-                Utils.AddChatPrivate($"{identifierArgument} Could not find player data from identifier");
+                CommandErrorText(TranslationStrings.Command_RemovePlayer_NotFound.Format(identifierArgument));
             }
         }
     }

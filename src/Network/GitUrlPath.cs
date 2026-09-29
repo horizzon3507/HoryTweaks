@@ -9,7 +9,7 @@ internal struct GitUrlPath(string folder)
     /// <summary>
     /// The base URL for the GitHub raw content.
     /// </summary>
-    private const string BASE_URL = "https://raw.githubusercontent.com/D1GQ/BetterAmongUs";
+    private const string BASE_URL = "https://raw.githubusercontent.com/horizzon3507/HoryTweaks";
 
     /// <summary>
     /// The branch name for the repository.

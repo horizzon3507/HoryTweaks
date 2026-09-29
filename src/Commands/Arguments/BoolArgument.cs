@@ -31,7 +31,7 @@ internal sealed class BoolArgument(BaseCommand command, string argInfo = "{bool}
         }
         else
         {
-            BaseCommand.CommandErrorText($"Invalid Syntax!");
+            BaseCommand.CommandErrorText(BetterAmongUs.Generated.TranslationStrings.Command_Error_InvalidSyntax.LocalizedString);
             result = default;
             return false;
         }

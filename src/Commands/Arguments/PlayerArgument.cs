@@ -50,7 +50,7 @@ internal sealed class PlayerArgument(BaseCommand command, string argInfo = "{pla
         }
 
         result = default!;
-        BaseCommand.CommandErrorText("Player not found!");
+        BaseCommand.CommandErrorText(BetterAmongUs.Generated.TranslationStrings.Command_Error_PlayerNotFound.LocalizedString);
         return false;
     }
 

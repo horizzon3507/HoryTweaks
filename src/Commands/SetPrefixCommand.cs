@@ -1,6 +1,7 @@
 ﻿using BetterAmongUs.Attributes;
 using BetterAmongUs.Commands.Arguments;
 using BetterAmongUs.Data.Config;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Modules.Support;
 
 namespace BetterAmongUs.Commands;
@@ -9,7 +10,7 @@ namespace BetterAmongUs.Commands;
 internal sealed class SetPrefixCommand : BaseCommand
 {
     internal override string Name => "setprefix";
-    internal override string Description => "Set command prefix";
+    internal override string Description => TranslationStrings.Command_SetPrefix_Description.LocalizedString;
 
     internal SetPrefixCommand()
     {
@@ -27,15 +28,15 @@ internal sealed class SetPrefixCommand : BaseCommand
         if (!_prefixArgument.TryParse(out var prefix))
             return;
 
-        prefix = prefix.ToCharArray()?.First().ToString();
+        prefix = prefix.Length > 0 ? prefix[..1] : string.Empty;
         if (!string.IsNullOrEmpty(prefix))
         {
             BAUConfigs.CommandPrefix.Value = prefix;
-            CommandResultText($"Command prefix set from <#c1c100>{oldPrefix}</color> to <#c1c100>{prefix}</color>");
+            CommandResultText(TranslationStrings.Command_Prefix_Updated.Format(oldPrefix, prefix));
         }
         else
         {
-            CommandErrorText("Invalid Syntax!");
+            CommandErrorText(TranslationStrings.Command_Error_InvalidSyntax.LocalizedString);
         }
     }
 }

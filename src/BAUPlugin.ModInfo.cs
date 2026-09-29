@@ -13,7 +13,7 @@ internal partial class BAUPlugin
         /// <summary>
         /// The base version number of the mod in MAJOR.MINOR.PATCH format.
         /// </summary>
-        internal const string VERSION_NUMBER = "1.3.4";
+        internal const string VERSION_NUMBER = "1.0.0";
 
         /// <summary>
         /// The beta release number. Increment this for each beta release.
@@ -52,12 +52,12 @@ internal partial class BAUPlugin
         /// <summary>
         /// The name of BAU.
         /// </summary>
-        internal const string PLUGIN_NAME = "BetterAmongUs";
+        internal const string PLUGIN_NAME = "HoryTweaks";
 
         /// <summary>
         /// The GUID (Globally Unique Identifier) of BAU.
         /// </summary>
-        internal const string PLUGIN_GUID = "com.d1gq.betteramongus";
+        internal const string PLUGIN_GUID = "com.horizzon3507.horytweaks";
 
         /// <summary>
         /// Gets the list of supported Among Us versions.
@@ -70,7 +70,7 @@ internal partial class BAUPlugin
         /// <summary>
         /// The GitHub repository URL for BAU.
         /// </summary>
-        internal const string GITHUB = ThisAssembly.Git.RepositoryUrl;
+        internal const string GITHUB = "https://github.com/horizzon3507/HoryTweaks";
 
         /// <summary>
         /// The Discord invite URL for BAU.

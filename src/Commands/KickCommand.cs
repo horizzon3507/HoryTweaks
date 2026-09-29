@@ -1,5 +1,6 @@
 ﻿using BetterAmongUs.Attributes;
 using BetterAmongUs.Commands.Arguments;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
 using BetterAmongUs.Utilities;
 
@@ -9,12 +10,12 @@ namespace BetterAmongUs.Commands;
 internal sealed class KickCommand : BaseCommand
 {
     internal override string Name => "kick";
-    internal override string Description => "Kick a player from the game";
+    internal override string Description => TranslationStrings.Command_Kick_Description.LocalizedString;
     internal override bool CanRunCommand(out string reason)
     {
         if (!GameState.IsHost)
         {
-            reason = "Can only run as host";
+            reason = TranslationStrings.Command_Error_HostOnly.LocalizedString;
             return false;
         }
 

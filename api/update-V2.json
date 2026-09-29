@@ -1,5 +1,5 @@
 {
-  "valid": false,
-  "dllLink": "",
-  "version": "1.3.4"
+  "valid": true,
+  "dllLink": "https://github.com/horizzon3507/HoryTweaks/releases/download/v1.0.0/HoryTweaks.dll",
+  "version": "1.0.0"
 }

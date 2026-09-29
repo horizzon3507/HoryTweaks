@@ -133,7 +133,7 @@ internal partial class BAUPlugin : BasePlugin
         Logger.Log("Better Among Us successfully loaded!");
 
         string SupportedVersions = string.Join(" ", ModInfo.SupportedAmongUsVersions);
-        Logger.Log($"BetterAmongUs {ModInfo.VERSION_STRING}-{ModInfo.BuildDate} - [{AppVersion} --> {SupportedVersions}] {Utils.GetPlatformName(PlatformData.Platform)}");
+        Logger.Log($"{ModInfo.PLUGIN_NAME} {ModInfo.VERSION_STRING}-{ModInfo.BuildDate} - [{AppVersion} --> {SupportedVersions}] {Utils.GetPlatformName(PlatformData.Platform)}");
     }
 
     /// <summary>
@@ -170,7 +170,7 @@ internal partial class BAUPlugin : BasePlugin
         ConsoleManager.ConfigPreventClose.Value = true;
         if (ConsoleManager.ConfigConsoleEnabled.Value) ConsoleManager.DetachConsole();
         ConsoleManager.ConfigConsoleEnabled.Value = false;
-        ConsoleManager.SetConsoleTitle("Among Us - BAU Console");
+        ConsoleManager.SetConsoleTitle($"Among Us - {ModInfo.PLUGIN_NAME} Console");
         _manualLogSource = BepInEx.Logging.Logger.CreateLogSource(ModInfo.PLUGIN_GUID);
         Logger = new BAULogger(_manualLogSource);
         var customLogListener = new CustomLogListener(Logger);

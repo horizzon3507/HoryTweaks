@@ -1,58 +1,124 @@
-name: Build
+name: Build and package
 
 on:
   push:
     branches:
-      - 'main'
-      - '**hotfix**'
-      - '**Hotfix**'
-      - '**beta**'
-      - '**Beta**'
-      - '**dev**'
-      - '**Dev**'
+      - '**'
+    tags:
+      - 'v*'
     paths:
       - 'src/**'
+      - '.github/workflows/build.yml'
   pull_request:
-    branches:
-      - 'main'
-      - '**hotfix**'
-      - '**Hotfix**'
-      - '**beta**'
-      - '**Beta**'
-      - '**dev**'
-      - '**Dev**'
     paths:
       - 'src/**'
-      
+      - '.github/workflows/build.yml'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version label used in package filenames (for example, v1.0.0)
+        required: true
+        default: v1.0.0
+        type: string
+
+permissions:
+  contents: write
+
 jobs:
   build-mod:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup .NET 6
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '6.0.x'
-    
-    - name: Install PowerShell Core
-      run: |
-        # Update package lists
-        sudo apt-get update
-        # Install PowerShell Core
-        sudo apt-get install -y powershell
-        # Verify installation
-        pwsh --version
-        # Create symlink for compatibility with scripts expecting powershell.exe
-        sudo ln -s /usr/bin/pwsh /usr/local/bin/powershell.exe || true
-    
-    - name: Build
-      run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false
-    
-    - name: Archive DLL file
-      uses: actions/upload-artifact@v4
-      with:
-        name: BetterAmongUs.dll
-        path: src/bin/Release/net6.0/BetterAmongUs.dll
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Validate translations
+        run: pwsh -NoProfile -File src/build/ValidateTranslations.ps1
+
+      - name: Build HoryTweaks
+        run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false
+
+      - name: Upload standalone DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: HoryTweaks.dll
+          path: src/bin/Release/net6.0/HoryTweaks.dll
+          if-no-files-found: error
+
+      - name: Package release archives
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        env:
+          RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][A-Za-z0-9.-]+)?$ ]]; then
+            echo "Version must look like v1.0.0: $RELEASE_TAG" >&2
+            exit 1
+          fi
+
+          dll="$GITHUB_WORKSPACE/src/bin/Release/net6.0/HoryTweaks.dll"
+          test -f "$dll"
+          mkdir -p dist
+          cp "$dll" dist/HoryTweaks.dll
+
+          package() {
+            local upstream_asset="$1"
+            local platform_name="$2"
+            local source_url="https://github.com/D1GQ/BetterAmongUs/releases/download/v1.3.4/$upstream_asset"
+            local temp_dir extract_dir archive output
+            temp_dir="$(mktemp -d)"
+            extract_dir="$temp_dir/extracted"
+            archive="$temp_dir/upstream.zip"
+            output="$GITHUB_WORKSPACE/dist/HoryTweaks-${platform_name}-${RELEASE_TAG}.zip"
+            mkdir -p "$extract_dir"
+            curl --fail --location --retry 3 --retry-delay 2 "$source_url" --output "$archive"
+            unzip -q "$archive" -d "$extract_dir"
+
+            mapfile -d '' dll_paths < <(find "$extract_dir" -type f -path '*/BepInEx/plugins/*' -name 'BetterAmongUs.dll' -print0)
+            if [[ "${#dll_paths[@]}" -ne 1 ]]; then
+              echo "Expected exactly one BetterAmongUs.dll in the upstream plugin folder; found ${#dll_paths[@]} in $upstream_asset" >&2
+              exit 1
+            fi
+
+            local plugin_dir
+            plugin_dir="$(dirname "${dll_paths[0]}")"
+            rm -- "${dll_paths[0]}"
+            cp "$dll" "$plugin_dir/HoryTweaks.dll"
+            (cd "$extract_dir" && zip -q -r "$output" .)
+            rm -rf "$temp_dir"
+          }
+
+          package BAU-Steam-Epic-MsStore-v1.3.4.zip Steam-Epic-MsStore
+          package BAU-Itchio-v1.3.4.zip Itchio
+
+      - name: Upload release package artifacts
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: HoryTweaks-release-packages
+          path: |
+            dist/HoryTweaks-Steam-Epic-MsStore-*.zip
+            dist/HoryTweaks-Itchio-*.zip
+          if-no-files-found: error
+
+      - name: Create or update GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag="$GITHUB_REF_NAME"
+          assets=(
+            "dist/HoryTweaks-Steam-Epic-MsStore-${tag}.zip"
+            "dist/HoryTweaks-Itchio-${tag}.zip"
+            "dist/HoryTweaks.dll"
+          )
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "${assets[@]}" --clobber
+          else
+            gh release create "$tag" "${assets[@]}" --title "HoryTweaks $tag" --generate-notes
+          fi

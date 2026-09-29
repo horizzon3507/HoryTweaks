@@ -60,7 +60,7 @@ internal sealed class PlayerInfoArgument(BaseCommand command, string argInfo = "
         }
 
         result = default!;
-        BaseCommand.CommandErrorText("Player not found!");
+        BaseCommand.CommandErrorText(BetterAmongUs.Generated.TranslationStrings.Command_Error_PlayerNotFound.LocalizedString);
         return false;
     }
 

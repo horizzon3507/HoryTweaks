@@ -1,8 +1,8 @@
 {
-  "dllLink": "https://github.com/D1GQ/BetterAmongUs/releases/download/v1.3.3-Hotfix-1/BetterAmongUs.dll",
-  "version": "1.3.3",
+  "dllLink": "https://github.com/horizzon3507/HoryTweaks/releases/download/v0.1.0/HoryTweaks.dll",
+  "version": "0.1.0",
   "releaseType": 0,
-  "isHotfix": true,
+  "isHotfix": false,
   "betaNumber": 0,
-  "hotfixNumber": 1
+  "hotfixNumber": 0
 }

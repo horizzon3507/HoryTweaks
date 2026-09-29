@@ -1,5 +1,6 @@
-﻿using BetterAmongUs.Attributes;
+using BetterAmongUs.Attributes;
 using BetterAmongUs.Commands.Arguments;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Modules.Support;
 using BetterAmongUs.Utilities;
 
@@ -98,7 +99,7 @@ internal abstract class BaseCommand
     /// <returns>The formatted error text.</returns>
     internal static string CommandErrorText(string error, bool onlyGetStr = false)
     {
-        string er = "<color=#f50000><size=150%><b>Error:</b></size></color>";
+        string er = $"<color=#f50000><size=150%><b>{TranslationStrings.Command_Error_Title.LocalizedString}</b></size></color>";
         if (!onlyGetStr) Utils.AddChatPrivate($"<color=#730000>{er}\n{error}");
         return $"<color=#730000>{er}\n{error}";
     }

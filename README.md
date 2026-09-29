@@ -1,143 +1,69 @@
-# ♻ BetterAmongUs ♻
+# HoryTweaks
 
-A client-sided mod that enhances the experience for the popular game Among Us!
-
-<img width="700" height="500" alt="BetterAmongUs-Logo" src="/assets/BetterAmongUs-Logo.png" />
-
-</p>
 <p align="center">
+  <img width="700" height="500" alt="BetterAmongUs logo retained from upstream" src="/assets/BetterAmongUs-Logo.png" />
+</p>
 
-<div style="text-align: center;">
-    <a href="https://discord.gg/vjYrXpzNAn" target="_blank">
-        <img src="https://img.shields.io/badge/Discord%20-%231DA1F2.svg?&style=for-the-badge&logo=discord&logoColor=white&color=5662f6" width="200" height="50"/>
-    </a>
-</div>
+HoryTweaks is a client-side Among Us mod forked from D1GQ's BetterAmongUs. It adds client-side improvements, expanded host settings and local anti-cheat protections while remaining compatible with unmodified players.
+
+> The existing BetterAmongUs logo and artwork are retained from upstream for now. No HoryTweaks artwork has been supplied.
+
+## Compatibility
+
+HoryTweaks 0.1.0 targets **Among Us v19.0.0 / 2026.9.29**. It is not intended for older or newer game versions unless a later release says otherwise.
+
+Release downloads: [HoryTweaks releases](https://github.com/horizzon3507/HoryTweaks/releases)
 
 ## Installation
-### For First-Time Installation:
 
-1. **Download the Correct Version**: 
-   - Go to the [Releases](https://github.com/D1GQ/BetterAmongUs/releases) page
-   - **Choose the correct zip file** for your platform:
-     - Steam and itch.io users: `BAU-SteamItchio-Version.zip `
-     - Epic Games and Microsoft Store users: `BAU-EpicMsStore-Version.zip`
+1. Download the package for your game store from the [latest HoryTweaks release](https://github.com/horizzon3507/HoryTweaks/releases/latest).
+   - Steam, Epic Games and Microsoft Store: `HoryTweaks-Steam-Epic-MsStore-<tag>.zip`
+   - itch.io: `HoryTweaks-Itchio-<tag>.zip`
+2. Close Among Us and extract the package into the game's installation folder, preserving its folders. Allow files to merge or overwrite when prompted.
+3. If you are upgrading from BetterAmongUs, remove the old `BepInEx/plugins/BetterAmongUs.dll` so the fork does not load alongside it. Keep the `Better_Data` folder; HoryTweaks uses it to preserve existing settings and local data.
+4. Start the game. The package includes the compatible BepInEx files based on the upstream BetterAmongUs v1.3.4 Steam/Epic/Microsoft Store or itch.io package.
 
-2. **Extract the Files**:
-   - Extract the downloaded zip file to a temporary location
+For later updates, download `HoryTweaks.dll` from the release and replace `BepInEx/plugins/HoryTweaks.dll`. Use the matching full package for a fresh installation or if the bundled BepInEx files need to be restored.
 
-3. **Install to Among Us Folder**:
-   - Navigate to your Among Us installation directory
-   - Copy ALL files and folders from the extracted zip into your Among Us folder
-   - Overwrite any existing files when prompted
+### Finding the game folder
 
-4. **Verify Installation**:
-   - Launch Among Us
-   - If installed correctly, you should see "BetterAmongUs" in the main menu
+- **Steam:** Library → Among Us → Manage → Browse local files.
+- **Epic Games:** Library → Among Us → menu → Manage → installation location.
+- **Microsoft Store:** use the installed game's folder and copy files with the permissions Windows allows. If the folder is protected, use the store's supported file access rather than changing its ownership.
+- **itch.io:** open the game's install folder from the itch app.
 
-### For Updating an Existing Installation:
+### Linux on Steam
 
-1. **Download the DLL File**:
-   - Go to the [Releases](https://github.com/D1GQ/BetterAmongUs/releases) page
-   - Download just the `BetterAmongUs.dll` file
+Run the Windows game under Proton 9.0 or newer. Enable Proton in Steam's Compatibility settings and install the package into the Among Us directory. If BepInEx cannot start, try these launch options:
 
-2. **Replace the Old DLL**:
-   - Navigate to your Among Us installation folder
-   - Go to: `BepInEx/plugins/`
-   - Replace the existing `BetterAmongUs.dll` with the newly downloaded one
-
-3. **Verify Update**:
-   - Launch Among Us
-   - Check that the mod version has been updated in the main menu
-
-### Linux Setup (Steam Only)
-
-Use Proton (9.0+) with these launch options:
-```
+```text
 WINEDLLOVERRIDES="winhttp=n,b" PROTON_NO_ESYNC=1 %command%
 ```
 
-**Setup Steps:**
-1. Enable Proton in Steam → Properties → Compatibility → Force Proton 9.0+
-2. Copy all mod files into your Among Us directory
-3. Add the launch options above
-4. Install Protontricks and set `winhttp` as a library override in winecfg
-
-## Supported Platforms
-- ✅ Steam
-- ✅ Linux + Steam
-- ✅ Epic Games
-- ✅ Microsoft Store
-- ✅ itch.io
-- ✅ Android
-- ❌ iOS
-- ❌ Xbox/Playstation/Switch
-
-## Supported Game Versions
-- ✅ AU **v19.0.0** / **v2026.9.29**: (BAU v1.3.4) >
-- ✅ AU **v18.0.0** / **v2026.8.18**: (BAU v1.3.3 Hotfix 1) >
-- ✅ AU **v17.2.0** / **v2026.3.17**: (BAU v1.3.3) >
-- ✅ AU **v17.1.0** / **v2025.11.18**: (BAU v1.3.1) >
-- ✅ AU **v17.0.1** / **v2025.10.14**: (BAU v1.3.0) >
-- ✅ AU **v16.1.0** / **v2025.6.10**: (BAU v1.2.0 Beta 1) >
-- ✅ AU **v16.0.0** / **v2025.3.25**: (BAU v1.1.6 Beta 1) >
-- ✅ AU **v2024.11.26**: >
-- ✅ AU **v2024.10.29**: >
-- ✅ AU **v2024.9.4**: >
-- ✅ AU **v2024.8.13**: >
-- ✅ AU **v2024.6.18**: (BAU v1.0.0) >
-- ❌ AU **v2024.3.5**: or Below <
+Proton and game updates can affect mod compatibility. HoryTweaks does not provide a separate native Linux build.
 
 ## Features
 
-BetterAmongUs comes packed with a variety of features designed to improve your gameplay experience:
-
-- **Built-in Client-Sided Anti-Cheat**: Enjoy a fair game by preventing cheaters from ruining your fun.
-- **Host Enhancements**: Gain more control as a host with additional options and settings.
-- **Better Options**: Customize your game with a range of new and improved options.
-- **Commands**: Utilize a set of commands to manage and enhance gameplay.
-- **Client Improvements**: Experience smoother gameplay with various client-side improvements.
-- **And More!**: Stay tuned for more exciting features coming your way!
-
-<img width="700" height="500" alt="freeplay-promo" src="/assets/freeplay-promo.png" />
-
-## Anti-Cheat
-
-Are you annoyed with pesky cheaters? Well, fear no more! BetterAmongUs has a built-in anti-cheat for both host and non-host players.
-
-### The Anti-Cheat Can:
-- **Check for Invalid Actions/RPCS**: Detect and prevent unauthorized actions and RPC calls.
-- **Cancel Out Invalid Actions/RPCS**: Automatically cancel any suspicious activities detected.
-- **Detect Specific Cheat Clients**: Identify known cheat clients to keep your game fair.
-- **Save Data About Cheaters**: Keep track of detected cheaters for future reference.
-- **And More**: Additional anti-cheat measures to ensure a secure gameplay environment.
+- Client-side anti-cheat checks for invalid actions and known cheat clients.
+- Additional lobby and gameplay settings for hosts.
+- Client-side improvements such as lobby information, customizable chat and minimap options.
+- Chat commands for player information, log export and supported host actions.
+- Preset and local anti-cheat data retained under the compatible `Better_Data` user-data folder.
 
 ## Commands
 
-BetterAmongUs offers a variety of commands to enhance your control over the game:
+Use `/help` in chat for an overview and `/commands` for the available command list. The command prefix can be changed in settings or with `/setprefix`.
 
-- `/help` Get help with commands.
-- `/commands` Get a list of all available commands.
-- `/dump` Dump the entire log to the user's desktop.
-- `/player {id}` Get a player's information.
-- `/players` Get all player information.
-- `/setprefix {prefix}` Set the command prefix.
-- `/kick {id}` Kick a player from the game (Host Only!).
-- `/ban {id}` Ban a player from the game (Host Only!).
-- `/endgame` Force end the game (Host Only!).
-- `/removeplayer {identifier}` Remove player from local Anti-Cheat data by (FriendCode, HashPuid).
-- `/removeall` Remove all players from local Anti-Cheat data.
+## Platform support
 
-## Credits
+Install packages are produced for Steam, Epic Games, Microsoft Store and itch.io. Linux support is through Steam Proton. This release workflow does not produce Android packages; iOS and console installations are not supported.
 
-A huge thank you to everyone who contributed to making BetterAmongUs a reality!
+## Credits and license
 
-- **Head Developer**: [D1GQ](https://github.com/D1GQ)
-- **Contributor**: [Nyx](https://github.com/DeveloperNyx)
-- **Contributor**: [At0mBomba](https://github.com/At0mBomba)
+HoryTweaks is based on [D1GQ's BetterAmongUs](https://github.com/D1GQ/BetterAmongUs), including its code, artwork and GPL-licensed components. Thank you to D1GQ and the BetterAmongUs contributors, including [Nyx](https://github.com/DeveloperNyx) and [At0mBomba](https://github.com/At0mBomba). See [LICENSE](LICENSE) for the preserved GPL license and its terms.
 
-## Contacts
-betterauofficial@gmail.com
+HoryTweaks follows the Option versioning convention documented in [VERSIONING.md](VERSIONING.md). Release history is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Disclaimer
 
-**BetterAmongUs** is an unofficial, fan-made mod for **Among Us**. It is not affiliated with, endorsed by, or associated with **InnerSloth LLC** or the official **Among Us** game. All trademarks and copyrights related to **Among Us** are the property of **InnerSloth LLC**. This mod is created purely for entertainment purposes and to enhance the gaming experience. Use of this mod is at your own risk.
+HoryTweaks is an unofficial, fan-made mod for Among Us. It is not affiliated with, endorsed by or associated with Innersloth LLC or the official Among Us game. All Among Us trademarks and copyrights belong to Innersloth LLC. Use the mod at your own risk.

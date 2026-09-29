@@ -1,7 +1,5 @@
 ﻿using BetterAmongUs.Data.Config;
 using BetterAmongUs.Modules;
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Patches.Gameplay.UI.Settings;
 using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
@@ -22,7 +20,7 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
     /// <summary>
     /// The current version identifier for the settings file format.
     /// </summary>
-    internal const string SETTINGS_VERSION = "2.0";
+    internal const string SETTINGS_VERSION = "2.1";
 
     /// <summary>
     /// The dictionary key used to store the settings file version.
@@ -68,21 +66,35 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
             }
 
             // Validate settings file version
-            object? versionObject = null;
-            Settings.TryGetValue(SETTINGS_VERSION_KEY, out versionObject);
-            if (versionObject == null || versionObject is not SETTINGS_VERSION)
+            Settings.TryGetValue(SETTINGS_VERSION_KEY, out var versionObject);
+            string? storedVersion = versionObject?.ToString();
+            if (storedVersion != SETTINGS_VERSION)
             {
-                Settings.Clear();
+                CreateBackup(storedVersion);
+                Settings[SETTINGS_VERSION_KEY] = SETTINGS_VERSION;
                 Save();
-                foreach (var opt in OptionItem.AllOptions)
-                {
-                    opt.TryLoad(true);
-                }
-                GameSettingsPatch.BetterSettingsTab?.UpdateVisuals();
-                return false;
             }
         }
         return success;
+    }
+
+    private void CreateBackup(string? storedVersion)
+    {
+        if (!File.Exists(FilePath))
+            return;
+
+        var version = new string((storedVersion ?? string.Empty)
+            .Where(character => char.IsLetterOrDigit(character) || character is '.' or '_' or '-')
+            .Take(32)
+            .ToArray());
+        if (string.IsNullOrWhiteSpace(version))
+            version = "unknown";
+
+        var backupPath = $"{FilePath}.v{version}.bak";
+        if (!File.Exists(backupPath))
+        {
+            File.Copy(FilePath, backupPath);
+        }
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BetterAmongUs.Attributes;
 using BetterAmongUs.Data;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
 
 namespace BetterAmongUs.Commands;
@@ -9,13 +10,13 @@ namespace BetterAmongUs.Commands;
 internal sealed class DumpCommand : BaseCommand
 {
     internal override string Name => "dump";
-    internal override string Description => "Dump the entire log to the user's desktop";
+    internal override string Description => TranslationStrings.Command_Dump_Description.LocalizedString;
 
     internal override bool CanRunCommand(out string reason)
     {
         if (GameState.IsInGamePlay)
         {
-            reason = "Only can run in lobby";
+            reason = TranslationStrings.Command_Error_LobbyOnly.LocalizedString;
             return false;
         }
 
@@ -27,14 +28,14 @@ internal sealed class DumpCommand : BaseCommand
         string bepInExLog = Path.Combine(Paths.BepInExRootPath, "LogOutput.log");
         if (!File.Exists(bepInExLog))
         {
-            CommandErrorText("BepInEx log file not found!");
+            CommandErrorText(TranslationStrings.Command_Error_LogNotFound.LocalizedString);
             return;
         }
 
         if (!BAUPlugin.ModInfo.Starlight)
         {
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string logFolderPath = Path.Combine(desktopPath, "BAULogDumps");
+            string logFolderPath = Path.Combine(desktopPath, "HoryTweaksLogDumps");
 
             if (!Directory.Exists(logFolderPath))
             {
@@ -61,12 +62,12 @@ internal sealed class DumpCommand : BaseCommand
                 Verb = "open"
             });
 
-            CommandResultText($"Dump logs at <color=#b1b1b1>'{logFolderPath}'</color>");
+            CommandResultText(TranslationStrings.Command_Dump_Success.Format(logFolderPath));
         }
         else
         {
             string dataPath = BetterDataManager.Folders.fileFolderPath;
-            string logFolderPath = Path.Combine(dataPath, "BAULogDumps");
+            string logFolderPath = Path.Combine(dataPath, "HoryTweaksLogDumps");
             if (!Directory.Exists(logFolderPath))
             {
                 Directory.CreateDirectory(logFolderPath);
@@ -85,7 +86,7 @@ internal sealed class DumpCommand : BaseCommand
             string logFilePath_New = Path.Combine(logFolderPath, logFileName);
             File.WriteAllText(logFilePath_New, decryptedLog);
 
-            CommandResultText($"Dump logs at <color=#b1b1b1>'{logFolderPath}'</color>");
+            CommandResultText(TranslationStrings.Command_Dump_Success.Format(logFolderPath));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BetterAmongUs.Attributes;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Utilities;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace BetterAmongUs.Commands;
 internal sealed class PlayersInfoCommand : BaseCommand
 {
     internal override string Name => "players";
-    internal override string Description => "Get all Player information";
+    internal override string Description => TranslationStrings.Command_PlayersInfo_Description.LocalizedString;
 
     internal override void Run()
     {

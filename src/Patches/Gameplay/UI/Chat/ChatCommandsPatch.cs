@@ -1,5 +1,6 @@
 ﻿using BetterAmongUs.Commands;
 using BetterAmongUs.Data.Config;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
 using BetterAmongUs.Modules.Support;
 using BetterAmongUs.Utilities;
@@ -25,7 +26,7 @@ internal static class ChatCommandsPatch
         }
         else
         {
-            Utils.AddChatPrivate("<color=#f50000><size=150%><b>Invalid Command!</b></size></color>");
+            Utils.AddChatPrivate($"<color=#f50000><size=150%><b>{TranslationStrings.Command_Error_InvalidCommand.LocalizedString}</b></size></color>");
         }
     }
 

@@ -34,12 +34,12 @@ public static class TranslationStrings
     }
 
     /// <summary>
-    /// Base Translation: BAU
+    /// Base Translation: HT
     /// </summary>
     public static readonly TranslationString BAU = new("BAU");
 
     /// <summary>
-    /// Base Translation: BetterAmongUs
+    /// Base Translation: HoryTweaks
     /// </summary>
     public static readonly TranslationString BetterAmongUs = new("BetterAmongUs");
 
@@ -767,4 +767,159 @@ public static class TranslationStrings
     /// Base Translation: No Survivors
     /// </summary>
     public static readonly TranslationString Game_Summary_Result_NoSurvivors = new("Game.Summary.Result.NoSurvivors");
+
+    /// <summary>
+    /// Base Translation: Get help with commands
+    /// </summary>
+    public static readonly TranslationString Command_Help_Description = new("Command.Help.Description");
+
+    /// <summary>
+    /// Base Translation: &lt;color=#0dff00&gt;{0}&lt;/color&gt; improves your vanilla Among Us experience with useful client-side features.\nOpen the pause menu to access more options and game settings.\nUse &lt;color=#e0b700&gt;/commands&lt;/color&gt; to see every available command.\n\nFeatures:\n- Built-in client-side anti-cheat.\n- Additional options for hosts.\n- Enhanced settings to customize your game.\n- Commands to manage and improve your experience.\n- Client-side improvements and quality-of-life features.
+    /// </summary>
+    public static readonly TranslationString Command_Help_Body = new("Command.Help.Body");
+
+    /// <summary>
+    /// Base Translation: List all available commands
+    /// </summary>
+    public static readonly TranslationString Command_Commands_Description = new("Command.Commands.Description");
+
+    /// <summary>
+    /// Base Translation: Save the full log to the desktop
+    /// </summary>
+    public static readonly TranslationString Command_Dump_Description = new("Command.Dump.Description");
+
+    /// <summary>
+    /// Base Translation: Force the current game to end
+    /// </summary>
+    public static readonly TranslationString Command_EndGame_Description = new("Command.EndGame.Description");
+
+    /// <summary>
+    /// Base Translation: Force a skip during the current meeting
+    /// </summary>
+    public static readonly TranslationString Command_ForceSkip_Description = new("Command.ForceSkip.Description");
+
+    /// <summary>
+    /// Base Translation: Kick a player from the game
+    /// </summary>
+    public static readonly TranslationString Command_Kick_Description = new("Command.Kick.Description");
+
+    /// <summary>
+    /// Base Translation: Show information about a player
+    /// </summary>
+    public static readonly TranslationString Command_PlayerInfo_Description = new("Command.PlayerInfo.Description");
+
+    /// <summary>
+    /// Base Translation: Show information about all players
+    /// </summary>
+    public static readonly TranslationString Command_PlayersInfo_Description = new("Command.PlayersInfo.Description");
+
+    /// <summary>
+    /// Base Translation: Remove all players from local &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt; data
+    /// </summary>
+    public static readonly TranslationString Command_RemoveAll_Description = new("Command.RemoveAll.Description");
+
+    /// <summary>
+    /// Base Translation: Remove a player from local &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt; data
+    /// </summary>
+    public static readonly TranslationString Command_RemovePlayer_Description = new("Command.RemovePlayer.Description");
+
+    /// <summary>
+    /// Base Translation: Set the command prefix
+    /// </summary>
+    public static readonly TranslationString Command_SetPrefix_Description = new("Command.SetPrefix.Description");
+
+    /// <summary>
+    /// Base Translation: Command List
+    /// </summary>
+    public static readonly TranslationString Command_List_Title = new("Command.List.Title");
+
+    /// <summary>
+    /// Base Translation: Error:
+    /// </summary>
+    public static readonly TranslationString Command_Error_Title = new("Command.Error.Title");
+
+    /// <summary>
+    /// Base Translation: Invalid syntax!
+    /// </summary>
+    public static readonly TranslationString Command_Error_InvalidSyntax = new("Command.Error.InvalidSyntax");
+
+    /// <summary>
+    /// Base Translation: Player not found!
+    /// </summary>
+    public static readonly TranslationString Command_Error_PlayerNotFound = new("Command.Error.PlayerNotFound");
+
+    /// <summary>
+    /// Base Translation: BepInEx log file not found!
+    /// </summary>
+    public static readonly TranslationString Command_Error_LogNotFound = new("Command.Error.LogNotFound");
+
+    /// <summary>
+    /// Base Translation: Invalid command!
+    /// </summary>
+    public static readonly TranslationString Command_Error_InvalidCommand = new("Command.Error.InvalidCommand");
+
+    /// <summary>
+    /// Base Translation: This command can only be used in the lobby
+    /// </summary>
+    public static readonly TranslationString Command_Error_LobbyOnly = new("Command.Error.LobbyOnly");
+
+    /// <summary>
+    /// Base Translation: Only the host can use this command
+    /// </summary>
+    public static readonly TranslationString Command_Error_HostOnly = new("Command.Error.HostOnly");
+
+    /// <summary>
+    /// Base Translation: This command can only be used during gameplay
+    /// </summary>
+    public static readonly TranslationString Command_Error_GameplayOnly = new("Command.Error.GameplayOnly");
+
+    /// <summary>
+    /// Base Translation: Logs saved to &lt;color=#b1b1b1&gt;&apos;{0}&apos;&lt;/color&gt;
+    /// </summary>
+    public static readonly TranslationString Command_Dump_Success = new("Command.Dump.Success");
+
+    /// <summary>
+    /// Base Translation: Command prefix changed from &lt;#c1c100&gt;{0}&lt;/color&gt; to &lt;#c1c100&gt;{1}&lt;/color&gt;
+    /// </summary>
+    public static readonly TranslationString Command_Prefix_Updated = new("Command.Prefix.Updated");
+
+    /// <summary>
+    /// Base Translation: All local &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt; data has been removed!
+    /// </summary>
+    public static readonly TranslationString Command_RemoveAll_Success = new("Command.RemoveAll.Success");
+
+    /// <summary>
+    /// Base Translation: {0} was removed from local &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt; data!
+    /// </summary>
+    public static readonly TranslationString Command_RemovePlayer_Success = new("Command.RemovePlayer.Success");
+
+    /// <summary>
+    /// Base Translation: Could not find player data for identifier {0}.
+    /// </summary>
+    public static readonly TranslationString Command_RemovePlayer_NotFound = new("Command.RemovePlayer.NotFound");
+
+    /// <summary>
+    /// Base Translation: This command can only be used during a meeting
+    /// </summary>
+    public static readonly TranslationString Command_Error_MeetingOnly = new("Command.Error.MeetingOnly");
+
+    /// <summary>
+    /// Base Translation: Info
+    /// </summary>
+    public static readonly TranslationString Command_PlayerInfo_Info = new("Command.PlayerInfo.Info");
+
+    /// <summary>
+    /// Base Translation: ID
+    /// </summary>
+    public static readonly TranslationString Command_PlayerInfo_ID = new("Command.PlayerInfo.ID");
+
+    /// <summary>
+    /// Base Translation: Platform
+    /// </summary>
+    public static readonly TranslationString Command_PlayerInfo_Platform = new("Command.PlayerInfo.Platform");
+
+    /// <summary>
+    /// Base Translation: FriendCode
+    /// </summary>
+    public static readonly TranslationString Command_PlayerInfo_FriendCode = new("Command.PlayerInfo.FriendCode");
 }

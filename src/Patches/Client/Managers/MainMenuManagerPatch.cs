@@ -1,6 +1,5 @@
 ﻿using BetterAmongUs.Utilities;
 using BetterAmongUs.Managers;
-using BetterAmongUs.Modules.Support;
 using HarmonyLib;
 using UnityEngine;
 
@@ -35,24 +34,6 @@ internal static class MainMenuManagerPatch
     [HarmonyPostfix]
     private static void MainMenuManager_Start_Postfix(MainMenuManager __instance)
     {
-        // Check if other mods haven't disabled the BAU logo replacement
-        if (!BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_BAULogo))
-        {
-            // Find the original Among Us logo
-            GameObject logo = GameObject.Find("LeftPanel/Sizer/LOGO-AU");
-            GameObject sizer = logo.transform.parent.gameObject;
-
-            // Adjust logo position downward and move it forward in Z-axis
-            sizer.transform.localPosition = new Vector3(sizer.transform.localPosition.x, sizer.transform.localPosition.y - 0.035f, sizer.transform.localPosition.z);
-            sizer.transform.position = new Vector3(sizer.transform.position.x, sizer.transform.position.y, -0.5f);
-
-            // Scale down the logo slightly
-            logo.transform.localScale = new Vector3(0.00155f, 0.00155f, 0f);
-
-            // Replace Among Us sprite with HoryTweaks logo
-            logo.GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Logo.png", 1f);
-        }
-
         // Apply custom colors to main menu background
         __instance.transform.Find("MainUI/AspectScaler/BackgroundTexture")?.gameObject?.SetSpriteColors(sprite => GameObjectUtils.AddColor(sprite));
 

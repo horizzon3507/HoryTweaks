@@ -11,6 +11,15 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
+## Unreleased
+
+### Added
+
+- Localized On/Off labels and question-mark descriptions for the Tweaks settings.
+- Restore defaults, copy preset and paste preset rows on the Tweaks tab, each guarded by a second confirming click.
+- Custom preset names through the `/presetname` command, stored inside the existing `Preset-N.json` files.
+- Unit tests for the preset share code and preset name helpers.
+
 ## v0.1.1-alpha · 29/09/2026
 
 ### Added

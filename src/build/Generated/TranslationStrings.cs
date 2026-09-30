@@ -339,6 +339,71 @@ public static class TranslationStrings
     public static readonly TranslationString BetterSetting_SetTo = new("BetterSetting.SetTo");
 
     /// <summary>
+    /// Base Translation: On
+    /// </summary>
+    public static readonly TranslationString BetterSetting_State_On = new("BetterSetting.State.On");
+
+    /// <summary>
+    /// Base Translation: Off
+    /// </summary>
+    public static readonly TranslationString BetterSetting_State_Off = new("BetterSetting.State.Off");
+
+    /// <summary>
+    /// Base Translation: Confirm?
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_Confirm = new("BetterSetting.Action.Confirm");
+
+    /// <summary>
+    /// Base Translation: Restore default settings
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_RestoreDefaults = new("BetterSetting.Action.RestoreDefaults");
+
+    /// <summary>
+    /// Base Translation: Reset
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_Reset = new("BetterSetting.Action.Reset");
+
+    /// <summary>
+    /// Base Translation: Restored {0} settings to their defaults
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_RestoreDefaults_Done = new("BetterSetting.Action.RestoreDefaults.Done");
+
+    /// <summary>
+    /// Base Translation: Copy preset to clipboard
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ExportPreset = new("BetterSetting.Action.ExportPreset");
+
+    /// <summary>
+    /// Base Translation: Copy
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_Copy = new("BetterSetting.Action.Copy");
+
+    /// <summary>
+    /// Base Translation: Preset code copied to the clipboard
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ExportPreset_Done = new("BetterSetting.Action.ExportPreset.Done");
+
+    /// <summary>
+    /// Base Translation: Paste preset from clipboard
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ImportPreset = new("BetterSetting.Action.ImportPreset");
+
+    /// <summary>
+    /// Base Translation: Paste
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_Paste = new("BetterSetting.Action.Paste");
+
+    /// <summary>
+    /// Base Translation: Applied {0} settings from the pasted preset
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ImportPreset_Done = new("BetterSetting.Action.ImportPreset.Done");
+
+    /// <summary>
+    /// Base Translation: The clipboard does not contain a valid preset code
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ImportPreset_Invalid = new("BetterSetting.Action.ImportPreset.Invalid");
+
+    /// <summary>
     /// Base Translation: System Settings
     /// </summary>
     public static readonly TranslationString BetterSetting_MainHeader_System = new("BetterSetting.MainHeader.System");
@@ -422,6 +487,51 @@ public static class TranslationStrings
     /// Base Translation: RPC limit per second
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_RateLimit = new("BetterSetting.Setting.RateLimit");
+
+    /// <summary>
+    /// Base Translation: Each preset keeps its own copy of the settings below. Name the selected preset with /presetname, and share it with the Copy and Paste rows.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_Presets_Description = new("BetterSetting.Setting.Presets.Description");
+
+    /// <summary>
+    /// Base Translation: Minimum time between moderation actions taken by the host, such as kicks and bans.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_KickCooldown_Description = new("BetterSetting.Setting.KickCooldown.Description");
+
+    /// <summary>
+    /// Base Translation: Kick players who join without a valid friend code.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_InvalidFriendCode_Description = new("BetterSetting.Setting.InvalidFriendCode.Description");
+
+    /// <summary>
+    /// Base Translation: Ban players whose friend code or account ID is listed in the ban player list file.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_UseBanPlayerList_Description = new("BetterSetting.Setting.UseBanPlayerList.Description");
+
+    /// <summary>
+    /// Base Translation: Ban players whose name matches a pattern in the ban name list file.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_UseBanNameList_Description = new("BetterSetting.Setting.UseBanNameList.Description");
+
+    /// <summary>
+    /// Base Translation: Kick or ban players whose chat message matches a pattern in the ban chat list file.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_UseBanChatList_Description = new("BetterSetting.Setting.UseBanChatList.Description");
+
+    /// <summary>
+    /// Base Translation: Kick players in the lobby whose level is below the minimum player level.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_KickLevel_Description = new("BetterSetting.Setting.KickLevel.Description");
+
+    /// <summary>
+    /// Base Translation: The level check only runs once the lobby has at least this many players.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_KickLevelBelowMinimumPlayers_Description = new("BetterSetting.Setting.KickLevelBelowMinimumPlayers.Description");
+
+    /// <summary>
+    /// Base Translation: Ignore RPCs from players who send more than the limit per second.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_RpcRateLimiting_Description = new("BetterSetting.Setting.RpcRateLimiting.Description");
 
     /// <summary>
     /// Base Translation: Disable sabotages for dead
@@ -597,6 +707,21 @@ public static class TranslationStrings
     /// Base Translation: Set the command prefix
     /// </summary>
     public static readonly TranslationString Command_SetPrefix_Description = new("Command.SetPrefix.Description");
+
+    /// <summary>
+    /// Base Translation: Name the selected settings preset
+    /// </summary>
+    public static readonly TranslationString Command_PresetName_Description = new("Command.PresetName.Description");
+
+    /// <summary>
+    /// Base Translation: &lt;color=#ffffbe&gt;{0}&lt;/color&gt; is now named &lt;color=#e0b700&gt;{1}&lt;/color&gt;
+    /// </summary>
+    public static readonly TranslationString Command_PresetName_Updated = new("Command.PresetName.Updated");
+
+    /// <summary>
+    /// Base Translation: &lt;color=#ffffbe&gt;{0}&lt;/color&gt; uses its default name again
+    /// </summary>
+    public static readonly TranslationString Command_PresetName_Cleared = new("Command.PresetName.Cleared");
 
     /// <summary>
     /// Base Translation: Command List

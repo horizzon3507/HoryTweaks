@@ -206,7 +206,8 @@ internal sealed class ClientOptionItem
         ToggleButton.Background.color = color;
         ToggleButton.Rollover?.ChangeOutColor(color);
         ToggleButton.Text.color = textColor;
-        ToggleButton.Text.text = $"{ToggleButton.name}: {(isEnabled ? "On" : "Off")}";
+        string state = (isEnabled ? TranslationStrings.BetterSetting_State_On : TranslationStrings.BetterSetting_State_Off).LocalizedString;
+        ToggleButton.Text.text = $"{ToggleButton.name}: {state}";
     }
 
     /// <summary>

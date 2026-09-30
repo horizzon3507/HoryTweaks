@@ -26,6 +26,11 @@ public abstract class OptionItem
     /// </summary>
     public string Name => TranslationName.LocalizedString;
 
+    /// <summary>
+    /// Gets the key under which this option is stored in the settings file.
+    /// </summary>
+    internal string SettingKey => TranslationName.Key.Split('.').Last();
+
     private static int nextIdIndex;
     /// <summary>
     /// Gets the unique identifier of the option.
@@ -80,6 +85,43 @@ public abstract class OptionItem
     internal virtual void SetToDefault() { }
 
     /// <summary>
+    /// Saves the option's value to persistent storage.
+    /// </summary>
+    internal virtual void Save() { }
+
+    /// <summary>
+    /// Converts an imported raw value to the type this option stores.
+    /// </summary>
+    /// <returns>The converted value, or null when the value cannot be applied to this option.</returns>
+    internal virtual object? NormalizeImportValue(object? value) => null;
+
+    /// <summary>
+    /// Gets all options whose values are persisted in the current preset file.
+    /// </summary>
+    internal static IEnumerable<OptionItem> PersistedOptions => AllOptions.Where(opt => opt.CanLoad && opt.IsOption);
+
+    /// <summary>
+    /// Resets every persisted option to its default, saves the preset and refreshes the tab.
+    /// </summary>
+    /// <returns>The number of options that were reset.</returns>
+    internal static int RestoreDefaults()
+    {
+        int count = 0;
+        OptionTab? tab = null;
+        foreach (var opt in PersistedOptions)
+        {
+            opt.SetToDefault();
+            opt.Save();
+            opt.UpdateVisuals(false);
+            tab ??= opt.Tab;
+            count++;
+        }
+
+        tab?.UpdateVisuals();
+        return count;
+    }
+
+    /// <summary>
     /// Sets up the Among Us option behavior with proper masking for UI rendering.
     /// </summary>
     /// <param name="optionBehaviour">The option behavior to set up.</param>
@@ -97,6 +139,25 @@ public abstract class OptionItem
             textMeshPro.fontMaterial.SetFloat("_StencilComp", 3f);
             textMeshPro.fontMaterial.SetFloat("_Stencil", MaskLayer);
         }
+    }
+
+    /// <summary>
+    /// Sets up common text properties for option display.
+    /// </summary>
+    /// <param name="textPro">The TextMeshPro component to configure.</param>
+    protected void SetupText(TextMeshPro textPro)
+    {
+        textPro.transform.SetLocalX(-2.5f);
+        textPro.transform.SetLocalY(-0.05f);
+        textPro.alignment = TextAlignmentOptions.Right;
+        textPro.enableWordWrapping = false;
+        textPro.enableAutoSizing = true;
+        textPro.fontSize = 3.3f;
+        textPro.fontSizeMax = 3.3f;
+        textPro.fontSizeMin = 1f;
+        textPro.rectTransform.sizeDelta = new(4.5f, 1f);
+        textPro.outlineColor = Color.black;
+        textPro.outlineWidth = 0.25f;
     }
 
     /// <summary>
@@ -321,10 +382,10 @@ public abstract class OptionItem
     }
 
     /// <summary>
-    /// Creates a description button that shows additional information when clicked.
+    /// Creates a question mark button that shows a localized description in the menu when clicked.
     /// </summary>
-    /// <param name="text">The description text to display.</param>
-    internal void CreateDescriptionButton(string text)
+    /// <param name="description">The translation string of the description to display.</param>
+    internal void CreateDescriptionButton(TranslationStrings.TranslationString description)
     {
         if (Option == null)
             return;
@@ -345,7 +406,7 @@ public abstract class OptionItem
             var menu = GameSettingMenu.Instance;
             if (menu != null)
             {
-                menu.MenuDescriptionText.text = text;
+                menu.MenuDescriptionText.text = description.LocalizedString;
             }
         });
     }
@@ -440,6 +501,13 @@ public abstract class OptionItem<T> : OptionItem
         Value = DefaultValue;
     }
 
+    internal override object? NormalizeImportValue(object? value) => value switch
+    {
+        T typed => typed,
+        int intValue when typeof(T) == typeof(float) => (float)intValue,
+        _ => null
+    };
+
     /// <summary>
     /// Creates the UI behavior for this option.
     /// </summary>
@@ -453,25 +521,6 @@ public abstract class OptionItem<T> : OptionItem
     internal virtual void OnValueChange(T oldValue, T newValue) { }
 
     internal Action<OptionItem>? OnValueChangeAction = (opt) => { };
-
-    /// <summary>
-    /// Sets up common text properties for option display.
-    /// </summary>
-    /// <param name="textPro">The TextMeshPro component to configure.</param>
-    protected void SetupText(TextMeshPro textPro)
-    {
-        textPro.transform.SetLocalX(-2.5f);
-        textPro.transform.SetLocalY(-0.05f);
-        textPro.alignment = TextAlignmentOptions.Right;
-        textPro.enableWordWrapping = false;
-        textPro.enableAutoSizing = true;
-        textPro.fontSize = 3.3f;
-        textPro.fontSizeMax = 3.3f;
-        textPro.fontSizeMin = 1f;
-        textPro.rectTransform.sizeDelta = new(4.5f, 1f);
-        textPro.outlineColor = Color.black;
-        textPro.outlineWidth = 0.25f;
-    }
 
     /// <summary>
     /// Sets up the option behavior after creation.
@@ -560,7 +609,7 @@ public abstract class OptionItem<T> : OptionItem
     /// <summary>
     /// Saves the option's value to persistent storage.
     /// </summary>
-    internal virtual void Save()
+    internal override void Save()
     {
         if (!CanLoad)
             return;

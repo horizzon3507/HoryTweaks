@@ -159,9 +159,10 @@ internal sealed class BAULogger(ManualLogSource manualLogSource)
 /// <summary>
 /// Custom log listener for BepInEx that forwards logs to the BetterAmongUs logging system.
 /// </summary>
-internal class CustomLogListener(BAULogger bauLogger) : ILogListener
+internal class CustomLogListener(BAULogger bauLogger, ILogSource outputSource) : ILogListener
 {
     private readonly BAULogger _bauLogger = bauLogger;
+    private readonly ILogSource _outputSource = outputSource;
 
     /// <summary>
     /// Gets or sets the log levels to filter.
@@ -175,7 +176,8 @@ internal class CustomLogListener(BAULogger bauLogger) : ILogListener
     /// <param name="eventArgs">The log event arguments.</param>
     public void LogEvent(object sender, LogEventArgs eventArgs)
     {
-        if (eventArgs.Source.SourceName.ToLower().Contains("unity")
+        if (ReferenceEquals(eventArgs.Source, _outputSource)
+            || eventArgs.Source.SourceName.ToLower().Contains("unity")
             || eventArgs.Source.SourceName.ToLower().Contains("betteramongus"))
             return;
 

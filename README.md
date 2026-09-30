@@ -10,6 +10,8 @@ HoryTweaks is a client-side Among Us mod forked from D1GQ's BetterAmongUs. It ad
 
 HoryTweaks 0.1.1 targets **Among Us v19.0.0 / 2026.9.29**. It is not intended for older or newer game versions unless a later release says otherwise.
 
+On startup HoryTweaks compares the running game version with the supported version and looks for a leftover `BepInEx/plugins/BetterAmongUs.dll`. If either check finds a problem, the sign-in screen shows a warning that explains what to do. Nothing is changed or deleted for you.
+
 Release downloads: [HoryTweaks releases](https://github.com/horizzon3507/HoryTweaks/releases)
 
 ## Installation
@@ -51,6 +53,8 @@ Proton and game updates can affect mod compatibility. HoryTweaks does not provid
 ## Commands
 
 Use `/help` in chat for an overview and `/commands` for the available command list. The command prefix can be changed in settings or with `/setprefix`.
+
+`/dump` saves the full BepInEx log and a diagnostic report to `HoryTweaksLogDumps` on the desktop (or inside `Better_Data` on Starlight). The report lists the HoryTweaks version, game version, platform, compatibility checks, non-secret client options and the most recent log lines. Private log entries are left out and lobby codes, friend codes, addresses and user names are redacted, so the report can be attached to a bug report.
 
 ## Platform support
 

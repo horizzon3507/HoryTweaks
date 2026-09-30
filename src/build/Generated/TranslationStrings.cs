@@ -564,7 +564,7 @@ public static class TranslationStrings
     public static readonly TranslationString Command_Commands_Description = new("Command.Commands.Description");
 
     /// <summary>
-    /// Base Translation: Save the full log to the desktop
+    /// Base Translation: Save the full log and a diagnostic report to the desktop
     /// </summary>
     public static readonly TranslationString Command_Dump_Description = new("Command.Dump.Description");
 
@@ -647,6 +647,36 @@ public static class TranslationStrings
     /// Base Translation: Logs saved to &lt;color=#b1b1b1&gt;&apos;{0}&apos;&lt;/color&gt;
     /// </summary>
     public static readonly TranslationString Command_Dump_Success = new("Command.Dump.Success");
+
+    /// <summary>
+    /// Base Translation: Diagnostic report saved as &lt;color=#b1b1b1&gt;&apos;{0}&apos;&lt;/color&gt;. Share this file when reporting a problem; it contains no lobby codes, friend codes or secrets.
+    /// </summary>
+    public static readonly TranslationString Command_Dump_ReportSaved = new("Command.Dump.ReportSaved");
+
+    /// <summary>
+    /// Base Translation: Warning
+    /// </summary>
+    public static readonly TranslationString Startup_Warning_Title = new("Startup.Warning.Title");
+
+    /// <summary>
+    /// Base Translation: {0} supports Among Us {1}.\\nAmong Us {2} is newer than the supported version, so you may run into bugs.
+    /// </summary>
+    public static readonly TranslationString Startup_GameVersion_Newer = new("Startup.GameVersion.Newer");
+
+    /// <summary>
+    /// Base Translation: {0} supports Among Us {1}.\\nAmong Us {2} is older than the supported version, so you may run into bugs.
+    /// </summary>
+    public static readonly TranslationString Startup_GameVersion_Older = new("Startup.GameVersion.Older");
+
+    /// <summary>
+    /// Base Translation: The old BetterAmongUs plugin is still installed:\\n{1}\\nRemove BetterAmongUs.dll from the BepInEx plugins folder so it does not load beside {0}. Your Better_Data folder is kept.
+    /// </summary>
+    public static readonly TranslationString Startup_LegacyPlugin_Found = new("Startup.LegacyPlugin.Found");
+
+    /// <summary>
+    /// Base Translation: The old BetterAmongUs plugin is loaded beside {0}. Both mods change the game and may conflict.\\nRemove BetterAmongUs.dll from the BepInEx plugins folder. Your Better_Data folder is kept.
+    /// </summary>
+    public static readonly TranslationString Startup_LegacyPlugin_Loaded = new("Startup.LegacyPlugin.Loaded");
 
     /// <summary>
     /// Base Translation: Command prefix changed from &lt;#c1c100&gt;{0}&lt;/color&gt; to &lt;#c1c100&gt;{1}&lt;/color&gt;

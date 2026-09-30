@@ -16,6 +16,7 @@ internal static class Translator
     internal static Dictionary<string, int> TranslateIdLookup = [];
     internal static Dictionary<string, Dictionary<int, string>> TranslateMaps = [];
     private const string ResourcePath = "BetterAmongUs.Resources.Lang";
+    private const string EnglishCatalogName = "en_US";
     private static bool _loggedActiveLanguage;
 
     /// <summary>
@@ -26,6 +27,7 @@ internal static class Translator
         BAUPlugin.Logger.Log("Loading language files...", "Translator");
         LoadLanguages();
         BAUPlugin.Logger.Log($"Language files loaded successfully: {string.Join(", ", TranslateIdLookup.Select(kvp => $"{kvp.Key}={kvp.Value}"))}", "Translator");
+        LogEnglishFallbacks();
     }
 
     /// <summary>
@@ -134,6 +136,31 @@ internal static class Translator
             // Replace escape sequences with actual characters
             var processedValue = value.Replace("\\n", "\n").Replace("\\r", "\r");
             translationMaps[key][languageId] = processedValue;
+        }
+    }
+
+    /// <summary>
+    /// Reports every catalog that lacks keys defined by en_US; those keys render in English at runtime.
+    /// </summary>
+    private static void LogEnglishFallbacks()
+    {
+        if (!TranslateIdLookup.TryGetValue(EnglishCatalogName, out var englishId))
+        {
+            BAUPlugin.Logger.Error($"{EnglishCatalogName} catalog is missing; untranslated keys cannot fall back to English.", "Translator");
+            return;
+        }
+
+        foreach (var (name, languageId) in TranslateIdLookup)
+        {
+            if (languageId == englishId) continue;
+
+            var missingKeys = TranslateMaps
+                .Where(kvp => kvp.Value.ContainsKey(englishId) && !kvp.Value.ContainsKey(languageId))
+                .Select(kvp => kvp.Key)
+                .ToArray();
+            if (missingKeys.Length == 0) continue;
+
+            BAUPlugin.Logger.Warning($"{name} is missing {missingKeys.Length} translation(s); English text is used for: {string.Join(", ", missingKeys)}", "Translator");
         }
     }
 
@@ -248,7 +275,7 @@ internal static class Translator
     /// <param name="languageId">The target language ID.</param>
     /// <param name="languageMap">The language map containing translations.</param>
     /// <param name="showInvalid">Whether to show invalid key indicators.</param>
-    /// <returns>The translated string, or null if not found.</returns>
+    /// <returns>The translated string, the English text when the language lacks the key, or a marked key when English lacks it too.</returns>
     private static string GetTranslationFromMap(TranslationStrings.TranslationString key, SupportedLangs languageId, Dictionary<int, string> languageMap, bool showInvalid)
     {
         if (languageMap.TryGetValue((int)languageId, out var translation) &&
@@ -260,14 +287,13 @@ internal static class Translator
                 var chineseTranslation = GetString(key, SupportedLangs.SChinese, showInvalid);
                 if (translation == chineseTranslation)
                 {
-                    return GetEnglishFallback(key);
+                    return GetEnglishFallback(key, showInvalid);
                 }
             }
             return translation;
         }
 
-        // Fallback to English if translation not found
-        return languageId == SupportedLangs.English ? $"*{key}" : GetString(key, SupportedLangs.English, showInvalid);
+        return languageId == SupportedLangs.English ? $"*{key}" : GetEnglishFallback(key, showInvalid);
     }
 
     /// <summary>
@@ -364,12 +390,13 @@ internal static class Translator
     }
 
     /// <summary>
-    /// Gets an English fallback translation.
+    /// Gets the English translation used whenever the active language lacks a key.
     /// </summary>
     /// <param name="key">The translation key to look up.</param>
+    /// <param name="showInvalid">Whether to show invalid key indicators.</param>
     /// <returns>The English translation of the key.</returns>
-    private static string GetEnglishFallback(TranslationStrings.TranslationString key) =>
-        GetString(key, SupportedLangs.English);
+    private static string GetEnglishFallback(TranslationStrings.TranslationString key, bool showInvalid = true) =>
+        GetString(key, SupportedLangs.English, showInvalid);
 
     /// <summary>
     /// Checks if a language ID represents a Chinese language.

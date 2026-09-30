@@ -9,6 +9,13 @@ internal static class LegacyPluginDetector
     internal const string LegacyPluginGuid = "com.d1gq.betteramongus";
     internal const string LegacyPluginFileName = "BetterAmongUs.dll";
 
+    private static readonly EnumerationOptions SearchOptions = new()
+    {
+        MatchCasing = MatchCasing.CaseInsensitive,
+        RecurseSubdirectories = true,
+        IgnoreInaccessible = true
+    };
+
     /// <summary>
     /// Returns every <c>BetterAmongUs.dll</c> below <paramref name="pluginsDirectory"/>, sorted for stable output.
     /// Missing or unreadable directories yield an empty list.
@@ -20,8 +27,7 @@ internal static class LegacyPluginDetector
 
         try
         {
-            return Directory.EnumerateFiles(pluginsDirectory, "*.dll", SearchOption.AllDirectories)
-                .Where(path => string.Equals(Path.GetFileName(path), LegacyPluginFileName, StringComparison.OrdinalIgnoreCase))
+            return Directory.EnumerateFiles(pluginsDirectory, LegacyPluginFileName, SearchOptions)
                 .OrderBy(path => path, StringComparer.Ordinal)
                 .ToArray();
         }

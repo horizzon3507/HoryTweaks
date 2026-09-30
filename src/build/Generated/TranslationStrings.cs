@@ -324,6 +324,186 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_ToVanilla = new("BetterOption.ToVanilla");
 
     /// <summary>
+    /// Base Translation: Moderation Center
+    /// </summary>
+    public static readonly TranslationString BetterOption_Moderation = new("BetterOption.Moderation");
+
+    /// <summary>
+    /// Base Translation: &lt; Back
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Back = new("ModerationCenter.Back");
+
+    /// <summary>
+    /// Base Translation: Refresh
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Refresh = new("ModerationCenter.Refresh");
+
+    /// <summary>
+    /// Base Translation: Kick
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Kick = new("ModerationCenter.Kick");
+
+    /// <summary>
+    /// Base Translation: Ban
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Ban = new("ModerationCenter.Ban");
+
+    /// <summary>
+    /// Base Translation: Confirm kick
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ConfirmKick = new("ModerationCenter.ConfirmKick");
+
+    /// <summary>
+    /// Base Translation: Confirm ban
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ConfirmBan = new("ModerationCenter.ConfirmBan");
+
+    /// <summary>
+    /// Base Translation: Select a player, then choose Kick or Ban. Every action asks for confirmation.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_SelectPlayer = new("ModerationCenter.SelectPlayer");
+
+    /// <summary>
+    /// Base Translation: Selected {0}. Choose Kick or Ban, then click it again to confirm.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Selected = new("ModerationCenter.Selected");
+
+    /// <summary>
+    /// Base Translation: Click Confirm kick to kick {0}. Select another player to cancel.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_PendingKick = new("ModerationCenter.PendingKick");
+
+    /// <summary>
+    /// Base Translation: Click Confirm ban to ban {0}. Bans are also added to the player ban list when it is enabled.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_PendingBan = new("ModerationCenter.PendingBan");
+
+    /// <summary>
+    /// Base Translation: {0} will be kicked.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Kicked = new("ModerationCenter.Kicked");
+
+    /// <summary>
+    /// Base Translation: {0} will be banned.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Banned = new("ModerationCenter.Banned");
+
+    /// <summary>
+    /// Base Translation: has been {0} by the host from the moderation center!
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ActionReason = new("ModerationCenter.ActionReason");
+
+    /// <summary>
+    /// Base Translation: Only the host can kick or ban players.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NotHost = new("ModerationCenter.NotHost");
+
+    /// <summary>
+    /// Base Translation: Host or join a lobby to manage players. The ban lists and history are still available.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NotInGame = new("ModerationCenter.NotInGame");
+
+    /// <summary>
+    /// Base Translation: Wait until the game has finished starting.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_GameStarting = new("ModerationCenter.GameStarting");
+
+    /// <summary>
+    /// Base Translation: The game has ended. Moderate players from the lobby.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_GameEnded = new("ModerationCenter.GameEnded");
+
+    /// <summary>
+    /// Base Translation: That player is no longer in the game.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetMissing = new("ModerationCenter.TargetMissing");
+
+    /// <summary>
+    /// Base Translation: Practice dummies cannot be moderated.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetIsDummy = new("ModerationCenter.TargetIsDummy");
+
+    /// <summary>
+    /// Base Translation: You cannot kick or ban yourself.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetIsSelf = new("ModerationCenter.TargetIsSelf");
+
+    /// <summary>
+    /// Base Translation: The host cannot be kicked or banned.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetIsHost = new("ModerationCenter.TargetIsHost");
+
+    /// <summary>
+    /// Base Translation: Wait until that player has finished loading.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetNotReady = new("ModerationCenter.TargetNotReady");
+
+    /// <summary>
+    /// Base Translation: No other players are in the game yet.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NoPlayers = new("ModerationCenter.NoPlayers");
+
+    /// <summary>
+    /// Base Translation: Player bans
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_PlayerList = new("ModerationCenter.PlayerList");
+
+    /// <summary>
+    /// Base Translation: Name bans
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NameList = new("ModerationCenter.NameList");
+
+    /// <summary>
+    /// Base Translation: Chat bans
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ChatList = new("ModerationCenter.ChatList");
+
+    /// <summary>
+    /// Base Translation: {0} has {1} entries: friend codes and hashed IDs, one player per line. Bans from the game are added automatically. Matching players are banned when they join.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_PlayerListInfo = new("ModerationCenter.PlayerListInfo");
+
+    /// <summary>
+    /// Base Translation: {0} has {1} entries: regex patterns, one per line. Players whose name matches are banned when they join.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NameListInfo = new("ModerationCenter.NameListInfo");
+
+    /// <summary>
+    /// Base Translation: {0} has {1} entries: regex patterns, one per line. Players whose chat message matches are kicked or banned by the host settings.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ChatListInfo = new("ModerationCenter.ChatListInfo");
+
+    /// <summary>
+    /// Base Translation: The file is open in your text editor. Lines starting with # or // are comments. Saved changes apply on the next check.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ListOpened = new("ModerationCenter.ListOpened");
+
+    /// <summary>
+    /// Base Translation: Edit the file in the Better_Data folder with a text editor. It opens from here in the lobby or main menu.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ListOpenBlocked = new("ModerationCenter.ListOpenBlocked");
+
+    /// <summary>
+    /// Base Translation: {0} was not found. It is created in Better_Data when the mod starts.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ListMissing = new("ModerationCenter.ListMissing");
+
+    /// <summary>
+    /// Base Translation: Kicks and bans this session
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_HistoryTitle = new("ModerationCenter.HistoryTitle");
+
+    /// <summary>
+    /// Base Translation: No kicks or bans yet.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_HistoryEmpty = new("ModerationCenter.HistoryEmpty");
+
+    /// <summary>
+    /// Base Translation: &lt;color=#aaaaaa&gt;{0}&lt;/color&gt; {1} &lt;color=#ffff00&gt;{2}&lt;/color&gt; {3}
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_HistoryEntry = new("ModerationCenter.HistoryEntry");
+
+    /// <summary>
     /// Base Translation: Tweaks
     /// </summary>
     public static readonly TranslationString BetterSetting = new("BetterSetting");

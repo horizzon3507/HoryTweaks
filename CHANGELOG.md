@@ -15,6 +15,8 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 ### Added
 
+- A host moderation center in the HoryTweaks options tab with the current player list, kick and ban actions that ask for confirmation, quick access to the player, name and chat ban lists and the kicks and bans of the current session.
+- Automated tests for the game-independent moderation rules, history and list helpers under `tests/HoryTweaks.Tests`.
 - A startup check that warns when a legacy `BetterAmongUs.dll` is still installed or loaded beside HoryTweaks, without touching the file.
 - A privacy-conscious diagnostic report written by `/dump` with the HoryTweaks version, game version, platform, compatibility checks, non-secret client options and recent redacted log lines.
 - Unit tests for the version comparison, legacy plugin detection and report redaction.

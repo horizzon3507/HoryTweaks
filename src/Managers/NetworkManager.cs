@@ -2,7 +2,7 @@
 using BepInEx.Unity.IL2CPP.Utils;
 using BetterAmongUs.Enums;
 using BetterAmongUs.Modules;
-using BetterAmongUs.Modules.AntiCheat;
+using BetterAmongUs.Modules.Rpc;
 using BetterAmongUs.MonoScripts.Extended;
 using BetterAmongUs.Network;
 using BetterAmongUs.Patches.Gameplay.UI.Settings;
@@ -17,7 +17,7 @@ using UnityEngine;
 namespace BetterAmongUs.Managers;
 
 /// <summary>
-/// Manages network communication, RPC handling, and anti-cheat measures for BetterAmongUs.
+/// Manages network communication and RPC handling for BetterAmongUs.
 /// </summary>
 internal static class NetworkManager
 {
@@ -419,7 +419,7 @@ internal static class NetworkManager
     }
 
     /// <summary>
-    /// Handles InnerNetObject RPCs with anti-cheat checks.
+    /// Handles InnerNetObject RPCs.
     /// </summary>
     private static bool HandleInnerNetObject(InnerNetObject netObj, byte callId, MessageReader reader)
     {
@@ -449,20 +449,18 @@ internal static class NetworkManager
     }
 
     /// <summary>
-    /// Processes RPCs for a player with anti-cheat validation.
+    /// Processes RPCs for a player with rate limiting and host validation.
     /// </summary>
     private static bool PlayerRpc(PlayerControl player, byte callId, MessageReader reader)
     {
         if (player.ExtendedData() != null && BetterGameSettings.RpcRateLimiting.GetBool())
         {
-            player.ExtendedData().AntiCheatInfo.RPCSentPS++;
-            if (player.ExtendedData().AntiCheatInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
+            player.ExtendedData().ActivityInfo.RPCSentPS++;
+            if (player.ExtendedData().ActivityInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
             {
                 return false;
             }
         }
-
-        BetterAntiCheat.HandleCheatRPCBeforeCheck(player, callId, reader);
 
         if (GameState.IsHost)
         {
@@ -475,14 +473,7 @@ internal static class NetworkManager
             tempReader.Recycle();
         }
 
-        if (BetterAntiCheat.CheckCancelRPC(player, callId, reader) == false)
-        {
-            if (!player.IsLocalPlayer()) BAUPlugin.Logger.LogCheat($"RPC canceled by Anti-Cheat: {Enum.GetName((RpcCalls)callId)}{Enum.GetName((CustomRPC)callId)} - {callId}");
-            return false;
-        }
-
-        BetterAntiCheat.CheckRPC(player, callId, reader);
-        BetterAntiCheat.HandleRPC(player, callId, reader);
+        BetterRpcRouter.HandleRPC(player, callId, reader);
 
         return true;
     }
@@ -497,14 +488,14 @@ internal static class NetworkManager
         {
             if (BetterGameSettings.RpcRateLimiting.GetBool())
             {
-                player.ExtendedData().AntiCheatInfo.RPCSentPS++;
-                if (player.ExtendedData().AntiCheatInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
+                player.ExtendedData().ActivityInfo.RPCSentPS++;
+                if (player.ExtendedData().ActivityInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
                 {
                     return false;
                 }
             }
 
-            if (BetterAntiCheat.RpcUpdateSystemCheck(player, systemType, msgReader) != true) return false;
+            if (BetterRpcRouter.RpcUpdateSystemCheck(player, systemType, msgReader) != true) return false;
 
             return true;
         }

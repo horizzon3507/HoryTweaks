@@ -1,5 +1,4 @@
 ﻿using BetterAmongUs.Managers;
-using BetterAmongUs.Modules.AntiCheat;
 using BetterAmongUs.Modules.Support;
 using BetterAmongUs.Network;
 using BetterAmongUs.Utilities;
@@ -62,7 +61,6 @@ internal static class ModManagerPatch
         }
 
         // Update various BAU systems each frame
-        BetterAntiCheat.Update();
         BetterNotificationManager.Update();
     }
 }

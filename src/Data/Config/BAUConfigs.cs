@@ -9,11 +9,6 @@ namespace BetterAmongUs.Data.Config;
 internal static class BAUConfigs
 {
     /// <summary>
-    /// Gets the configuration entry for anti-cheat setting.
-    /// </summary>
-    internal static BAUConfigEntry<bool> AntiCheat { get; } = new("Better Options", "AntiCheat", true);
-
-    /// <summary>
     /// Gets the configuration entry for sending Better RPC setting.
     /// </summary>
     internal static BAUConfigEntry<bool> SendBetterRpc { get; } = new("Better Options", "SendBetterRpc", true);
@@ -114,7 +109,7 @@ internal static class BAUConfigs
     internal static void LoadConfigs()
     {
         BAUModdedSupportEvents.OnBAUConfigEntriesLoadedEvent.InvokeAll([
-            AntiCheat, SendBetterRpc, BetterNotifications,
+            SendBetterRpc, BetterNotifications,
             ForceOwnLanguage, ChatDarkMode, ChatInGameplay, LobbyPlayerInfo,
             LessInfo, DisableLobbyTheme, UnlockFPS, ShowFPS,
             MinimapIcons, VentColorGroups, ColorblindTextOnTop, CommandPrefix,

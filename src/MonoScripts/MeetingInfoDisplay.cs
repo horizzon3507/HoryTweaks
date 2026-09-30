@@ -1,6 +1,5 @@
 ﻿using AmongUs.Data;
 using BetterAmongUs.Attributes;
-using BetterAmongUs.Data;
 using BetterAmongUs.Data.Config;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Modules.Support;
@@ -162,29 +161,12 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
         if (_playerInfo == null || _playerInfo.ExtendedData() == null)
             return;
 
-        SetPlayerTags(_ssbTag);
         _ssbInfo.Append(_playerInfo.GetRoleInfo(true));
 
         UpdateNameTextPosition(_ssbInfo.ToString(), _ssbInfo.ToString());
 
         UpdateTextIfChanged(_infoText, _ssbInfo.ToString(), ref _lastInfoText);
         UpdateTextIfChanged(_topText, _ssbTag.ToString(), ref _lastTopText);
-    }
-
-    /// <summary>
-    /// Sets player tags based on data from BetterDataManager.
-    /// </summary>
-    /// <param name="ssbTag">StringBuilder for tag text.</param>
-    [HideFromIl2Cpp]
-    private void SetPlayerTags(SplitStringBuilder ssbTag)
-    {
-        if (_playerInfo == null)
-            return;
-
-        if (BetterDataManager.Files.BetterDataFile.TryGetCheatInfo(_playerInfo, out var info))
-        {
-            ssbTag.Append(info.title.ToColor(info.hexColor));
-        }
     }
 
     /// <summary>
@@ -292,10 +274,7 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
                 return TranslationStrings.DisconnectReasonMeeting_Left.LocalizedString;
 
             case DisconnectReasons.Banned:
-                if (betterData.AntiCheatInfo != null && betterData.AntiCheatInfo.BannedByAntiCheat)
-                    return TranslationStrings.DisconnectReasonMeeting_AntiCheat.LocalizedString;
-                else
-                    return TranslationStrings.DisconnectReasonMeeting_Banned.LocalizedString;
+                return TranslationStrings.DisconnectReasonMeeting_Banned.LocalizedString;
 
             case DisconnectReasons.Kicked:
                 return TranslationStrings.DisconnectReasonMeeting_Kicked.LocalizedString;

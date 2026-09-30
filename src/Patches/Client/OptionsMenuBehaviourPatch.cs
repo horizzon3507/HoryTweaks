@@ -45,7 +45,6 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.ClientOptions.Clear();
 
         // Toggle options with config binding
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_AntiCheat, BAUConfigs.AntiCheat, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_SendBetterRpc, BAUConfigs.SendBetterRpc, 1, __instance, SendBetterRpcAction);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterNotifications, BAUConfigs.BetterNotifications, 1, __instance, BetterNotificationManager.ClearNotifications);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ForceOwnLanguage, BAUConfigs.ForceOwnLanguage, 1, __instance);

@@ -1,6 +1,5 @@
 ﻿using AmongUs.Data;
 using BetterAmongUs.Attributes;
-using BetterAmongUs.Data;
 using BetterAmongUs.Data.Config;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
@@ -39,18 +38,6 @@ internal class PlayerInfoDisplay : MonoBehaviour
     /// Cached regex pattern for friend code validation.
     /// </summary>
     private static readonly Regex _friendCodePattern = new(@"^[a-zA-Z0-9#]+$", RegexOptions.Compiled);
-
-    /// <summary>
-    /// Cached color values for performance optimization.
-    /// </summary>
-    private static readonly Dictionary<string, Color32> _cachedColors = new()
-    {
-        [Colors.SickoHexColor] = Utils.HexToColor32(Colors.SickoHexColor),
-        [Colors.AUMHexColor] = Utils.HexToColor32(Colors.AUMHexColor),
-        [Colors.KNHexColor] = Utils.HexToColor32(Colors.KNHexColor),
-        [Colors.MMCHexColor] = Utils.HexToColor32(Colors.MMCHexColor),
-        [Colors.CheaterHexColor] = Utils.HexToColor32(Colors.CheaterHexColor)
-    };
 
     /// <summary>
     /// Initializes the player info display.
@@ -135,7 +122,6 @@ internal class PlayerInfoDisplay : MonoBehaviour
         _ssbTagBottom.Clear();
 
         UpdatePlayerInfo();
-        UpdatePlayerHighlight();
         UpdateColorBlindTextPosition();
         _nameText.transform.parent.localPosition = new Vector3(0f, 0.8f, -0.5f);
 
@@ -178,7 +164,6 @@ internal class PlayerInfoDisplay : MonoBehaviour
         }
 
         string newName = _player.Data.PlayerName;
-        string hashPuid = Utils.GetHashPuid(_player);
         string platform = Utils.GetPlatformName(_player, useTag: true);
 
         string friendCode = ValidateFriendCode(out string friendCodeColor);
@@ -188,9 +173,6 @@ internal class PlayerInfoDisplay : MonoBehaviour
 
         if (DataManager.Settings.Gameplay.StreamerMode)
             platform = TranslationStrings.Player_PlatformHidden.LocalizedString;
-
-        if (!_player.IsInShapeshift())
-            SetPlayerOutline(_ssbTag);
 
         if (GameState.IsInGame && GameState.IsLobby && !GameState.IsFreePlay)
         {
@@ -276,8 +258,11 @@ internal class PlayerInfoDisplay : MonoBehaviour
         {
             if (GameState.IsHost && BetterGameSettings.InvalidFriendCode.GetBool())
             {
-                string kickMessage = TranslationStrings.AntiCheat_KickMessage.Format(TranslationStrings.AntiCheat_ByAntiCheat, TranslationStrings.AntiCheat_Reason_InvalidFriendCode);
-                _player.TryKick(true, kickMessage, true);
+                string kickMessage = TranslationStrings.HostTools_KickMessage.Format(
+                    TranslationStrings.HostTools_Kick,
+                    TranslationStrings.HostTools_InvalidFriendCode
+                );
+                _player.TryKick(false, kickMessage);
             }
         }
 
@@ -334,38 +319,6 @@ internal class PlayerInfoDisplay : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets player outline based on data from BetterDataManager.
-    /// </summary>
-    /// <param name="ssbTag">StringBuilder for tag text.</param>
-    [HideFromIl2Cpp]
-    private void SetPlayerOutline(SplitStringBuilder? ssbTag)
-    {
-        if (_player == null)
-            return;
-
-        if (_player.Data == null)
-            return;
-
-        string hashPuid = Utils.GetHashPuid(_player);
-        string friendCode = _player.Data.FriendCode;
-
-        var color = _player.cosmetics.currentBodySprite.BodySprite.material.GetColor("_OutlineColor");
-
-        if (BetterDataManager.Files.BetterDataFile.TryGetCheatInfo(_player.Data, out var info))
-        {
-            if (ssbTag.HasValue)
-            {
-                ssbTag.Value.Append(info.title.ToColor(info.hexColor));
-            }
-            _player.SetOutlineByHex(true, info.hexColor);
-        }
-        else if (_cachedColors.Any(kvp => color == kvp.Value))
-        {
-            _player.SetOutline(false, null);
-        }
-    }
-
-    /// <summary>
     /// Sets lobby specific information.
     /// </summary>
     [HideFromIl2Cpp]
@@ -395,14 +348,6 @@ internal class PlayerInfoDisplay : MonoBehaviour
     private void SetInGameInfo(SplitStringBuilder ssbTagTop)
     {
         ssbTagTop.Append(_player.GetRoleInfo(true));
-    }
-
-    /// <summary>
-    /// Updates player highlight/outline.
-    /// </summary>
-    private void UpdatePlayerHighlight()
-    {
-        SetPlayerOutline(null);
     }
 
     /// <summary>

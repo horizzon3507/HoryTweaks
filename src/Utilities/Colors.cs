@@ -140,9 +140,4 @@ internal static class Colors
     /// </summary>
     internal static readonly Color ImpostorRed = new Color32(byte.MaxValue, 25, 25, byte.MaxValue);
 
-    internal static readonly string SickoHexColor = "#00f583";
-    internal static readonly string AUMHexColor = "#4f0000";
-    internal static readonly string KNHexColor = "#8731e7";
-    internal static readonly string MMCHexColor = "#9c8200";
-    internal static readonly string CheaterHexColor = "#fc0000";
 }

@@ -144,31 +144,6 @@ public static class TranslationStrings
     public static readonly TranslationString Player_BetterUser = new("Player.BetterUser");
 
     /// <summary>
-    /// Base Translation: Sicko User
-    /// </summary>
-    public static readonly TranslationString Player_SickoUser = new("Player.SickoUser");
-
-    /// <summary>
-    /// Base Translation: AUM User
-    /// </summary>
-    public static readonly TranslationString Player_AUMUser = new("Player.AUMUser");
-
-    /// <summary>
-    /// Base Translation: KN User
-    /// </summary>
-    public static readonly TranslationString Player_KNUser = new("Player.KNUser");
-
-    /// <summary>
-    /// Base Translation: MMC User
-    /// </summary>
-    public static readonly TranslationString Player_MMCUser = new("Player.MMCUser");
-
-    /// <summary>
-    /// Base Translation: Flagged Player
-    /// </summary>
-    public static readonly TranslationString Player_FlaggedPlayer = new("Player.FlaggedPlayer");
-
-    /// <summary>
     /// Base Translation: {0} Left the game!
     /// </summary>
     public static readonly TranslationString DisconnectReason_Left = new("DisconnectReason.Left");
@@ -224,11 +199,6 @@ public static class TranslationStrings
     public static readonly TranslationString DisconnectReasonMeeting_Banned = new("DisconnectReasonMeeting.Banned");
 
     /// <summary>
-    /// Base Translation: Banned By Anti-Cheat
-    /// </summary>
-    public static readonly TranslationString DisconnectReasonMeeting_AntiCheat = new("DisconnectReasonMeeting.AntiCheat");
-
-    /// <summary>
     /// Base Translation: Banned By Server
     /// </summary>
     public static readonly TranslationString DisconnectReasonMeeting_Cheater = new("DisconnectReasonMeeting.Cheater");
@@ -244,7 +214,7 @@ public static class TranslationStrings
     public static readonly TranslationString WelcomeMsg_ThanksForDownloading = new("WelcomeMsg.ThanksForDownloading");
 
     /// <summary>
-    /// Base Translation: &lt;color=#0dff00&gt;{0}&lt;/color&gt; Is a mod for improving the vanilla Among Us experience with a built-in {1} and other features, &lt;color=#0dff00&gt;{0}&lt;/color&gt; is a client-sided mod so it can be used with other vanilla Among Us players.
+    /// Base Translation: &lt;color=#0dff00&gt;{0}&lt;/color&gt; improves the vanilla Among Us experience with client-side features like {1}, host tools and more. You can play with people using the vanilla game.
     /// </summary>
     public static readonly TranslationString WelcomeMsg_BAUDescription1 = new("WelcomeMsg.BAUDescription1");
 
@@ -262,11 +232,6 @@ public static class TranslationStrings
     /// Base Translation: &lt; Prev
     /// </summary>
     public static readonly TranslationString BetterOption_Previous = new("BetterOption.Previous");
-
-    /// <summary>
-    /// Base Translation: &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt;
-    /// </summary>
-    public static readonly TranslationString BetterOption_AntiCheat = new("BetterOption.AntiCheat");
 
     /// <summary>
     /// Base Translation: &lt;color=#4f92ff&gt;Send Better RPC&lt;/color&gt;
@@ -297,6 +262,11 @@ public static class TranslationStrings
     /// Base Translation: Show Lobby Info
     /// </summary>
     public static readonly TranslationString BetterOption_LobbyInfo = new("BetterOption.LobbyInfo");
+
+    /// <summary>
+    /// Base Translation: Less Info
+    /// </summary>
+    public static readonly TranslationString BetterOption_LessInfo = new("BetterOption.LessInfo");
 
     /// <summary>
     /// Base Translation: Disable Lobby Theme
@@ -334,6 +304,11 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_BetterColorblindText = new("BetterOption.BetterColorblindText");
 
     /// <summary>
+    /// Base Translation: Colorblind Text On Top
+    /// </summary>
+    public static readonly TranslationString BetterOption_ColorblindTextOnTop = new("BetterOption.ColorblindTextOnTop");
+
+    /// <summary>
     /// Base Translation: Compress Setting Files
     /// </summary>
     public static readonly TranslationString BetterOption_CompressSettingFiles = new("BetterOption.CompressSettingFiles");
@@ -369,9 +344,9 @@ public static class TranslationStrings
     public static readonly TranslationString BetterSetting_MainHeader_System = new("BetterSetting.MainHeader.System");
 
     /// <summary>
-    /// Base Translation: &lt;color=#4f92ff&gt;Anti-Cheat Settings&lt;/color&gt;
+    /// Base Translation: &lt;color=#4f92ff&gt;Host tools&lt;/color&gt;
     /// </summary>
-    public static readonly TranslationString BetterSetting_MainHeader_AntiCheat = new("BetterSetting.MainHeader.AntiCheat");
+    public static readonly TranslationString BetterSetting_MainHeader_HostTools = new("BetterSetting.MainHeader.HostTools");
 
     /// <summary>
     /// Base Translation: &lt;color=#d7d700&gt;Gameplay Settings&lt;/color&gt;
@@ -384,42 +359,17 @@ public static class TranslationStrings
     public static readonly TranslationString BetterSetting_TextHeader_HostOnly = new("BetterSetting.TextHeader.HostOnly");
 
     /// <summary>
-    /// Base Translation: &lt;color=#4f92ff&gt;Detections&lt;/color&gt;
-    /// </summary>
-    public static readonly TranslationString BetterSetting_TextHeader_Detections = new("BetterSetting.TextHeader.Detections");
-
-    /// <summary>
-    /// Base Translation: Kick cooldown
+    /// Base Translation: Host moderation cooldown
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_KickCooldown = new("BetterSetting.Setting.KickCooldown");
 
     /// <summary>
-    /// Base Translation: When a player is caught cheating
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_WhenCheating = new("BetterSetting.Setting.WhenCheating");
-
-    /// <summary>
-    /// Base Translation: Notify
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_WhenCheating_Notify = new("BetterSetting.Setting.WhenCheating.Notify");
-
-    /// <summary>
-    /// Base Translation: Kick
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_WhenCheating_Kick = new("BetterSetting.Setting.WhenCheating.Kick");
-
-    /// <summary>
-    /// Base Translation: Ban
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_WhenCheating_Ban = new("BetterSetting.Setting.WhenCheating.Ban");
-
-    /// <summary>
-    /// Base Translation: Detected invalid friendCodes
+    /// Base Translation: Kick players with invalid friend codes
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_InvalidFriendCode = new("BetterSetting.Setting.InvalidFriendCode");
 
     /// <summary>
-    /// Base Translation: Cancel invalid sabotages
+    /// Base Translation: Cancel invalid sabotage attempts
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_CancelInvalidSabotage = new("BetterSetting.Setting.CancelInvalidSabotage");
 
@@ -449,52 +399,27 @@ public static class TranslationStrings
     public static readonly TranslationString BetterSetting_Setting_UseBanChatListBan = new("BetterSetting.Setting.UseBanChatListBan");
 
     /// <summary>
-    /// Base Translation: Censor detection reason
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_CensorDetectionReason = new("BetterSetting.Setting.CensorDetectionReason");
-
-    /// <summary>
-    /// Base Translation: Detected player levels
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_DetectedLevel = new("BetterSetting.Setting.DetectedLevel");
-
-    /// <summary>
-    /// Base Translation: Detected player level above
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_DetectedLevelAbove = new("BetterSetting.Setting.DetectedLevelAbove");
-
-    /// <summary>
-    /// Base Translation: Kick player levels
+    /// Base Translation: Enforce a minimum player level
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_KickLevel = new("BetterSetting.Setting.KickLevel");
 
     /// <summary>
-    /// Base Translation: Kick player level below
+    /// Base Translation: Minimum player level
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_KickLevelBelow = new("BetterSetting.Setting.KickLevelBelow");
 
     /// <summary>
-    /// Base Translation: Only when player count at least
+    /// Base Translation: Minimum players required to enforce level
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_KickLevelBelowMinimumPlayers = new("BetterSetting.Setting.KickLevelBelowMinimumPlayers");
 
     /// <summary>
-    /// Base Translation: Detect cheat clients
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_DetectCheatClients = new("BetterSetting.Setting.DetectCheatClients");
-
-    /// <summary>
-    /// Base Translation: Detect invalid Rpcs
-    /// </summary>
-    public static readonly TranslationString BetterSetting_Setting_DetectInvalidRpcs = new("BetterSetting.Setting.DetectInvalidRpcs");
-
-    /// <summary>
-    /// Base Translation: Rpc Rate Limiting
+    /// Base Translation: Limit RPCs sent per second
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_RpcRateLimiting = new("BetterSetting.Setting.RpcRateLimiting");
 
     /// <summary>
-    /// Base Translation: Rate Limit
+    /// Base Translation: RPC limit per second
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_RateLimit = new("BetterSetting.Setting.RateLimit");
 
@@ -524,184 +449,39 @@ public static class TranslationStrings
     public static readonly TranslationString BetterSetting_TempSetting_HideAndSeekImpNum = new("BetterSetting.TempSetting.HideAndSeekImpNum");
 
     /// <summary>
-    /// Base Translation: Anti-Cheat
-    /// </summary>
-    public static readonly TranslationString AntiCheat = new("AntiCheat");
-
-    /// <summary>
     /// Base Translation: Banned
     /// </summary>
-    public static readonly TranslationString AntiCheat_Ban = new("AntiCheat.Ban");
+    public static readonly TranslationString HostTools_Ban = new("HostTools.Ban");
 
     /// <summary>
     /// Base Translation: Kicked
     /// </summary>
-    public static readonly TranslationString AntiCheat_Kick = new("AntiCheat.Kick");
-
-    /// <summary>
-    /// Base Translation: Player
-    /// </summary>
-    public static readonly TranslationString AntiCheat_PlayerDetected = new("AntiCheat.PlayerDetected");
-
-    /// <summary>
-    /// Base Translation: Anti-Cheat has been temporarily disabled on modded protocol!
-    /// </summary>
-    public static readonly TranslationString AntiCheat_DisabledModdedProtocol = new("AntiCheat.DisabledModdedProtocol");
-
-    /// <summary>
-    /// Base Translation: Has been detected doing an unauthorized action
-    /// </summary>
-    public static readonly TranslationString AntiCheat_UnauthorizedAction = new("AntiCheat.UnauthorizedAction");
-
-    /// <summary>
-    /// Base Translation: {0} by &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt;
-    /// </summary>
-    public static readonly TranslationString AntiCheat_ByAntiCheat = new("AntiCheat.ByAntiCheat");
+    public static readonly TranslationString HostTools_Kick = new("HostTools.Kick");
 
     /// <summary>
     /// Base Translation: {0}! Reason: &lt;color=#fc0000&gt;{1}&lt;/color&gt;
     /// </summary>
-    public static readonly TranslationString AntiCheat_KickMessage = new("AntiCheat.KickMessage");
+    public static readonly TranslationString HostTools_KickMessage = new("HostTools.KickMessage");
 
     /// <summary>
-    /// Base Translation: has been {0} due to being on the ban player list!
+    /// Base Translation: has been {0} for being on the banned player list!
     /// </summary>
-    public static readonly TranslationString AntiCheat_BanPlayerListMessage = new("AntiCheat.BanPlayerListMessage");
+    public static readonly TranslationString HostTools_BanPlayerListMessage = new("HostTools.BanPlayerListMessage");
 
     /// <summary>
-    /// Base Translation: has been {0} due to their name being on the ban name list!
+    /// Base Translation: has been {0} for having a name on the banned name list!
     /// </summary>
-    public static readonly TranslationString AntiCheat_BanNameListMessage = new("AntiCheat.BanNameListMessage");
+    public static readonly TranslationString HostTools_BanNameListMessage = new("HostTools.BanNameListMessage");
 
     /// <summary>
-    /// Base Translation: Has been detected with a cheat
+    /// Base Translation: Invalid friend code
     /// </summary>
-    public static readonly TranslationString AntiCheat_HasBeenDetectedWithCheat = new("AntiCheat.HasBeenDetectedWithCheat");
+    public static readonly TranslationString HostTools_InvalidFriendCode = new("HostTools.InvalidFriendCode");
 
     /// <summary>
-    /// Base Translation: Has been detected with a cheat client
+    /// Base Translation: Failed to initialize before the timeout expired
     /// </summary>
-    public static readonly TranslationString AntiCheat_HasBeenDetectedWithCheatClient = new("AntiCheat.HasBeenDetectedWithCheatClient");
-
-    /// <summary>
-    /// Base Translation: Invalid Action RPC: {0}
-    /// </summary>
-    public static readonly TranslationString AntiCheat_InvalidAction = new("AntiCheat.InvalidAction");
-
-    /// <summary>
-    /// Base Translation: Invalid Action RPC: {0}
-    /// </summary>
-    public static readonly TranslationString AntiCheat_InvalidActionRPC = new("AntiCheat.InvalidActionRPC");
-
-    /// <summary>
-    /// Base Translation: Invalid Host RPC: {0}
-    /// </summary>
-    public static readonly TranslationString AntiCheat_InvalidHostRPC = new("AntiCheat.InvalidHostRPC");
-
-    /// <summary>
-    /// Base Translation: Invalid Set RPC: {0}
-    /// </summary>
-    public static readonly TranslationString AntiCheat_InvalidSetRPC = new("AntiCheat.InvalidSetRPC");
-
-    /// <summary>
-    /// Base Translation: Invalid Lobby RPC: {0}
-    /// </summary>
-    public static readonly TranslationString AntiCheat_InvalidLobbyRPC = new("AntiCheat.InvalidLobbyRPC");
-
-    /// <summary>
-    /// Base Translation: Invalid Level: {0}
-    /// </summary>
-    public static readonly TranslationString AntiCheat_InvalidLevelRPC = new("AntiCheat.InvalidLevelRPC");
-
-    /// <summary>
-    /// Base Translation: Attempted To Ban Exploit
-    /// </summary>
-    public static readonly TranslationString AntiCheat_TryBanExploit = new("AntiCheat.TryBanExploit");
-
-    /// <summary>
-    /// Base Translation: Sicko Menu
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Cheat_Sicko = new("AntiCheat.Cheat.Sicko");
-
-    /// <summary>
-    /// Base Translation: AUM
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Cheat_AUM = new("AntiCheat.Cheat.AUM");
-
-    /// <summary>
-    /// Base Translation: AUM Chat
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Cheat_AUMChat = new("AntiCheat.Cheat.AUMChat");
-
-    /// <summary>
-    /// Base Translation: Kill Network
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Cheat_KN = new("AntiCheat.Cheat.KN");
-
-    /// <summary>
-    /// Base Translation: KN Chat
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Cheat_KNChat = new("AntiCheat.Cheat.KNChat");
-
-    /// <summary>
-    /// Base Translation: Mod Menu Crew
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Cheat_MMC = new("AntiCheat.Cheat.MMC");
-
-    /// <summary>
-    /// Base Translation: MMC Chat
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Cheat_MMCChat = new("AntiCheat.Cheat.MMCChat");
-
-    /// <summary>
-    /// Base Translation: Invalid Friend Code
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_InvalidFriendCode = new("AntiCheat.Reason.InvalidFriendCode");
-
-    /// <summary>
-    /// Base Translation: Platform Spoofer
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_PlatformSpoofer = new("AntiCheat.Reason.PlatformSpoofer");
-
-    /// <summary>
-    /// Base Translation: RPC Spam
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_RPCSentPS = new("AntiCheat.Reason.RPCSentPS");
-
-    /// <summary>
-    /// Base Translation: Vote Kick Exploit
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_VoteKick = new("AntiCheat.Reason.VoteKick");
-
-    /// <summary>
-    /// Base Translation: Failed To Initialize Player
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_Initialize = new("AntiCheat.Reason.Initialize");
-
-    /// <summary>
-    /// Base Translation: Known Sicko User
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_SickoMenuUser = new("AntiCheat.Reason.SickoMenuUser");
-
-    /// <summary>
-    /// Base Translation: Known AUM User
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_AUMUser = new("AntiCheat.Reason.AUMUser");
-
-    /// <summary>
-    /// Base Translation: Known KN User
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_KNUser = new("AntiCheat.Reason.KNUser");
-
-    /// <summary>
-    /// Base Translation: Known MMC User
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_MMCUser = new("AntiCheat.Reason.MMCUser");
-
-    /// <summary>
-    /// Base Translation: Known Cheater
-    /// </summary>
-    public static readonly TranslationString AntiCheat_Reason_KnownCheater = new("AntiCheat.Reason.KnownCheater");
+    public static readonly TranslationString HostTools_InitializeTimeout = new("HostTools.InitializeTimeout");
 
     /// <summary>
     /// Base Translation: Game Summary
@@ -774,7 +554,7 @@ public static class TranslationStrings
     public static readonly TranslationString Command_Help_Description = new("Command.Help.Description");
 
     /// <summary>
-    /// Base Translation: &lt;color=#0dff00&gt;{0}&lt;/color&gt; improves your vanilla Among Us experience with useful client-side features.\nOpen the pause menu to access more options and game settings.\nUse &lt;color=#e0b700&gt;/commands&lt;/color&gt; to see every available command.\n\nFeatures:\n- Built-in client-side anti-cheat.\n- Additional options for hosts.\n- Enhanced settings to customize your game.\n- Commands to manage and improve your experience.\n- Client-side improvements and quality-of-life features.
+    /// Base Translation: &lt;color=#0dff00&gt;{0}&lt;/color&gt; improves your vanilla Among Us experience with useful client-side features.\nOpen the pause menu to access more options and game settings.\nUse &lt;color=#e0b700&gt;/commands&lt;/color&gt; to see every available command.\n\nFeatures:\n- Host-side gameplay validation and manual moderation.\n- Additional options for hosts.\n- Enhanced settings to customize your game.\n- Commands to manage and improve your experience.\n- Client-side improvements and quality-of-life features.
     /// </summary>
     public static readonly TranslationString Command_Help_Body = new("Command.Help.Body");
 
@@ -812,16 +592,6 @@ public static class TranslationStrings
     /// Base Translation: Show information about all players
     /// </summary>
     public static readonly TranslationString Command_PlayersInfo_Description = new("Command.PlayersInfo.Description");
-
-    /// <summary>
-    /// Base Translation: Remove all players from local &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt; data
-    /// </summary>
-    public static readonly TranslationString Command_RemoveAll_Description = new("Command.RemoveAll.Description");
-
-    /// <summary>
-    /// Base Translation: Remove a player from local &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt; data
-    /// </summary>
-    public static readonly TranslationString Command_RemovePlayer_Description = new("Command.RemovePlayer.Description");
 
     /// <summary>
     /// Base Translation: Set the command prefix
@@ -882,21 +652,6 @@ public static class TranslationStrings
     /// Base Translation: Command prefix changed from &lt;#c1c100&gt;{0}&lt;/color&gt; to &lt;#c1c100&gt;{1}&lt;/color&gt;
     /// </summary>
     public static readonly TranslationString Command_Prefix_Updated = new("Command.Prefix.Updated");
-
-    /// <summary>
-    /// Base Translation: All local &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt; data has been removed!
-    /// </summary>
-    public static readonly TranslationString Command_RemoveAll_Success = new("Command.RemoveAll.Success");
-
-    /// <summary>
-    /// Base Translation: {0} was removed from local &lt;color=#4f92ff&gt;Anti-Cheat&lt;/color&gt; data!
-    /// </summary>
-    public static readonly TranslationString Command_RemovePlayer_Success = new("Command.RemovePlayer.Success");
-
-    /// <summary>
-    /// Base Translation: Could not find player data for identifier {0}.
-    /// </summary>
-    public static readonly TranslationString Command_RemovePlayer_NotFound = new("Command.RemovePlayer.NotFound");
 
     /// <summary>
     /// Base Translation: This command can only be used during a meeting

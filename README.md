@@ -4,7 +4,7 @@
   <img width="700" height="500" alt="BetterAmongUs logo retained from upstream" src="/assets/BetterAmongUs-Logo.png" />
 </p>
 
-HoryTweaks is a client-side Among Us mod forked from D1GQ's BetterAmongUs. It adds client-side improvements, expanded host settings and local anti-cheat protections while remaining compatible with unmodified players.
+HoryTweaks is a client-side Among Us mod forked from D1GQ's BetterAmongUs. It adds client-side improvements, host gameplay validation and manual moderation tools while remaining compatible with unmodified players.
 
 > The existing BetterAmongUs logo and artwork are retained from upstream for now. No HoryTweaks artwork has been supplied.
 
@@ -44,11 +44,11 @@ Proton and game updates can affect mod compatibility. HoryTweaks does not provid
 
 ## Features
 
-- Client-side anti-cheat checks for invalid actions and known cheat clients.
-- Additional lobby and gameplay settings for hosts.
+- Host-side gameplay validation for selected actions and invalid sabotage attempts.
+- Manual host moderation, including ban lists, kick cooldown, minimum-level checks and banned-chat patterns.
 - Client-side improvements such as lobby information, customizable chat and minimap options.
 - Chat commands for player information, log export and supported host actions.
-- Preset and local anti-cheat data retained under the compatible `Better_Data` user-data folder.
+- Presets and moderation lists retained under the compatible `Better_Data` user-data folder.
 
 ## Commands
 

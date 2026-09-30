@@ -1,5 +1,5 @@
 ﻿using BetterAmongUs.Commands;
-using BetterAmongUs.Modules.AntiCheat;
+using BetterAmongUs.Modules.Rpc;
 using System.Reflection;
 using System.Runtime.Serialization;
 

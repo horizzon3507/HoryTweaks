@@ -63,7 +63,7 @@ internal static class PlayerJoinAndLeftPatch
                     if (TextFileHandler.CompareStringMatch(BetterDataManager.Files.banPlayerListFilePath,
                             [player.Data.FriendCode, player.GetHashPuid()]))
                     {
-                        player.Kick(true, TranslationStrings.AntiCheat_BanPlayerListMessage.LocalizedString, bypassDataCheck: true);
+                        player.Kick(true, TranslationStrings.HostTools_BanPlayerListMessage.LocalizedString, bypassDataCheck: true);
                         yield break;
                     }
                 }
@@ -77,7 +77,7 @@ internal static class PlayerJoinAndLeftPatch
                     if (TextFileHandler.CompareStringRegexMatches(BetterDataManager.Files.banNameListFilePath,
                             player.Data.PlayerName))
                     {
-                        player.Kick(true, TranslationStrings.AntiCheat_BanNameListMessage.LocalizedString, bypassDataCheck: true);
+                        player.Kick(true, TranslationStrings.HostTools_BanNameListMessage.LocalizedString, bypassDataCheck: true);
                     }
                 }
             }
@@ -141,7 +141,7 @@ internal static class PlayerJoinAndLeftPatch
             return;
 
         // Prevent showing duplicate notifications
-        if (playerData.ExtendedData().AntiCheatInfo.BannedByAntiCheat || playerData.ExtendedData().HasShowDcMsg)
+        if (playerData.ExtendedData().HasShowDcMsg)
             return;
 
         playerData.ExtendedData().HasShowDcMsg = true;

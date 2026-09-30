@@ -1,8 +1,6 @@
 ﻿using BepInEx.Unity.IL2CPP.Utils;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 using BetterAmongUs.Data.Config;
-using BetterAmongUs.Generated;
-using BetterAmongUs.Managers;
 using BetterAmongUs.Modules;
 using BetterAmongUs.Modules.OptionItems;
 using BetterAmongUs.Modules.Support;
@@ -46,11 +44,6 @@ internal static class PlayerControlPatch
                         // Send command to server to change color
                         player.CmdCheckColor((byte)BAUConfigs.FavoriteColor.Value);
                     }
-                }
-
-                if (GameState.IsModdedProtocol)
-                {
-                    BetterNotificationManager.Notify(TranslationStrings.AntiCheat_DisabledModdedProtocol.LocalizedString, 6f, true);
                 }
             }
         }

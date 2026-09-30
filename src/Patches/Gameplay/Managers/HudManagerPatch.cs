@@ -15,7 +15,7 @@ internal static class HudManagerPatch
 {
     internal static string WelcomeMessage => $"<b><color=#00b530><size=125%><align=\"center\">{TranslationStrings.WelcomeMsg_WelcomeToBAU.Format(TranslationStrings.BetterAmongUs)}\n{BAUPlugin.ModInfo.VERSION_STRING}</size>\n" +
         $"{TranslationStrings.WelcomeMsg_ThanksForDownloading}</align></color></b>\n<size=120%> </size>\n" +
-        TranslationStrings.WelcomeMsg_BAUDescription1.Format(TranslationStrings.BAU, TranslationStrings.BetterOption_AntiCheat);
+        TranslationStrings.WelcomeMsg_BAUDescription1.Format(TranslationStrings.BAU, TranslationStrings.BetterOption_BetterNotifications);
 
     private static bool HasBeenWelcomed = false;
 

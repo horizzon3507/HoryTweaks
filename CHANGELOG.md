@@ -25,6 +25,7 @@ The first HoryTweaks foundation separates the fork's identity and release channe
 
 - Fork identity, plugin metadata, update feeds and download links now point to HoryTweaks.
 - Build output is named `HoryTweaks.dll`.
+- Automatic cheat detection, its database and detection settings were removed while RPC routing, host gameplay validation, rate limiting, manual moderation and host commands remain.
 
 ### Fixed
 

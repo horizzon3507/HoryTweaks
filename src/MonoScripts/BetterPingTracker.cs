@@ -95,7 +95,7 @@ internal sealed class BetterPingTracker : MonoBehaviour
         if (BAUConfigs.ShowFPS.Value)
         {
             float FPSNum = 1.0f / Time.deltaTime;
-            sb.AppendFormat("<color=#0dff00><size=75%>FPS: <b>{0}</b></size></color>\n", (int)FPSNum);
+            sb.AppendFormat("<color=#ffffbe><size=75%>FPS: <b>{0}</b></size></color>\n", (int)FPSNum);
         }
 
         // Add Host Info if not in lobby

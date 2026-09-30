@@ -23,11 +23,6 @@ internal static class ChatPatch
     {
         get
         {
-            if (BAUConfigs.ChatInGameplay.Value)
-            {
-                return true;
-            }
-
             if (!GameState.IsInGamePlay)
             {
                 return true;
@@ -260,7 +255,7 @@ internal static class ChatPatch
             // Show BAU user tag
             if (sourcePlayer.IsLocalPlayer() || betterData.IsBetterUser)
             {
-                ssbTag.AppendFormat("<color=#0dff00>{1}{0}</color>", TranslationStrings.Player_BetterUser.LocalizedString, betterData.IsVerifiedBetterUser || sourcePlayer.IsLocalPlayer() ? "✓ " : "");
+                ssbTag.AppendFormat("<color=#ffffbe>{1}{0}</color>", TranslationStrings.Player_BetterUser.LocalizedString, betterData.IsVerifiedBetterUser || sourcePlayer.IsLocalPlayer() ? "✓ " : "");
             }
         }
 

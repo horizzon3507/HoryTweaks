@@ -39,7 +39,7 @@
 
   "WelcomeMsg.WelcomeToBAU": "Welcome To {0}",
   "WelcomeMsg.ThanksForDownloading": "Thanks for downloading!",
-  "WelcomeMsg.BAUDescription1": "<color=#0dff00>{0}</color> improves the vanilla Among Us experience with client-side features like {1}, host tools and more. You can play with people using the vanilla game.",
+  "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> improves the vanilla Among Us experience with client-side features like {1}, host tools and more. You can play with people using the vanilla game.",
 
   "BetterOption": "Better Options",
   "BetterOption.Next": "Next >",
@@ -48,7 +48,7 @@
   "BetterOption.BetterNotifications": "<color=#4f92ff>Better Notifications</color>",
   "BetterOption.ForceOwnLanguage": "Force System language",
   "BetterOption.ChatDarkMode": "Chat Dark Mode",
-  "BetterOption.ChatInGame": "Chat In Gameplay",
+  "BetterOption.HideConsole": "Hide Console (restart required)",
   "BetterOption.LobbyInfo": "Show Lobby Info",
   "BetterOption.LessInfo": "Less Info",
   "BetterOption.LobbyTheme": "Disable Lobby Theme",
@@ -114,7 +114,7 @@
   "Game.Summary.Result.NoSurvivors": "No Survivors",
 
   "Command.Help.Description": "Get help with commands",
-  "Command.Help.Body": "<color=#0dff00>{0}</color> improves your vanilla Among Us experience with useful client-side features.\nOpen the pause menu to access more options and game settings.\nUse <color=#e0b700>/commands</color> to see every available command.\n\nFeatures:\n- Host-side gameplay validation and manual moderation.\n- Additional options for hosts.\n- Enhanced settings to customize your game.\n- Commands to manage and improve your experience.\n- Client-side improvements and quality-of-life features.",
+  "Command.Help.Body": "<color=#ffffbe>{0}</color> improves your vanilla Among Us experience with useful client-side features.\nOpen the pause menu to access more options and game settings.\nUse <color=#e0b700>/commands</color> to see every available command.\n\nFeatures:\n- Host-side gameplay validation and manual moderation.\n- Additional options for hosts.\n- Enhanced settings to customize your game.\n- Commands to manage and improve your experience.\n- Client-side improvements and quality-of-life features.",
   "Command.Commands.Description": "List all available commands",
   "Command.Dump.Description": "Save the full log to the desktop",
   "Command.EndGame.Description": "Force the current game to end",

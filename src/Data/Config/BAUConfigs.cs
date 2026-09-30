@@ -29,9 +29,9 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<bool> ChatDarkMode { get; } = new("Better Options", "ChatDarkMode", true);
 
     /// <summary>
-    /// Gets the configuration entry for chat in gameplay setting.
+    /// Gets the configuration entry for hiding the HoryTweaks console.
     /// </summary>
-    internal static BAUConfigEntry<bool> ChatInGameplay { get; } = new("Better Options", "ChatInGameplay", true);
+    internal static BAUConfigEntry<bool> HideConsole { get; } = new("Better Options", "HideConsole", false);
 
     /// <summary>
     /// Gets the configuration entry for lobby player info setting.
@@ -110,7 +110,7 @@ internal static class BAUConfigs
     {
         BAUModdedSupportEvents.OnBAUConfigEntriesLoadedEvent.InvokeAll([
             SendBetterRpc, BetterNotifications,
-            ForceOwnLanguage, ChatDarkMode, ChatInGameplay, LobbyPlayerInfo,
+            ForceOwnLanguage, ChatDarkMode, HideConsole, LobbyPlayerInfo,
             LessInfo, DisableLobbyTheme, UnlockFPS, ShowFPS,
             MinimapIcons, VentColorGroups, ColorblindTextOnTop, CommandPrefix,
             FavoriteColor, SettingsPreset

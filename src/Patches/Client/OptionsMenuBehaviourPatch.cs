@@ -44,24 +44,30 @@ internal static class OptionsMenuBehaviourPatch
         // Clear previous client options to prevent duplicates
         ClientOptionItem.ClientOptions.Clear();
 
-        // Toggle options with config binding
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_SendBetterRpc, BAUConfigs.SendBetterRpc, 1, __instance, SendBetterRpcAction);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterNotifications, BAUConfigs.BetterNotifications, 1, __instance, BetterNotificationManager.ClearNotifications);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ForceOwnLanguage, BAUConfigs.ForceOwnLanguage, 1, __instance);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ChatDarkMode, BAUConfigs.ChatDarkMode, 1, __instance, ChatPatch.SetChatTheme);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_HideConsole, BAUConfigs.HideConsole, 1, __instance);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyInfo, BAUConfigs.LobbyPlayerInfo, 1, __instance);
+        // Page 1: what the player sees on screen
+        ClientOptionItem.CreateHeader(TranslationStrings.BetterOption_PageInterface, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LessInfo, BAUConfigs.LessInfo, 1, __instance, MeetingHudPatch.UpdateHostIcon);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyTheme, BAUConfigs.DisableLobbyTheme, 1, __instance, ToggleLobbyTheme);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 1, __instance, UpdateFrameRate);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyInfo, BAUConfigs.LobbyPlayerInfo, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ShowFPS, BAUConfigs.ShowFPS, 1, __instance);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterNotifications, BAUConfigs.BetterNotifications, 1, __instance, BetterNotificationManager.ClearNotifications);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ChatDarkMode, BAUConfigs.ChatDarkMode, 1, __instance, ChatPatch.SetChatTheme);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ForceOwnLanguage, BAUConfigs.ForceOwnLanguage, 1, __instance);
 
+        // Page 2: in-game readability and map
+        ClientOptionItem.CreateHeader(TranslationStrings.BetterOption_PageGameplay, 2, __instance);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterColorblindText, BAUConfigs.BetterColorblindText, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ColorblindTextOnTop, BAUConfigs.ColorblindTextOnTop, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_MinimapIcons, BAUConfigs.MinimapIcons, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterMinimapColors, BAUConfigs.BetterMinimapColors, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_VentColorGroups, BAUConfigs.VentColorGroups, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterColorblindText, BAUConfigs.BetterColorblindText, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ColorblindTextOnTop, BAUConfigs.ColorblindTextOnTop, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 2, __instance, ConvertAllSettingFiles);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyTheme, BAUConfigs.DisableLobbyTheme, 2, __instance, ToggleLobbyTheme);
+
+        // Page 3: performance, connection and files
+        ClientOptionItem.CreateHeader(TranslationStrings.BetterOption_PagePerformance, 3, __instance);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 3, __instance, UpdateFrameRate);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_SendBetterRpc, BAUConfigs.SendBetterRpc, 3, __instance, SendBetterRpcAction);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 3, __instance, ConvertAllSettingFiles);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_HideConsole, BAUConfigs.HideConsole, 3, __instance);
 
         // Button options (no toggle)
         if (!BAUPlugin.ModInfo.Starlight)

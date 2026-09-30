@@ -17,12 +17,15 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 - HoryTweaks artwork in the splash screen, main menu and repository.
 - A client option to hide the HoryTweaks console after restarting.
+- Titles for each page of the HoryTweaks options.
 
 ### Changed
 
 - Replaced the console banner and green branding accents with HoryTweaks branding.
 - Moved the upper colorblind label closer to the player and kept the player-color formatting used below.
 - Limited chat for living players to lobbies, meetings and exile sequences.
+- Grouped the client options into Interface, Gameplay and Performance pages.
+- Replaced the mod stamp artwork with the HoryTweaks icon.
 
 ### Fixed
 

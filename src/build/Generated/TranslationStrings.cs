@@ -234,6 +234,21 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_Previous = new("BetterOption.Previous");
 
     /// <summary>
+    /// Base Translation: Interface
+    /// </summary>
+    public static readonly TranslationString BetterOption_PageInterface = new("BetterOption.PageInterface");
+
+    /// <summary>
+    /// Base Translation: Gameplay
+    /// </summary>
+    public static readonly TranslationString BetterOption_PageGameplay = new("BetterOption.PageGameplay");
+
+    /// <summary>
+    /// Base Translation: Performance &amp; Files
+    /// </summary>
+    public static readonly TranslationString BetterOption_PagePerformance = new("BetterOption.PagePerformance");
+
+    /// <summary>
     /// Base Translation: &lt;color=#4f92ff&gt;Send Better RPC&lt;/color&gt;
     /// </summary>
     public static readonly TranslationString BetterOption_SendBetterRpc = new("BetterOption.SendBetterRpc");
@@ -274,12 +289,12 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_LobbyTheme = new("BetterOption.LobbyTheme");
 
     /// <summary>
-    /// Base Translation: UnlockFPS
+    /// Base Translation: Unlock FPS
     /// </summary>
     public static readonly TranslationString BetterOption_UnlockFPS = new("BetterOption.UnlockFPS");
 
     /// <summary>
-    /// Base Translation: ShowFPS
+    /// Base Translation: Show FPS
     /// </summary>
     public static readonly TranslationString BetterOption_ShowFPS = new("BetterOption.ShowFPS");
 

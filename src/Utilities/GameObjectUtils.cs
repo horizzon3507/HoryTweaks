@@ -122,7 +122,7 @@ internal static class GameObjectUtils
     /// Sets UI colors for SpriteRenderer components with specific color and filtering options.
     /// </summary>
     /// <param name="go">The GameObject to modify.</param>
-    /// <param name="color">The color to apply (defaults to green if null).</param>
+    /// <param name="color">The color to apply (defaults to the theme color if null).</param>
     /// <param name="check">Optional function to determine if a SpriteRenderer should be modified.</param>
     /// <param name="avoidGoName">Names of GameObjects to skip when applying colors.</param>
     internal static void SetUIColors(this GameObject go, Color? color = null, Func<SpriteRenderer, bool>? check = null, params string[] avoidGoName)
@@ -143,7 +143,7 @@ internal static class GameObjectUtils
     /// Adds a color tint to a SpriteRenderer using a blend formula.
     /// </summary>
     /// <param name="sprite">The SpriteRenderer to modify.</param>
-    /// <param name="color">The color to blend (defaults to green if null).</param>
+    /// <param name="color">The color to blend (defaults to the theme color if null).</param>
     internal static void AddColor(SpriteRenderer sprite, Color? color = null)
     {
         if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_Theme))
@@ -151,7 +151,7 @@ internal static class GameObjectUtils
 
         if (color == null)
         {
-            color = Color.green;
+            color = Colors.Theme;
         }
 
         sprite.color = (sprite.color * 0.6f) + ((Color)color * 0.5f);

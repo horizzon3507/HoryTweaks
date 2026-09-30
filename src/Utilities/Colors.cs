@@ -140,4 +140,9 @@ internal static class Colors
     /// </summary>
     internal static readonly Color ImpostorRed = new Color32(byte.MaxValue, 25, 25, byte.MaxValue);
 
+    /// <summary>
+    /// HoryTweaks theme color.
+    /// </summary>
+    internal static readonly Color Theme = new Color32(byte.MaxValue, byte.MaxValue, 190, byte.MaxValue);
+
 }

@@ -28,7 +28,7 @@ internal static class ChatPatch
                 return true;
             }
 
-            return !PlayerControl.LocalPlayer.IsAlive() || GameState.IsMeeting || GameState.IsExilling;
+            return !PlayerControl.LocalPlayer.IsAlive() || GameState.IsMeeting;
         }
     }
 

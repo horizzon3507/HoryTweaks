@@ -139,7 +139,7 @@ public static class TranslationStrings
     public static readonly TranslationString Player_PlatformHidden = new("Player.PlatformHidden");
 
     /// <summary>
-    /// Base Translation: Better User
+    /// Base Translation: Hory User
     /// </summary>
     public static readonly TranslationString Player_BetterUser = new("Player.BetterUser");
 
@@ -234,21 +234,6 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_Previous = new("BetterOption.Previous");
 
     /// <summary>
-    /// Base Translation: Interface
-    /// </summary>
-    public static readonly TranslationString BetterOption_PageInterface = new("BetterOption.PageInterface");
-
-    /// <summary>
-    /// Base Translation: Gameplay
-    /// </summary>
-    public static readonly TranslationString BetterOption_PageGameplay = new("BetterOption.PageGameplay");
-
-    /// <summary>
-    /// Base Translation: Performance &amp; Files
-    /// </summary>
-    public static readonly TranslationString BetterOption_PagePerformance = new("BetterOption.PagePerformance");
-
-    /// <summary>
     /// Base Translation: &lt;color=#4f92ff&gt;Send Better RPC&lt;/color&gt;
     /// </summary>
     public static readonly TranslationString BetterOption_SendBetterRpc = new("BetterOption.SendBetterRpc");
@@ -339,12 +324,12 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_ToVanilla = new("BetterOption.ToVanilla");
 
     /// <summary>
-    /// Base Translation: Better Settings
+    /// Base Translation: Tweaks
     /// </summary>
     public static readonly TranslationString BetterSetting = new("BetterSetting");
 
     /// <summary>
-    /// Base Translation: Edit better settings for your lobby and gameplay.
+    /// Base Translation: Edit HoryTweaks settings for your lobby and gameplay.
     /// </summary>
     public static readonly TranslationString BetterSetting_Description = new("BetterSetting.Description");
 
@@ -354,22 +339,22 @@ public static class TranslationStrings
     public static readonly TranslationString BetterSetting_SetTo = new("BetterSetting.SetTo");
 
     /// <summary>
-    /// Base Translation: &lt;color=#07B400&gt;System Settings&lt;/color&gt;
+    /// Base Translation: System Settings
     /// </summary>
     public static readonly TranslationString BetterSetting_MainHeader_System = new("BetterSetting.MainHeader.System");
 
     /// <summary>
-    /// Base Translation: &lt;color=#4f92ff&gt;Host tools&lt;/color&gt;
+    /// Base Translation: Host Tools
     /// </summary>
     public static readonly TranslationString BetterSetting_MainHeader_HostTools = new("BetterSetting.MainHeader.HostTools");
 
     /// <summary>
-    /// Base Translation: &lt;color=#d7d700&gt;Gameplay Settings&lt;/color&gt;
+    /// Base Translation: Gameplay Settings
     /// </summary>
     public static readonly TranslationString BetterSetting_MainHeader_Gameplay = new("BetterSetting.MainHeader.Gameplay");
 
     /// <summary>
-    /// Base Translation: &lt;color=#4f92ff&gt;Host Only&lt;/color&gt;
+    /// Base Translation: Host Only
     /// </summary>
     public static readonly TranslationString BetterSetting_TextHeader_HostOnly = new("BetterSetting.TextHeader.HostOnly");
 

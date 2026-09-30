@@ -11,6 +11,13 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
+## Unreleased
+
+### Added
+
+- A host moderation center in the HoryTweaks options tab with the current player list, kick and ban actions that ask for confirmation, quick access to the player, name and chat ban lists and the kicks and bans of the current session.
+- Automated tests for the game-independent moderation rules, history and list helpers under `tests/HoryTweaks.Tests`.
+
 ## v0.1.1-alpha · 29/09/2026
 
 ### Added

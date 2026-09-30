@@ -119,9 +119,10 @@ internal sealed class ClientOptionItem
                 options = ClientOptions[page] = [];
             }
 
+            bool lastOfOdd = options.Count % 2 == 1 && count == options.Count - 1;
             return new Vector3(
-                options.Count == 1 ? 0f : count % 2 == 0 ? -1.3f : 1.3f,
-                -1.8f,
+                lastOfOdd ? 0f : count % 2 == 0 ? -1.3f : 1.3f,
+                -1.8f + 0.5f * (count / 2),
                 -6f
             );
         }

@@ -2,6 +2,7 @@
 using BetterAmongUs.Utilities;
 using BetterAmongUs.Managers;
 using BetterAmongUs.Modules;
+using BetterAmongUs.Modules.Moderation;
 using BetterAmongUs.Patches.Gameplay.UI.Settings;
 using HarmonyLib;
 using Hazel;
@@ -57,11 +58,19 @@ internal static class InnerNetClientPatch
     [HarmonyPrefix]
     private static void InnerNetClient_KickPlayer_Prefix(ref int clientId, ref bool ban)
     {
-        // When banning a player, add them to BAU's custom ban list if enabled
-        if (ban && BetterGameSettings.UseBanPlayerList.GetBool())
+        string reason = ModerationHistory.TakePendingReason();
+        var player = Utils.PlayerFromClientId(clientId);
+
+        if (GameState.IsHost && player != null && player.Data != null)
         {
-            // Get player info from client ID
-            NetworkedPlayerInfo info = Utils.PlayerFromClientId(clientId).Data;
+            string identity = string.IsNullOrEmpty(player.Data.FriendCode) ? player.GetHashPuid() : player.Data.FriendCode;
+            ModerationHistory.Record(ban ? ModerationActionKind.Ban : ModerationActionKind.Kick, player.Data.PlayerName, identity, reason);
+        }
+
+        // When banning a player, add them to BAU's custom ban list if enabled
+        if (ban && BetterGameSettings.UseBanPlayerList.GetBool() && player != null && player.Data != null)
+        {
+            NetworkedPlayerInfo info = player.Data;
 
             // Add player to ban list using both friend code and PUID
             BetterDataManager.AddToBanList(info.FriendCode, info.Puid);

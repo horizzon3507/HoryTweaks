@@ -4,6 +4,7 @@ using BetterAmongUs.Data.Json;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Managers;
 using BetterAmongUs.Modules;
+using BetterAmongUs.Modules.Moderation;
 using BetterAmongUs.MonoScripts.Extended;
 using BetterAmongUs.Patches.Gameplay.Player;
 using BetterAmongUs.Patches.Gameplay.UI;
@@ -28,6 +29,7 @@ internal static class OptionsMenuBehaviourPatch
     {
         // Create custom "Better Options" tab in settings menu
         BetterOptionsTab = CreateTabPage(__instance, TranslationStrings.BetterOption.LocalizedString);
+        ModerationCenterMenu.Reset();
 
         // Populate the tab with all BAU client options
         SetupAllClientOptions(__instance);
@@ -91,6 +93,8 @@ internal static class OptionsMenuBehaviourPatch
             }
             return !cannotSwitch;
         });
+
+        ClientOptionItem.CreateButton(TranslationStrings.BetterOption_Moderation, -1, __instance, () => ModerationCenterMenu.Open(__instance));
     }
 
     private static void SendBetterRpcAction()

@@ -44,6 +44,7 @@ Proton and game updates can affect mod compatibility. HoryTweaks does not provid
 
 - Host-side gameplay validation for selected actions and invalid sabotage attempts.
 - Manual host moderation, including ban lists, kick cooldown, minimum-level checks and banned-chat patterns.
+- An in-game moderation center in the Tweaks options tab for kicking and banning the current players, opening the ban lists and reviewing this session's kicks and bans.
 - Client-side improvements such as lobby information, customizable chat and minimap options.
 - Chat commands for player information, log export and supported host actions.
 - Presets and moderation lists retained under the compatible `Better_Data` user-data folder.

@@ -8,10 +8,12 @@ on:
       - 'v*'
     paths:
       - 'src/**'
+      - 'tests/**'
       - '.github/workflows/build.yml'
   pull_request:
     paths:
       - 'src/**'
+      - 'tests/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
     inputs:
@@ -38,6 +40,9 @@ jobs:
 
       - name: Validate translations
         run: pwsh -NoProfile -File src/build/ValidateTranslations.ps1
+
+      - name: Run tests
+        run: dotnet test tests/HoryTweaks.Tests/HoryTweaks.Tests.csproj --configuration Release
 
       - name: Build HoryTweaks
         run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false

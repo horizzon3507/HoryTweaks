@@ -13,7 +13,7 @@ internal partial class BAUPlugin
         /// <summary>
         /// The base version number of the mod in MAJOR.MINOR.PATCH format.
         /// </summary>
-        internal const string VERSION_NUMBER = "0.1.1";
+        internal const string VERSION_NUMBER = "0.1.2";
 
         /// <summary>
         /// The beta release number. Increment this for each beta release.

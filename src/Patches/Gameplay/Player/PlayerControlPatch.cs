@@ -45,7 +45,6 @@ internal static class PlayerControlPatch
                         player.CmdCheckColor((byte)BAUConfigs.FavoriteColor.Value);
                     }
                 }
-
             }
         }
 

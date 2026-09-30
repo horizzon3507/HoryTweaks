@@ -262,7 +262,6 @@ internal static class ChatPatch
             {
                 ssbTag.AppendFormat("<color=#0dff00>{1}{0}</color>", TranslationStrings.Player_BetterUser.LocalizedString, betterData.IsVerifiedBetterUser || sourcePlayer.IsLocalPlayer() ? "✓ " : "");
             }
-
         }
 
         ssbTag.Append(sourcePlayer.GetRoleInfo(false).Size(75f));

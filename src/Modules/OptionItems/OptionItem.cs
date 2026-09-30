@@ -113,7 +113,10 @@ public abstract class OptionItem
             opt.SetToDefault();
             opt.Save();
             opt.UpdateVisuals(false);
-            tab ??= opt.Tab;
+            if (tab == null)
+            {
+                tab = opt.Tab;
+            }
             count++;
         }
 

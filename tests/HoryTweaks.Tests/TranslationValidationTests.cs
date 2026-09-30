@@ -19,6 +19,28 @@ public class TranslationValidationTests : IDisposable
         ["Menu.Title"] = "HoryTweaks"
     };
 
+    /// <summary>
+    /// Every catalog the validator expects to ship, mirroring $expectedLanguageIds in the script.
+    /// </summary>
+    private static readonly Dictionary<string, string> ShippedLanguageIds = new()
+    {
+        ["es_419"] = "1",
+        ["pt_BR"] = "2",
+        ["pt_PT"] = "3",
+        ["ko_KR"] = "4",
+        ["ru_RU"] = "5",
+        ["nl_NL"] = "6",
+        ["fil_PH"] = "7",
+        ["fr_FR"] = "8",
+        ["de_DE"] = "9",
+        ["it_IT"] = "10",
+        ["ja_JP"] = "11",
+        ["es_ES"] = "12",
+        ["zh_CN"] = "13",
+        ["zh_TW"] = "14",
+        ["ga_IE"] = "15"
+    };
+
     private readonly string _directory = Path.Combine(Path.GetTempPath(), "HoryTweaks.Tests", Guid.NewGuid().ToString("N"));
 
     public TranslationValidationTests()
@@ -47,6 +69,18 @@ public class TranslationValidationTests : IDisposable
         catalog["LanguageID"] = languageId;
         mutate?.Invoke(catalog);
         return catalog;
+    }
+
+    /// <summary>
+    /// Writes en_US plus a complete copy for every shipped language, then lets a test overwrite one of them.
+    /// </summary>
+    private void WriteShippedCatalogs()
+    {
+        WriteCatalog("en_US", English);
+        foreach (var (name, languageId) in ShippedLanguageIds)
+        {
+            WriteCatalog(name, Translation(languageId));
+        }
     }
 
     private static (int ExitCode, string Output) RunValidator(string? languageDirectory)
@@ -91,21 +125,45 @@ public class TranslationValidationTests : IDisposable
     }
 
     [Fact]
-    public void Matching_catalogs_pass_and_stubs_are_skipped()
+    public void Matching_catalogs_pass()
     {
-        WriteCatalog("en_US", English);
+        WriteShippedCatalogs();
         WriteCatalog("pt_BR", Translation("2", catalog =>
         {
             catalog["Chat.Welcome"] = "Bem-vindo {0}";
             catalog["Chat.Kicked"] = "{1} foi expulso por {0} após {2} avisos";
         }));
-        WriteCatalog("fr_FR", new Dictionary<string, string> { ["LanguageID"] = "4" });
 
         var (exitCode, output) = RunValidatorOnFixtures();
 
         Assert.True(exitCode == 0, output);
-        Assert.Contains("Validated 2 language catalogs with 3 translation keys", output);
-        Assert.Contains("skipped 1 stub catalogs", output);
+        Assert.Contains("Validated 16 language catalogs with 3 translation keys", output);
+        Assert.Contains("skipped 0 allowed stub catalogs", output);
+    }
+
+    [Fact]
+    public void Missing_shipped_catalog_fails_validation()
+    {
+        WriteShippedCatalogs();
+        File.Delete(Path.Combine(_directory, "fr_FR.json"));
+
+        var (exitCode, output) = RunValidatorOnFixtures();
+
+        Assert.NotEqual(0, exitCode);
+        Assert.Contains("Expected language catalogs are missing from", output);
+        Assert.Contains("[fr_FR]", output);
+    }
+
+    [Fact]
+    public void Stub_catalog_fails_validation()
+    {
+        WriteShippedCatalogs();
+        WriteCatalog("fr_FR", new Dictionary<string, string> { ["LanguageID"] = "8" });
+
+        var (exitCode, output) = RunValidatorOnFixtures();
+
+        Assert.NotEqual(0, exitCode);
+        Assert.Contains("fr_FR is advertised as a complete catalog but only contains LanguageID", output);
     }
 
     [Theory]
@@ -115,7 +173,7 @@ public class TranslationValidationTests : IDisposable
     [InlineData("{0} kicked {1} after {a} warnings")]
     public void Placeholder_differences_fail_validation(string translated)
     {
-        WriteCatalog("en_US", English);
+        WriteShippedCatalogs();
         WriteCatalog("pt_BR", Translation("2", catalog => catalog["Chat.Kicked"] = translated));
 
         var (exitCode, output) = RunValidatorOnFixtures();
@@ -127,7 +185,7 @@ public class TranslationValidationTests : IDisposable
     [Fact]
     public void Reordered_placeholders_are_accepted()
     {
-        WriteCatalog("en_US", English);
+        WriteShippedCatalogs();
         WriteCatalog("pt_BR", Translation("2", catalog => catalog["Chat.Kicked"] = "após {2} avisos, {1} foi expulso por {0}"));
 
         var (exitCode, output) = RunValidatorOnFixtures();
@@ -138,7 +196,7 @@ public class TranslationValidationTests : IDisposable
     [Fact]
     public void Missing_and_extra_keys_fail_validation()
     {
-        WriteCatalog("en_US", English);
+        WriteShippedCatalogs();
         WriteCatalog("pt_BR", Translation("2", catalog =>
         {
             catalog.Remove("Menu.Title");
@@ -154,7 +212,7 @@ public class TranslationValidationTests : IDisposable
     [Fact]
     public void Wrong_language_id_fails_validation()
     {
-        WriteCatalog("en_US", English);
+        WriteShippedCatalogs();
         WriteCatalog("pt_BR", Translation("3"));
 
         var (exitCode, output) = RunValidatorOnFixtures();
@@ -166,7 +224,7 @@ public class TranslationValidationTests : IDisposable
     [Fact]
     public void Unknown_non_stub_language_fails_validation()
     {
-        WriteCatalog("en_US", English);
+        WriteShippedCatalogs();
         WriteCatalog("xx_XX", Translation("99"));
 
         var (exitCode, output) = RunValidatorOnFixtures();
@@ -178,7 +236,7 @@ public class TranslationValidationTests : IDisposable
     [Fact]
     public void Catalog_without_language_id_fails_validation()
     {
-        WriteCatalog("en_US", English);
+        WriteShippedCatalogs();
         WriteCatalog("pt_BR", Translation("2", catalog => catalog.Remove("LanguageID")));
 
         var (exitCode, output) = RunValidatorOnFixtures();
@@ -190,7 +248,7 @@ public class TranslationValidationTests : IDisposable
     [Fact]
     public void Invalid_json_fails_validation()
     {
-        WriteCatalog("en_US", English);
+        WriteShippedCatalogs();
         WriteRaw("pt_BR", "{ \"LanguageID\": \"2\", ");
 
         var (exitCode, output) = RunValidatorOnFixtures();

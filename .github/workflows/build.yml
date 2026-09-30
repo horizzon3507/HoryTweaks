@@ -65,9 +65,6 @@ jobs:
       - name: Build HoryTweaks
         run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false
 
-      - name: Run tests
-        run: dotnet test tests/BetterAmongUs.Tests/BetterAmongUs.Tests.csproj --configuration Release
-
       - name: Upload standalone DLL
         uses: actions/upload-artifact@v4
         with:

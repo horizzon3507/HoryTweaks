@@ -38,15 +38,7 @@ internal sealed class BAUUpdateData
     {
         try
         {
-            if (!Valid)
-            {
-                return false;
-            }
-
-            var updateVersion = SemVersion.Parse(Version);
-            var modVersion = BAUPlugin.ModInfo.SemVersion;
-
-            return updateVersion.ComparePrecedenceTo(modVersion) > 0;
+            return UpdateVersionCheck.IsNewerThanInstalled(Valid, Version, BAUPlugin.ModInfo.SemVersion);
         }
         catch (Exception ex)
         {

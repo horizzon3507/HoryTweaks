@@ -8,10 +8,14 @@ on:
       - 'v*'
     paths:
       - 'src/**'
+      - 'tests/**'
+      - 'api/**'
       - '.github/workflows/build.yml'
   pull_request:
     paths:
       - 'src/**'
+      - 'tests/**'
+      - 'api/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
     inputs:
@@ -38,6 +42,17 @@ jobs:
 
       - name: Validate translations
         run: pwsh -NoProfile -File src/build/ValidateTranslations.ps1
+
+      - name: Run quality gate tests
+        run: dotnet test tests/HoryTweaks.Tests/HoryTweaks.Tests.csproj --configuration Release --logger "trx;LogFileName=HoryTweaks.Tests.trx" --results-directory tests/TestResults
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: tests/TestResults/*.trx
+          if-no-files-found: error
 
       - name: Build HoryTweaks
         run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false

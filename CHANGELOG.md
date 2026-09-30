@@ -11,6 +11,16 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
+## Unreleased
+
+### Added
+
+- Unity-independent quality gate tests for settings serialization, compression and migration, update manifest version decisions, legacy ban list migration and translation placeholder validation, run in CI before packaging.
+
+### Removed
+
+- The unfinished replay recording system and its unused Better_Data replays folder.
+
 ## v0.1.1-alpha · 29/09/2026
 
 ### Added

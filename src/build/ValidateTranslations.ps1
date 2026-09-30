@@ -1,7 +1,14 @@
+param(
+    [string]$LanguageDirectory
+)
+
 $ErrorActionPreference = 'Stop'
 
-$sourceDirectory = Split-Path -Parent $PSScriptRoot
-$languageDirectory = Join-Path (Join-Path $sourceDirectory 'Resources') 'Lang'
+if ([string]::IsNullOrWhiteSpace($LanguageDirectory)) {
+    $sourceDirectory = Split-Path -Parent $PSScriptRoot
+    $LanguageDirectory = Join-Path (Join-Path $sourceDirectory 'Resources') 'Lang'
+}
+$languageDirectory = $LanguageDirectory
 $englishPath = Join-Path $languageDirectory 'en_US.json'
 
 $expectedLanguageIds = @{

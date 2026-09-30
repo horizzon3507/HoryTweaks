@@ -4,3 +4,6 @@ src/bin
 src/obj
 src/.editorconfig
 src/.vscode
+tests/**/bin
+tests/**/obj
+tests/TestResults

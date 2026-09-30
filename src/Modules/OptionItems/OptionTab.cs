@@ -34,7 +34,7 @@ internal sealed class OptionTab
     /// <summary>
     /// Gets the translated description of this tab.
     /// </summary>
-    internal string Description => TranslationName.LocalizedString;
+    internal string Description => TranslationDescription.LocalizedString;
 
     /// <summary>
     /// Gets or sets the translation key for the tab description.

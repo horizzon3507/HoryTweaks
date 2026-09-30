@@ -1,7 +1,6 @@
 ﻿using BetterAmongUs.Data.Config;
 using BetterAmongUs.Data.Json;
 using BetterAmongUs.Utilities;
-using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace BetterAmongUs.Data;
@@ -40,11 +39,6 @@ internal static class BetterDataManager
         /// Directory for settings files.
         /// </summary>
         internal static readonly string settingsFolderPath = Path.Combine(fileFolderPath, $"Settings");
-
-        /// <summary>
-        /// Directory for game replay files.
-        /// </summary>
-        internal static readonly string replaysFolderPath = Path.Combine(fileFolderPath, $"Replays");
     }
 
     /// <summary>
@@ -258,11 +252,8 @@ internal static class BetterDataManager
         if (!File.Exists(Files.banWordListFilePath_Legacy)) return;
 
         var content = File.ReadLines(Files.banWordListFilePath_Legacy)
-            .Where(line =>
-                !string.IsNullOrWhiteSpace(line) &&
-                !line.StartsWith("//") &&
-                !line.StartsWith("#")
-            ).ToArray();
+            .Where(BanListMigration.IsPatternLine)
+            .ToArray();
 
         if (content.Any())
         {
@@ -275,11 +266,7 @@ internal static class BetterDataManager
             writer.WriteLine();
             foreach (var line in content)
             {
-                writer.Write("(?i)(?: |^)");
-                if (line.StartsWith("**")) writer.Write(".*");
-                writer.Write(Regex.Escape(line.Trim('*')));
-                if (line.EndsWith("**")) writer.Write(".*");
-                writer.WriteLine("(?: |$)");
+                writer.WriteLine(BanListMigration.ChatWildcardToRegex(line));
             }
         }
         File.Delete(Files.banWordListFilePath_Legacy);
@@ -300,11 +287,7 @@ internal static class BetterDataManager
         if (lines.AnyLineInContentLines(BAUPlugin.Constants.BAN_NAME_LIST_CONTENT))
             return;
 
-        var content = lines.Where(line =>
-            !string.IsNullOrWhiteSpace(line) &&
-            !line.StartsWith("//") &&
-            !line.StartsWith("#")
-        ).ToArray();
+        var content = lines.Where(BanListMigration.IsPatternLine).ToArray();
 
         if (!content.Any())
         {
@@ -312,7 +295,7 @@ internal static class BetterDataManager
             return;
         }
 
-        if (!content.Any(s => Regex.IsMatch(s, @"\*\*")) &&
+        if (!content.Any(BanListMigration.UsesWildcard) &&
             !lines.AnyLineInContentLines(BAUPlugin.Constants.BAN_NAME_LIST_CONTENT_LEGACY)) return;
 
         using var writer = File.CreateText(Files.banNameListFilePath);
@@ -324,11 +307,7 @@ internal static class BetterDataManager
         writer.WriteLine();
         foreach (var line in content)
         {
-            writer.Write("(?i)");
-            if (!line.StartsWith("**")) writer.Write("^");
-            writer.Write(Regex.Escape(line.Trim('*')));
-            if (!line.EndsWith("**")) writer.Write("$");
-            writer.WriteLine();
+            writer.WriteLine(BanListMigration.NameWildcardToRegex(line));
         }
     }
 

@@ -2,5 +2,10 @@
 src/.vs
 src/bin
 src/obj
+tests/**/bin
+tests/**/obj
 src/.editorconfig
 src/.vscode
+tests/**/bin
+tests/**/obj
+tests/TestResults

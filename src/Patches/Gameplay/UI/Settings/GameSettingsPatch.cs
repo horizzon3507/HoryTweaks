@@ -1,4 +1,5 @@
-﻿using BetterAmongUs.Generated;
+﻿using BetterAmongUs.Data;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
 using BetterAmongUs.Modules.OptionItems;
 using BetterAmongUs.Modules.OptionItems.NoneOption;
@@ -53,7 +54,8 @@ internal static class GameSettingsPatch
         BetterSettingsTab = OptionTab.Create(3, TranslationStrings.BetterSetting, TranslationStrings.BetterSetting_Description, Colors.Theme);
 
         OptionHeaderItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_MainHeader_System);
-        OptionPresetItem.Create();
+        OptionPresetItem.Create().CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_Presets_Description);
+        SetupPresetActions(BetterSettingsTab);
 
         // Host tools
         {
@@ -64,23 +66,62 @@ internal static class GameSettingsPatch
             {
                 OptionTitleItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_TextHeader_HostOnly);
                 BetterGameSettings.KickCooldown = OptionFloatItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_KickCooldown, (0f, 3f, 0.1f), 2f, ("", "s"));
+                BetterGameSettings.KickCooldown.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_KickCooldown_Description);
                 BetterGameSettings.InvalidFriendCode = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_InvalidFriendCode, true);
+                BetterGameSettings.InvalidFriendCode.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_InvalidFriendCode_Description);
                 BetterGameSettings.CancelInvalidSabotage = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_CancelInvalidSabotage, true);
                 BetterGameSettings.UseBanPlayerList = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_UseBanPlayerList, true);
+                BetterGameSettings.UseBanPlayerList.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_UseBanPlayerList_Description);
                 BetterGameSettings.UseBanNameList = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_UseBanNameList, true);
+                BetterGameSettings.UseBanNameList.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_UseBanNameList_Description);
                 BetterGameSettings.UseBanChatList = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_UseBanChatList, true);
+                BetterGameSettings.UseBanChatList.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_UseBanChatList_Description);
                 BetterGameSettings.UseBanChatListOnlyLobby = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_UseBanChatListOnlyLobby, true, BetterGameSettings.UseBanChatList);
                 BetterGameSettings.UseBanChatListBan = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_UseBanChatListBan, false, BetterGameSettings.UseBanChatList);
             }
 
             BetterGameSettings.KickLevel = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_KickLevel, false);
+            BetterGameSettings.KickLevel.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_KickLevel_Description);
             BetterGameSettings.KickLevelBelow = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_KickLevelBelow, (0, 10000, 1), 0, ("Lv ", ""), BetterGameSettings.KickLevel);
             BetterGameSettings.KickLevelBelowMinimumPlayers = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_KickLevelBelowMinimumPlayers, (1, 15, 1), 9, parent: BetterGameSettings.KickLevelBelow);
+            BetterGameSettings.KickLevelBelowMinimumPlayers.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_KickLevelBelowMinimumPlayers_Description);
             BetterGameSettings.RpcRateLimiting = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_RpcRateLimiting, true);
+            BetterGameSettings.RpcRateLimiting.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_RpcRateLimiting_Description);
             BetterGameSettings.RpcRateLimit = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_RateLimit, (25, 1000, 1), 50, ("", " PS"), BetterGameSettings.RpcRateLimiting);
         }
 
         BetterSettingsTab.UpdateVisuals();
+    }
+
+    // Restore-defaults and clipboard sharing rows for the selected preset
+    private static void SetupPresetActions(OptionTab tab)
+    {
+        OptionButtonItem.Create(tab, TranslationStrings.BetterSetting_Action_RestoreDefaults, TranslationStrings.BetterSetting_Action_Reset, () =>
+        {
+            int count = OptionItem.RestoreDefaults();
+            OptionButtonItem.Notify(TranslationStrings.BetterSetting_Action_RestoreDefaults_Done.Format(count.ToString()));
+        }, TranslationStrings.BetterSetting_Action_Confirm);
+
+        OptionButtonItem.Create(tab, TranslationStrings.BetterSetting_Action_ExportPreset, TranslationStrings.BetterSetting_Action_Copy, () =>
+        {
+            ClipboardHelper.PutClipboardString(OptionPresetItem.Export());
+            OptionButtonItem.Notify(TranslationStrings.BetterSetting_Action_ExportPreset_Done.LocalizedString);
+        });
+
+        Dictionary<string, object?> pending = [];
+        OptionButtonItem.Create(tab, TranslationStrings.BetterSetting_Action_ImportPreset, TranslationStrings.BetterSetting_Action_Paste, () =>
+        {
+            int count = OptionPresetItem.Import(pending);
+            pending = [];
+            OptionButtonItem.Notify(TranslationStrings.BetterSetting_Action_ImportPreset_Done.Format(count.ToString()));
+        }, TranslationStrings.BetterSetting_Action_Confirm, () =>
+        {
+            if (PresetShareCodec.TryDecode(ClipboardHelper.GetClipboardString(), out pending))
+                return true;
+
+            OptionButtonItem.Notify(TranslationStrings.BetterSetting_Action_ImportPreset_Invalid.LocalizedString);
+            return false;
+        });
     }
 
     // Initialize settings

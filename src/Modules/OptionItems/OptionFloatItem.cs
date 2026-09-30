@@ -158,6 +158,10 @@ public class OptionFloatItem : OptionItem<float>
         base.SetValue(newValue);
     }
 
+    internal override object? NormalizeImportValue(object? value) => base.NormalizeImportValue(value) is float floatValue
+        ? (float)Math.Round(Math.Clamp(floatValue, Range.min, Range.max), 1)
+        : null;
+
     /// <summary>
     /// Updates the visual appearance of the float option based on its current value.
     /// </summary>

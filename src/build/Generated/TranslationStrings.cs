@@ -324,6 +324,186 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_ToVanilla = new("BetterOption.ToVanilla");
 
     /// <summary>
+    /// Base Translation: Moderation Center
+    /// </summary>
+    public static readonly TranslationString BetterOption_Moderation = new("BetterOption.Moderation");
+
+    /// <summary>
+    /// Base Translation: &lt; Back
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Back = new("ModerationCenter.Back");
+
+    /// <summary>
+    /// Base Translation: Refresh
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Refresh = new("ModerationCenter.Refresh");
+
+    /// <summary>
+    /// Base Translation: Kick
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Kick = new("ModerationCenter.Kick");
+
+    /// <summary>
+    /// Base Translation: Ban
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Ban = new("ModerationCenter.Ban");
+
+    /// <summary>
+    /// Base Translation: Confirm kick
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ConfirmKick = new("ModerationCenter.ConfirmKick");
+
+    /// <summary>
+    /// Base Translation: Confirm ban
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ConfirmBan = new("ModerationCenter.ConfirmBan");
+
+    /// <summary>
+    /// Base Translation: Select a player, then choose Kick or Ban. Every action asks for confirmation.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_SelectPlayer = new("ModerationCenter.SelectPlayer");
+
+    /// <summary>
+    /// Base Translation: Selected {0}. Choose Kick or Ban, then click it again to confirm.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Selected = new("ModerationCenter.Selected");
+
+    /// <summary>
+    /// Base Translation: Click Confirm kick to kick {0}. Select another player to cancel.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_PendingKick = new("ModerationCenter.PendingKick");
+
+    /// <summary>
+    /// Base Translation: Click Confirm ban to ban {0}. Bans are also added to the player ban list when it is enabled.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_PendingBan = new("ModerationCenter.PendingBan");
+
+    /// <summary>
+    /// Base Translation: {0} will be kicked.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Kicked = new("ModerationCenter.Kicked");
+
+    /// <summary>
+    /// Base Translation: {0} will be banned.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_Banned = new("ModerationCenter.Banned");
+
+    /// <summary>
+    /// Base Translation: has been {0} by the host from the moderation center!
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ActionReason = new("ModerationCenter.ActionReason");
+
+    /// <summary>
+    /// Base Translation: Only the host can kick or ban players.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NotHost = new("ModerationCenter.NotHost");
+
+    /// <summary>
+    /// Base Translation: Host or join a lobby to manage players. The ban lists and history are still available.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NotInGame = new("ModerationCenter.NotInGame");
+
+    /// <summary>
+    /// Base Translation: Wait until the game has finished starting.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_GameStarting = new("ModerationCenter.GameStarting");
+
+    /// <summary>
+    /// Base Translation: The game has ended. Moderate players from the lobby.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_GameEnded = new("ModerationCenter.GameEnded");
+
+    /// <summary>
+    /// Base Translation: That player is no longer in the game.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetMissing = new("ModerationCenter.TargetMissing");
+
+    /// <summary>
+    /// Base Translation: Practice dummies cannot be moderated.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetIsDummy = new("ModerationCenter.TargetIsDummy");
+
+    /// <summary>
+    /// Base Translation: You cannot kick or ban yourself.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetIsSelf = new("ModerationCenter.TargetIsSelf");
+
+    /// <summary>
+    /// Base Translation: The host cannot be kicked or banned.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetIsHost = new("ModerationCenter.TargetIsHost");
+
+    /// <summary>
+    /// Base Translation: Wait until that player has finished loading.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_TargetNotReady = new("ModerationCenter.TargetNotReady");
+
+    /// <summary>
+    /// Base Translation: No other players are in the game yet.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NoPlayers = new("ModerationCenter.NoPlayers");
+
+    /// <summary>
+    /// Base Translation: Player bans
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_PlayerList = new("ModerationCenter.PlayerList");
+
+    /// <summary>
+    /// Base Translation: Name bans
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NameList = new("ModerationCenter.NameList");
+
+    /// <summary>
+    /// Base Translation: Chat bans
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ChatList = new("ModerationCenter.ChatList");
+
+    /// <summary>
+    /// Base Translation: {0} has {1} entries: friend codes and hashed IDs, one player per line. Bans from the game are added automatically. Matching players are banned when they join.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_PlayerListInfo = new("ModerationCenter.PlayerListInfo");
+
+    /// <summary>
+    /// Base Translation: {0} has {1} entries: regex patterns, one per line. Players whose name matches are banned when they join.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_NameListInfo = new("ModerationCenter.NameListInfo");
+
+    /// <summary>
+    /// Base Translation: {0} has {1} entries: regex patterns, one per line. Players whose chat message matches are kicked or banned by the host settings.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ChatListInfo = new("ModerationCenter.ChatListInfo");
+
+    /// <summary>
+    /// Base Translation: The file is open in your text editor. Lines starting with # or // are comments. Saved changes apply on the next check.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ListOpened = new("ModerationCenter.ListOpened");
+
+    /// <summary>
+    /// Base Translation: Edit the file in the Better_Data folder with a text editor. It opens from here in the lobby or main menu.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ListOpenBlocked = new("ModerationCenter.ListOpenBlocked");
+
+    /// <summary>
+    /// Base Translation: {0} was not found. It is created in Better_Data when the mod starts.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_ListMissing = new("ModerationCenter.ListMissing");
+
+    /// <summary>
+    /// Base Translation: Kicks and bans this session
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_HistoryTitle = new("ModerationCenter.HistoryTitle");
+
+    /// <summary>
+    /// Base Translation: No kicks or bans yet.
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_HistoryEmpty = new("ModerationCenter.HistoryEmpty");
+
+    /// <summary>
+    /// Base Translation: &lt;color=#aaaaaa&gt;{0}&lt;/color&gt; {1} &lt;color=#ffff00&gt;{2}&lt;/color&gt; {3}
+    /// </summary>
+    public static readonly TranslationString ModerationCenter_HistoryEntry = new("ModerationCenter.HistoryEntry");
+
+    /// <summary>
     /// Base Translation: Tweaks
     /// </summary>
     public static readonly TranslationString BetterSetting = new("BetterSetting");
@@ -337,6 +517,71 @@ public static class TranslationStrings
     /// Base Translation: Set To:
     /// </summary>
     public static readonly TranslationString BetterSetting_SetTo = new("BetterSetting.SetTo");
+
+    /// <summary>
+    /// Base Translation: On
+    /// </summary>
+    public static readonly TranslationString BetterSetting_State_On = new("BetterSetting.State.On");
+
+    /// <summary>
+    /// Base Translation: Off
+    /// </summary>
+    public static readonly TranslationString BetterSetting_State_Off = new("BetterSetting.State.Off");
+
+    /// <summary>
+    /// Base Translation: Confirm?
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_Confirm = new("BetterSetting.Action.Confirm");
+
+    /// <summary>
+    /// Base Translation: Restore default settings
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_RestoreDefaults = new("BetterSetting.Action.RestoreDefaults");
+
+    /// <summary>
+    /// Base Translation: Reset
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_Reset = new("BetterSetting.Action.Reset");
+
+    /// <summary>
+    /// Base Translation: Restored {0} settings to their defaults
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_RestoreDefaults_Done = new("BetterSetting.Action.RestoreDefaults.Done");
+
+    /// <summary>
+    /// Base Translation: Copy preset to clipboard
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ExportPreset = new("BetterSetting.Action.ExportPreset");
+
+    /// <summary>
+    /// Base Translation: Copy
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_Copy = new("BetterSetting.Action.Copy");
+
+    /// <summary>
+    /// Base Translation: Preset code copied to the clipboard
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ExportPreset_Done = new("BetterSetting.Action.ExportPreset.Done");
+
+    /// <summary>
+    /// Base Translation: Paste preset from clipboard
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ImportPreset = new("BetterSetting.Action.ImportPreset");
+
+    /// <summary>
+    /// Base Translation: Paste
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_Paste = new("BetterSetting.Action.Paste");
+
+    /// <summary>
+    /// Base Translation: Applied {0} settings from the pasted preset
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ImportPreset_Done = new("BetterSetting.Action.ImportPreset.Done");
+
+    /// <summary>
+    /// Base Translation: The clipboard does not contain a valid preset code
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Action_ImportPreset_Invalid = new("BetterSetting.Action.ImportPreset.Invalid");
 
     /// <summary>
     /// Base Translation: System Settings
@@ -422,6 +667,51 @@ public static class TranslationStrings
     /// Base Translation: RPC limit per second
     /// </summary>
     public static readonly TranslationString BetterSetting_Setting_RateLimit = new("BetterSetting.Setting.RateLimit");
+
+    /// <summary>
+    /// Base Translation: Each preset keeps its own copy of the settings below. Name the selected preset with /presetname, and share it with the Copy and Paste rows.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_Presets_Description = new("BetterSetting.Setting.Presets.Description");
+
+    /// <summary>
+    /// Base Translation: Minimum time between moderation actions taken by the host, such as kicks and bans.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_KickCooldown_Description = new("BetterSetting.Setting.KickCooldown.Description");
+
+    /// <summary>
+    /// Base Translation: Kick players who join without a valid friend code.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_InvalidFriendCode_Description = new("BetterSetting.Setting.InvalidFriendCode.Description");
+
+    /// <summary>
+    /// Base Translation: Ban players whose friend code or account ID is listed in the ban player list file.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_UseBanPlayerList_Description = new("BetterSetting.Setting.UseBanPlayerList.Description");
+
+    /// <summary>
+    /// Base Translation: Ban players whose name matches a pattern in the ban name list file.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_UseBanNameList_Description = new("BetterSetting.Setting.UseBanNameList.Description");
+
+    /// <summary>
+    /// Base Translation: Kick or ban players whose chat message matches a pattern in the ban chat list file.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_UseBanChatList_Description = new("BetterSetting.Setting.UseBanChatList.Description");
+
+    /// <summary>
+    /// Base Translation: Kick players in the lobby whose level is below the minimum player level.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_KickLevel_Description = new("BetterSetting.Setting.KickLevel.Description");
+
+    /// <summary>
+    /// Base Translation: The level check only runs once the lobby has at least this many players.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_KickLevelBelowMinimumPlayers_Description = new("BetterSetting.Setting.KickLevelBelowMinimumPlayers.Description");
+
+    /// <summary>
+    /// Base Translation: Ignore RPCs from players who send more than the limit per second.
+    /// </summary>
+    public static readonly TranslationString BetterSetting_Setting_RpcRateLimiting_Description = new("BetterSetting.Setting.RpcRateLimiting.Description");
 
     /// <summary>
     /// Base Translation: Disable sabotages for dead
@@ -564,7 +854,7 @@ public static class TranslationStrings
     public static readonly TranslationString Command_Commands_Description = new("Command.Commands.Description");
 
     /// <summary>
-    /// Base Translation: Save the full log to the desktop
+    /// Base Translation: Save the full log and a diagnostic report to the desktop
     /// </summary>
     public static readonly TranslationString Command_Dump_Description = new("Command.Dump.Description");
 
@@ -597,6 +887,21 @@ public static class TranslationStrings
     /// Base Translation: Set the command prefix
     /// </summary>
     public static readonly TranslationString Command_SetPrefix_Description = new("Command.SetPrefix.Description");
+
+    /// <summary>
+    /// Base Translation: Name the selected settings preset
+    /// </summary>
+    public static readonly TranslationString Command_PresetName_Description = new("Command.PresetName.Description");
+
+    /// <summary>
+    /// Base Translation: &lt;color=#ffffbe&gt;{0}&lt;/color&gt; is now named &lt;color=#e0b700&gt;{1}&lt;/color&gt;
+    /// </summary>
+    public static readonly TranslationString Command_PresetName_Updated = new("Command.PresetName.Updated");
+
+    /// <summary>
+    /// Base Translation: &lt;color=#ffffbe&gt;{0}&lt;/color&gt; uses its default name again
+    /// </summary>
+    public static readonly TranslationString Command_PresetName_Cleared = new("Command.PresetName.Cleared");
 
     /// <summary>
     /// Base Translation: Command List
@@ -649,6 +954,36 @@ public static class TranslationStrings
     public static readonly TranslationString Command_Dump_Success = new("Command.Dump.Success");
 
     /// <summary>
+    /// Base Translation: Diagnostic report saved as &lt;color=#b1b1b1&gt;&apos;{0}&apos;&lt;/color&gt;. Share this file when reporting a problem; it contains no lobby codes, friend codes or secrets.
+    /// </summary>
+    public static readonly TranslationString Command_Dump_ReportSaved = new("Command.Dump.ReportSaved");
+
+    /// <summary>
+    /// Base Translation: Warning
+    /// </summary>
+    public static readonly TranslationString Startup_Warning_Title = new("Startup.Warning.Title");
+
+    /// <summary>
+    /// Base Translation: {0} supports Among Us {1}.\\nAmong Us {2} is newer than the supported version, so you may run into bugs.
+    /// </summary>
+    public static readonly TranslationString Startup_GameVersion_Newer = new("Startup.GameVersion.Newer");
+
+    /// <summary>
+    /// Base Translation: {0} supports Among Us {1}.\\nAmong Us {2} is older than the supported version, so you may run into bugs.
+    /// </summary>
+    public static readonly TranslationString Startup_GameVersion_Older = new("Startup.GameVersion.Older");
+
+    /// <summary>
+    /// Base Translation: The old BetterAmongUs plugin is still installed:\\n{1}\\nRemove BetterAmongUs.dll from the BepInEx plugins folder so it does not load beside {0}. Your Better_Data folder is kept.
+    /// </summary>
+    public static readonly TranslationString Startup_LegacyPlugin_Found = new("Startup.LegacyPlugin.Found");
+
+    /// <summary>
+    /// Base Translation: The old BetterAmongUs plugin is loaded beside {0}. Both mods change the game and may conflict.\\nRemove BetterAmongUs.dll from the BepInEx plugins folder. Your Better_Data folder is kept.
+    /// </summary>
+    public static readonly TranslationString Startup_LegacyPlugin_Loaded = new("Startup.LegacyPlugin.Loaded");
+
+    /// <summary>
     /// Base Translation: Command prefix changed from &lt;#c1c100&gt;{0}&lt;/color&gt; to &lt;#c1c100&gt;{1}&lt;/color&gt;
     /// </summary>
     public static readonly TranslationString Command_Prefix_Updated = new("Command.Prefix.Updated");
@@ -677,4 +1012,69 @@ public static class TranslationStrings
     /// Base Translation: FriendCode
     /// </summary>
     public static readonly TranslationString Command_PlayerInfo_FriendCode = new("Command.PlayerInfo.FriendCode");
+
+    /// <summary>
+    /// Base Translation: Update
+    /// </summary>
+    public static readonly TranslationString Update_Button = new("Update.Button");
+
+    /// <summary>
+    /// Base Translation: {0} update installed!\nRestart the game to finish updating.
+    /// </summary>
+    public static readonly TranslationString Update_Complete = new("Update.Complete");
+
+    /// <summary>
+    /// Base Translation: Update failed: no internet connection.\nCheck your connection and press Update again.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_NoInternet = new("Update.Failed.NoInternet");
+
+    /// <summary>
+    /// Base Translation: Update failed: the download link is missing or invalid.\nDownload the latest release from GitHub instead.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_MissingLink = new("Update.Failed.MissingLink");
+
+    /// <summary>
+    /// Base Translation: Update failed: the download did not finish.\nYour current version is still installed. Press Update to try again.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_Download = new("Update.Failed.Download");
+
+    /// <summary>
+    /// Base Translation: Update failed: the downloaded file is not a newer {0} build.\nYour current version is still installed. Download the latest release from GitHub instead.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_InvalidPayload = new("Update.Failed.InvalidPayload");
+
+    /// <summary>
+    /// Base Translation: Update failed: the new file could not be installed.\nYour current version is still installed. Close other programs using the game folder and try again.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_Install = new("Update.Failed.Install");
+
+    /// <summary>
+    /// Base Translation: Update failed unexpectedly.\nYour current version is still installed. Check the BepInEx log for details.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_Unexpected = new("Update.Failed.Unexpected");
+
+    /// <summary>
+    /// Base Translation: Starting download{0}
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Starting = new("Update.Progress.Starting");
+
+    /// <summary>
+    /// Base Translation: Downloading{0}
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Downloading = new("Update.Progress.Downloading");
+
+    /// <summary>
+    /// Base Translation: Verifying update...
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Verifying = new("Update.Progress.Verifying");
+
+    /// <summary>
+    /// Base Translation: Installing update...
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Installing = new("Update.Progress.Installing");
+
+    /// <summary>
+    /// Base Translation: Download failed!
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Failed = new("Update.Progress.Failed");
 }

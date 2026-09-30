@@ -157,6 +157,9 @@ public sealed class OptionIntItem : OptionItem<int>
         base.SetValue(newValue);
     }
 
+    internal override object? NormalizeImportValue(object? value) =>
+        value is int intValue ? Math.Clamp(intValue, Range.min, Range.max) : null;
+
     /// <summary>
     /// Updates the visual appearance of the integer option based on its current value.
     /// </summary>

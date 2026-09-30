@@ -1,7 +1,5 @@
 ﻿using BetterAmongUs.Data.Config;
 using BetterAmongUs.Modules;
-using System.IO.Compression;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -20,12 +18,12 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
     /// <summary>
     /// The current version identifier for the settings file format.
     /// </summary>
-    internal const string SETTINGS_VERSION = "2.1";
+    internal const string SETTINGS_VERSION = SettingsFileCodec.SETTINGS_VERSION;
 
     /// <summary>
     /// The dictionary key used to store the settings file version.
     /// </summary>
-    internal const string SETTINGS_VERSION_KEY = "FileVer";
+    internal const string SETTINGS_VERSION_KEY = SettingsFileCodec.SETTINGS_VERSION_KEY;
 
     /// <summary>
     /// Gets the file path for the game settings file.
@@ -47,16 +45,7 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
                 {
                     try
                     {
-                        Settings[kvp.Key] = jsonElement.ValueKind switch
-                        {
-                            JsonValueKind.Number when jsonElement.TryGetInt32(out int intValue) => intValue,
-                            JsonValueKind.Number when jsonElement.TryGetSingle(out float floatValue) => floatValue,
-                            JsonValueKind.Number when jsonElement.TryGetByte(out byte byteValue) => byteValue,
-                            JsonValueKind.True => true,
-                            JsonValueKind.False => false,
-                            JsonValueKind.String => jsonElement.GetString(),
-                            _ => throw new NotSupportedException($"Unsupported JSON type: {jsonElement.ValueKind}")
-                        };
+                        Settings[kvp.Key] = SettingsFileCodec.ConvertElement(jsonElement);
                     }
                     catch (Exception ex)
                     {
@@ -68,10 +57,9 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
             // Validate settings file version
             Settings.TryGetValue(SETTINGS_VERSION_KEY, out var versionObject);
             string? storedVersion = versionObject?.ToString();
-            if (storedVersion != SETTINGS_VERSION)
+            if (SettingsFileCodec.RequiresMigration(storedVersion))
             {
                 CreateBackup(storedVersion);
-                Settings[SETTINGS_VERSION_KEY] = SETTINGS_VERSION;
                 Save();
             }
         }
@@ -83,14 +71,7 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
         if (!File.Exists(FilePath))
             return;
 
-        var version = new string((storedVersion ?? string.Empty)
-            .Where(character => char.IsLetterOrDigit(character) || character is '.' or '_' or '-')
-            .Take(32)
-            .ToArray());
-        if (string.IsNullOrWhiteSpace(version))
-            version = "unknown";
-
-        var backupPath = $"{FilePath}.v{version}.bak";
+        var backupPath = SettingsFileCodec.GetBackupPath(FilePath, storedVersion);
         if (!File.Exists(backupPath))
         {
             File.Copy(FilePath, backupPath);
@@ -106,10 +87,7 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
     /// </returns>
     internal override bool Save()
     {
-        Settings[SETTINGS_VERSION_KEY] = SETTINGS_VERSION;
-        Settings = Settings.OrderBy(kvp => kvp.Key != SETTINGS_VERSION_KEY)
-                           .ThenBy(kvp => kvp.Key)
-                           .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        Settings = SettingsFileCodec.PrepareForSave(Settings);
         return base.Save();
     }
 
@@ -125,49 +103,12 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
             return;
         }
 
-        var jsonDoc = JsonDocument.Parse(json);
-        var settingsDict = jsonDoc.RootElement.GetProperty(nameof(Settings));
-        var sb = new StringBuilder();
+        File.WriteAllText(FilePath, SettingsFileCodec.Encode(json, IsFloatSetting));
+    }
 
-        foreach (var kvp in settingsDict.EnumerateObject())
-        {
-            if (sb.Length > 0) sb.Append('|');
-            sb.Append(kvp.Name).Append('/');
-
-            // Check if the value is a float and format it with a decimal point
-            var valueKind = kvp.Value.ValueKind;
-            if (valueKind == JsonValueKind.Number)
-            {
-                if (kvp.Value.TryGetSingle(out float floatValue))
-                {
-                    if (Settings.TryGetValue(kvp.Name, out var originalValue) && originalValue is float)
-                    {
-                        sb.Append(floatValue.ToString("0.0########", System.Globalization.CultureInfo.InvariantCulture));
-                    }
-                    else
-                    {
-                        sb.Append(kvp.Value.GetRawText());
-                    }
-                }
-                else
-                {
-                    sb.Append(kvp.Value.GetRawText());
-                }
-            }
-            else
-            {
-                sb.Append(kvp.Value.GetRawText());
-            }
-        }
-
-        byte[] flattenedData = Encoding.UTF8.GetBytes(sb.ToString());
-        using var ms = new MemoryStream();
-        using (var gzip = new GZipStream(ms, CompressionMode.Compress, true))
-        {
-            gzip.Write(flattenedData, 0, flattenedData.Length);
-        }
-        ms.Position = 0;
-        File.WriteAllText(FilePath, Convert.ToBase64String(ms.ToArray()));
+    private bool IsFloatSetting(string key)
+    {
+        return Settings.TryGetValue(key, out var originalValue) && originalValue is float;
     }
 
     /// <summary>
@@ -176,43 +117,12 @@ internal sealed class BetterGameSettingsFile : AbstractJsonFile
     /// <returns>The decompressed JSON string.</returns>
     protected override string ReadFromFile()
     {
-        string text = File.ReadAllText(FilePath).Trim();
-
-        byte[] compressedBytes = new byte[text.Length];
-        if (!Convert.TryFromBase64String(text, compressedBytes, out var bytesWritten))
-        {
-            return text; // Not valid base64, return original json
-        }
-        Array.Resize(ref compressedBytes, bytesWritten);
-
-        using var ms = new MemoryStream(compressedBytes);
-        using var gzip = new GZipStream(ms, CompressionMode.Decompress);
-        using var reader = new StreamReader(gzip);
-        string flattenedData = reader.ReadToEnd();
-
-        var settingsDict = new Dictionary<string, JsonElement>();
-        foreach (var pair in flattenedData.Split('|', StringSplitOptions.RemoveEmptyEntries))
-        {
-            var parts = pair.Split('/', 2);
-            if (parts.Length == 2)
-            {
-                using var doc = JsonDocument.Parse(parts[1]);
-                settingsDict[parts[0]] = doc.RootElement.Clone();
-            }
-        }
-
-        var resultDict = new Dictionary<string, object?>();
-        foreach (var kvp in settingsDict)
-        {
-            resultDict[kvp.Key] = kvp.Value.Deserialize<object?>();
-        }
-
-        return JsonSerializer.Serialize(new { Settings = resultDict });
+        return SettingsFileCodec.Decode(File.ReadAllText(FilePath));
     }
 
     /// <summary>
     /// Gets the dictionary of game settings with integer keys and various value types.
     /// </summary>
-    [JsonPropertyName(nameof(Settings))]
+    [JsonPropertyName(SettingsFileCodec.SETTINGS_PROPERTY)]
     public Dictionary<string, object?> Settings { get; set; } = [];
 }

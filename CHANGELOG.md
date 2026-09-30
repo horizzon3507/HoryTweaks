@@ -11,6 +11,29 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
+## Unreleased
+
+### Added
+
+- Localized On/Off labels and question-mark descriptions for the Tweaks settings.
+- Restore defaults, copy preset and paste preset rows on the Tweaks tab, each guarded by a second confirming click.
+- Custom preset names through the `/presetname` command, stored inside the existing `Preset-N.json` files.
+- Unit tests for the preset share code and preset name helpers.
+- A host moderation center in the HoryTweaks options tab with the current player list, kick and ban actions that ask for confirmation, quick access to the player, name and chat ban lists and the kicks and bans of the current session.
+- Automated tests for the game-independent moderation rules, history and list helpers under `tests/HoryTweaks.Tests`.
+- A startup check that warns when a legacy `BetterAmongUs.dll` is still installed or loaded beside HoryTweaks, without touching the file.
+- A privacy-conscious diagnostic report written by `/dump` with the HoryTweaks version, game version, platform, compatibility checks, non-secret client options and recent redacted log lines.
+- Unit tests for the version comparison, legacy plugin detection and report redaction.
+- Unity-independent quality gate tests for settings serialization, compression and migration, update manifest version decisions, legacy ban list migration and translation placeholder validation, run in CI before packaging.
+
+### Changed
+
+- Localized the unsupported Among Us version warning and combined it with the legacy plugin warning in a single popup.
+
+### Removed
+
+- The unfinished replay recording system and its unused Better_Data replays folder.
+
 ## v0.1.1-alpha · 29/09/2026
 
 ### Added

@@ -124,6 +124,7 @@ internal partial class BAUPlugin : BasePlugin
         BetterDataManager.Initialize();
         AudioOverrideManager.Initialize();
         Translator.Initialize();
+        StartupCompatibility.Initialize();
         Harmony.PatchAll();
         GameSettingsPatch.SetupSettings(true);
         BAUModdedSupportEvents.OnBAUOptionsLoadedEvent.InvokeAll([.. OptionItem.AllOptions.Cast<object>()]);

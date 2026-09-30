@@ -8,10 +8,14 @@ on:
       - 'v*'
     paths:
       - 'src/**'
+      - 'tests/**'
+      - 'api/**'
       - '.github/workflows/build.yml'
   pull_request:
     paths:
       - 'src/**'
+      - 'tests/**'
+      - 'api/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
     inputs:
@@ -38,6 +42,25 @@ jobs:
 
       - name: Validate translations
         run: pwsh -NoProfile -File src/build/ValidateTranslations.ps1
+
+      - name: Test translation validator
+        run: pwsh -NoProfile -File src/build/ValidateTranslations.Tests.ps1
+
+      - name: Run unit tests
+        run: |
+          set -euo pipefail
+          for project in tests/*/*.csproj; do
+            name="$(basename "$project" .csproj)"
+            dotnet test "$project" --configuration Release --logger "trx;LogFileName=$name.trx" --results-directory tests/TestResults
+          done
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: tests/TestResults/*.trx
+          if-no-files-found: error
 
       - name: Build HoryTweaks
         run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false

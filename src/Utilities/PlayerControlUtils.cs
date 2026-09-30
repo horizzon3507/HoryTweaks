@@ -3,6 +3,7 @@ using BetterAmongUs.Data;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Managers;
 using BetterAmongUs.Modules;
+using BetterAmongUs.Modules.Moderation;
 using BetterAmongUs.MonoScripts.Extended;
 using BetterAmongUs.Patches.Gameplay.Player;
 using BetterAmongUs.Patches.Gameplay.UI.Settings;
@@ -204,13 +205,15 @@ internal static class PlayerControlUtils
     /// <param name="setReasonInfo">Custom reason message for the kick.</param>
     private static void PerformKick(this PlayerControl player, bool ban = false, string setReasonInfo = "")
     {
+        string reasonText = string.Empty;
         if (setReasonInfo != "")
         {
-            PlayerJoinAndLeftPatch.BetterShowNotification(player.Data, forceReasonText: string.Format(setReasonInfo, ban ? TranslationStrings.HostTools_Ban.LocalizedString.ToLower() : TranslationStrings.HostTools_Kick.LocalizedString.ToLower()));
+            reasonText = string.Format(setReasonInfo, ban ? TranslationStrings.HostTools_Ban.LocalizedString.ToLower() : TranslationStrings.HostTools_Kick.LocalizedString.ToLower());
+            PlayerJoinAndLeftPatch.BetterShowNotification(player.Data, forceReasonText: reasonText);
         }
 
+        ModerationHistory.SetPendingReason(reasonText);
         AmongUsClient.Instance.KickPlayer(player.GetClientId(), ban);
-
     }
 
     /// <summary>

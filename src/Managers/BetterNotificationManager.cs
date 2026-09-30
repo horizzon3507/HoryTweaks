@@ -3,7 +3,6 @@ using BetterAmongUs.Data.Config;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
 using BetterAmongUs.MonoScripts.Extended;
-using BetterAmongUs.Patches.Gameplay.UI.Settings;
 using BetterAmongUs.Utilities;
 using Cpp2IL.Core.Extensions;
 using TMPro;
@@ -12,7 +11,7 @@ using UnityEngine;
 namespace BetterAmongUs.Managers;
 
 /// <summary>
-/// Manages in-game notifications for BetterAmongUs, including cheat detection alerts and system messages.
+/// Manages in-game notifications for BetterAmongUs and system messages.
 /// </summary>
 internal static class BetterNotificationManager
 {
@@ -111,77 +110,6 @@ internal static class BetterNotificationManager
         TextArea.text = text;
         SoundManager.Instance.PlaySound(HudManager.Instance.TaskCompleteSound, false, 1f);
         Notifying = true;
-    }
-
-    /// <summary>
-    /// Handles cheat detection notifications and actions.
-    /// </summary>
-    /// <param name="player">The player who was detected cheating.</param>
-    /// <param name="reason">The reason for the cheat detection.</param>
-    /// <param name="newText">Optional custom text to replace the default detection message.</param>
-    /// <param name="kickPlayer">Whether to kick the detected player.</param>
-    /// <param name="forceBan">Whether to force a ban regardless of settings.</param>
-    /// <returns>True if the cheat detection was handled, false otherwise.</returns>
-    internal static bool NotifyCheat(PlayerControl player, string reason, string newText = "", bool kickPlayer = true, bool forceBan = false)
-    {
-        if (player == null)
-            return false;
-
-        if (player.Data == null)
-            return false;
-
-        if (player.IsCheater())
-            return false;
-
-        if (player.IsLocalPlayer())
-        {
-            /*
-            FileChecker.SetHasUnauthorizedFileOrMod();
-            FileChecker.SetWarningMsg("Tampered client detected!");
-            Utils.DisconnectSelf("Tampered client detected!");
-            Utils.DisconnectAccountFromOnline();
-            */
-            return false;
-        }
-
-        var Reason = reason;
-        if (BetterGameSettings.CensorDetectionReason.GetBool())
-        {
-            Reason = string.Concat('*').Repeat(reason.Length);
-        }
-
-        string playerDetected = TranslationStrings.AntiCheat_PlayerDetected.LocalizedString;
-        string unauthorizedAction = TranslationStrings.AntiCheat_UnauthorizedAction.LocalizedString;
-        string byAntiCheat = TranslationStrings.AntiCheat_ByAntiCheat.LocalizedString;
-        string playerDetectedLog = Translator.GetString(TranslationStrings.AntiCheat_PlayerDetected, useConsoleLanguage: true);
-        string unauthorizedActionLog = Translator.GetString(TranslationStrings.AntiCheat_UnauthorizedAction, useConsoleLanguage: true);
-
-        string text = $"{playerDetected}: <color=#0097b5>{player?.ExtendedData().RealName}</color> {unauthorizedAction}: <b><color=#fc0000>{Reason}</color></b>";
-        string rawText = $"{playerDetectedLog}: <color=#0097b5>{player?.ExtendedData().RealName}</color> {unauthorizedActionLog}: <b><color=#fc0000>{reason}</color></b>";
-
-        if (newText != "")
-        {
-            text = $"{playerDetected}: <color=#0097b5>{player?.ExtendedData().RealName}</color> " + newText + $": <b><color=#fc0000>{Reason}</color></b>";
-            rawText = $"{playerDetectedLog}: <color=#0097b5>{player?.ExtendedData().RealName}</color> " + newText + $": <b><color=#fc0000>{reason}</color></b>";
-        }
-
-        if (!BetterDataManager.Files.BetterDataFile.CheatData.Any(info => info.CheckPlayerData(player.Data)))
-        {
-            BetterDataManager.Files.BetterDataFile.CheatData.Add(new(player?.ExtendedData().RealName ?? player.Data.PlayerName, player.GetHashPuid(), player.Data.FriendCode, reason));
-            BetterDataManager.Files.BetterDataFile.Save();
-            Notify(text, time: 8f);
-        }
-
-        BAUPlugin.Logger.LogCheat($"{player.cosmetics.nameText.text} Info: {player.Data.PlayerName} - {player.Data.FriendCode} - {player.GetHashPuid()}");
-        BAUPlugin.Logger.LogCheat(Utils.RemoveHtmlText(rawText));
-
-        if (GameState.IsHost && kickPlayer)
-        {
-            string kickMessage = string.Format(TranslationStrings.AntiCheat_KickMessage.LocalizedString, byAntiCheat, Reason);
-            player.Kick(true, kickMessage, true, false, forceBan);
-        }
-
-        return true;
     }
 
     /// <summary>

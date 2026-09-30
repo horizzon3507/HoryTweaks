@@ -1,8 +1,6 @@
 ﻿using AmongUs.GameOptions;
 using BetterAmongUs.Attributes;
-using BetterAmongUs.Generated;
 using BetterAmongUs.Interfaces;
-using BetterAmongUs.Managers;
 using BetterAmongUs.Modules;
 using BetterAmongUs.Modules.Support;
 using BetterAmongUs.Patches.Gameplay.UI.Settings;
@@ -16,7 +14,7 @@ using UnityEngine;
 namespace BetterAmongUs.MonoScripts.Extended;
 
 /// <summary>
-/// Extended player information with additional data and anti-cheat features.
+/// Extended player information with additional activity data.
 /// </summary>
 [RegisterInIl2Cpp]
 internal sealed class ExtendedPlayerInfo : MonoBehaviour, IMonoExtension<NetworkedPlayerInfo>
@@ -49,31 +47,21 @@ internal sealed class ExtendedPlayerInfo : MonoBehaviour, IMonoExtension<Network
     {
         var time = Time.deltaTime;
 
-        AntiCheatInfo.TimeSinceLastTask += time;
-
-        if (AntiCheatInfo.RPCSentPS > 0)
+        if (ActivityInfo.RPCSentPS > 0)
         {
             if (BetterGameSettings.RpcRateLimiting.GetBool())
             {
-                bool flag = BaseMono.IsCheater();
-
-                if (AntiCheatInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt() && !flag)
+                if (ActivityInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
                 {
-                    BetterNotificationManager.NotifyCheat(
-                        BaseMono.Object,
-                        TranslationStrings.AntiCheat_Reason_RPCSentPS.LocalizedString,
-                        TranslationStrings.AntiCheat_UnauthorizedAction.LocalizedString
-                    );
-
-                    BAUPlugin.Logger.LogCheat($"{BaseMono.Object.ExtendedData().RealName} {AntiCheatInfo.RPCSentPS} Sent.");
+                    BAUPlugin.Logger.Log($"{BaseMono.Object.ExtendedData().RealName} {ActivityInfo.RPCSentPS} RPCs sent.", "RPC");
                 }
             }
 
             timeAccumulator += time;
 
-            if (timeAccumulator >= 0.25f - 0.005 * AntiCheatInfo.RPCSentPS)
+            if (timeAccumulator >= 0.25f - 0.005 * ActivityInfo.RPCSentPS)
             {
-                AntiCheatInfo.RPCSentPS -= 1;
+                ActivityInfo.RPCSentPS -= 1;
                 timeAccumulator = 0f;
             }
         }
@@ -149,41 +137,21 @@ internal sealed class ExtendedPlayerInfo : MonoBehaviour, IMonoExtension<Network
     internal ExtendedRoleInfo? RoleInfo { get; } = new();
 
     /// <summary>
-    /// Gets the extended anti-cheat information.
+    /// Gets the extended activity information.
     /// </summary>
     [HideFromIl2Cpp]
-    internal ExtendedAntiCheatInfo? AntiCheatInfo { get; } = new();
+    internal ExtendedActivityInfo? ActivityInfo { get; } = new();
 }
 
 /// <summary>
-/// Contains anti-cheat monitoring information for a player.
+/// Contains activity information for a player.
 /// </summary>
-internal sealed class ExtendedAntiCheatInfo
+internal sealed class ExtendedActivityInfo
 {
-    /// <summary>
-    /// Gets or sets whether the player is banned by anti-cheat.
-    /// </summary>
-    internal bool BannedByAntiCheat { get; set; } = false;
-
-    /// <summary>
-    /// Gets or sets the list of AUM chat messages.
-    /// </summary>
-    internal List<string> AUMChats { get; set; } = [];
-
-    /// <summary>
-    /// Gets or sets the list of MCC chat messages.
-    /// </summary>
-    internal List<string> MCCChats { get; set; } = [];
-
     /// <summary>
     /// Gets or sets the RPCs sent per second.
     /// </summary>
     internal int RPCSentPS { get; set; } = 0;
-
-    /// <summary>
-    /// Gets or sets the number of times attempted to kill.
-    /// </summary>
-    internal int TimesAttemptedKilled { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets the number of open sabotages.
@@ -195,25 +163,6 @@ internal sealed class ExtendedAntiCheatInfo
     /// </summary>
     internal bool IsFixingPanelSabotage => OpenSabotageNum != 0;
 
-    /// <summary>
-    /// Gets or sets the time since last task.
-    /// </summary>
-    internal float TimeSinceLastTask { get; set; } = 5f;
-
-    /// <summary>
-    /// Gets or sets the last task ID.
-    /// </summary>
-    internal uint LastTaskId { get; set; } = 999;
-
-    /// <summary>
-    /// Gets or sets whether the player has set their name.
-    /// </summary>
-    internal bool HasSetName { get; set; }
-
-    /// <summary>
-    /// Gets or sets whether the player has set their level.
-    /// </summary>
-    internal bool HasSetLevel { get; set; }
 }
 
 /// <summary>

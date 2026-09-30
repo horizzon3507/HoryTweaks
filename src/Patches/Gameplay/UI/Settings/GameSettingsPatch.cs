@@ -12,25 +12,19 @@ namespace BetterAmongUs.Patches.Gameplay.UI.Settings;
 internal sealed class BetterGameSettings
 {
     internal static OptionFloatItem? KickCooldown;
-    internal static OptionStringItem? WhenCheating;
     internal static OptionCheckboxItem? InvalidFriendCode;
     internal static OptionCheckboxItem? UseBanPlayerList;
     internal static OptionCheckboxItem? UseBanNameList;
     internal static OptionCheckboxItem? UseBanChatList;
     internal static OptionCheckboxItem? UseBanChatListOnlyLobby;
     internal static OptionCheckboxItem? UseBanChatListBan;
-    internal static OptionCheckboxItem? DetectedLevel;
-    internal static OptionIntItem? DetectedLevelAbove;
     internal static OptionCheckboxItem? KickLevel;
     internal static OptionIntItem? KickLevelBelow;
     internal static OptionIntItem? KickLevelBelowMinimumPlayers;
-    internal static OptionCheckboxItem? DetectCheatClients;
-    internal static OptionCheckboxItem? DetectInvalidRpcs;
     internal static OptionCheckboxItem? RpcRateLimiting;
     internal static OptionIntItem? RpcRateLimit;
 
     internal static OptionCheckboxItem? CancelInvalidSabotage;
-    internal static OptionCheckboxItem? CensorDetectionReason;
 }
 
 // Temporary settings for Hide & Seek impostor selection
@@ -60,17 +54,15 @@ internal static class GameSettingsPatch
         OptionHeaderItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_MainHeader_System);
         OptionPresetItem.Create();
 
-        // Anti-Cheat Settings section
+        // Host tools
         {
-            OptionHeaderItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_MainHeader_AntiCheat);
+            OptionHeaderItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_MainHeader_HostTools);
 
-            // Host-only anti-cheat settings
+            // Host moderation settings
             if (IsPreload || GameState.IsHost)
             {
                 OptionTitleItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_TextHeader_HostOnly);
                 BetterGameSettings.KickCooldown = OptionFloatItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_KickCooldown, (0f, 3f, 0.1f), 2f, ("", "s"));
-                BetterGameSettings.WhenCheating = OptionStringItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_WhenCheating,
-                    [TranslationStrings.BetterSetting_Setting_WhenCheating_Notify, TranslationStrings.BetterSetting_Setting_WhenCheating_Kick, TranslationStrings.BetterSetting_Setting_WhenCheating_Ban], 2);
                 BetterGameSettings.InvalidFriendCode = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_InvalidFriendCode, true);
                 BetterGameSettings.CancelInvalidSabotage = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_CancelInvalidSabotage, true);
                 BetterGameSettings.UseBanPlayerList = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_UseBanPlayerList, true);
@@ -80,16 +72,9 @@ internal static class GameSettingsPatch
                 BetterGameSettings.UseBanChatListBan = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_UseBanChatListBan, false, BetterGameSettings.UseBanChatList);
             }
 
-            // General detection settings
-            OptionTitleItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_TextHeader_Detections);
-            BetterGameSettings.CensorDetectionReason = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_CensorDetectionReason, false);
-            BetterGameSettings.DetectedLevel = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_DetectedLevel, false);
-            BetterGameSettings.DetectedLevelAbove = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_DetectedLevelAbove, (100, 10000, 5), 500, ("Lv ", ""), BetterGameSettings.DetectedLevel);
             BetterGameSettings.KickLevel = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_KickLevel, false);
             BetterGameSettings.KickLevelBelow = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_KickLevelBelow, (0, 10000, 1), 0, ("Lv ", ""), BetterGameSettings.KickLevel);
             BetterGameSettings.KickLevelBelowMinimumPlayers = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_KickLevelBelowMinimumPlayers, (1, 15, 1), 9, parent: BetterGameSettings.KickLevelBelow);
-            BetterGameSettings.DetectCheatClients = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_DetectCheatClients, true);
-            BetterGameSettings.DetectInvalidRpcs = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_DetectInvalidRpcs, true);
             BetterGameSettings.RpcRateLimiting = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_RpcRateLimiting, true);
             BetterGameSettings.RpcRateLimit = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_RateLimit, (25, 1000, 1), 50, ("", " PS"), BetterGameSettings.RpcRateLimiting);
         }

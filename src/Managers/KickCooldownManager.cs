@@ -7,7 +7,7 @@ namespace BetterAmongUs.Managers;
 
 /// <summary>
 /// Manages the cooldown period between player kick actions.
-/// This cooldown is necessary to avoid bans by Innersloth anti-cheat.
+/// This cooldown prevents repeated host moderation actions.
 /// </summary>
 internal static class KickCooldownManager
 {

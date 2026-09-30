@@ -1,5 +1,4 @@
-﻿using BetterAmongUs.Data;
-using BetterAmongUs.Data.Config;
+﻿using BetterAmongUs.Data.Config;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
 using BetterAmongUs.Modules.Support;
@@ -249,8 +248,6 @@ internal static class ChatPatch
 
         SplitStringBuilder ssbTag = new(100, '-');
 
-        string hashPuid = Utils.GetHashPuid(sourcePlayer);
-        string friendCode = playerInfo.FriendCode;
         string playerName = playerInfo.ExtendedData()?.RealName ?? "???";
 
         // In lobby, show player tags instead of roles
@@ -266,11 +263,6 @@ internal static class ChatPatch
                 ssbTag.AppendFormat("<color=#0dff00>{1}{0}</color>", TranslationStrings.Player_BetterUser.LocalizedString, betterData.IsVerifiedBetterUser || sourcePlayer.IsLocalPlayer() ? "✓ " : "");
             }
 
-            // Show mod-specific tags based on player data
-            if (BetterDataManager.Files.BetterDataFile.TryGetCheatInfo(sourcePlayer.Data, out var info))
-            {
-                ssbTag.Append(info.title.ToColor(info.hexColor));
-            }
         }
 
         ssbTag.Append(sourcePlayer.GetRoleInfo(false).Size(75f));

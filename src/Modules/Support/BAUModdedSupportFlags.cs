@@ -68,22 +68,13 @@ public static class BAUModdedSupportFlags
     /// </summary>
     public static string Disable_BAUHttpHeader = "client.disable.bauhttpheader";
 
-    // ============================================
-    // Anti-Cheat System
-    // ============================================
-
-    /// <summary>
-    /// Completely disables the anti-cheat system.
-    /// When enabled by another mod, BetterAmongUs will not perform any anti-cheat checks.
-    /// </summary>
-    public static string Disable_Anticheat = "anticheat.disable";
-
     /// <summary>
     /// Prefix for disabling specific RPC handlers or handler flags.
     /// Format: "anticheat.disable.rpchandler=HandlerClassName" to disable an entire handler,
     /// or "anticheat.disable.rpchandler=HandlerClassName:HandlerFlagName" for specific flags.
-    /// When enabled by another mod, BetterAmongUs will not validate the specified RPC handlers.
-    /// <seealso cref="AntiCheat.RPCHandler"/> for the base handler class.
+    /// The prefix is retained for compatibility with existing integrations.
+    /// When enabled by another mod, BetterAmongUs will not process the specified RPC handlers.
+    /// <seealso cref="Rpc.RPCHandler"/> for the base handler class.
     /// <seealso cref="Enums.HandlerFlag"/> for available handler flags.
     /// </summary>
     public static string Disable_RPCHandler = "anticheat.disable.rpchandler=";

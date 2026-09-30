@@ -46,15 +46,6 @@ internal sealed class BAULogger(ManualLogSource manualLogSource)
     internal void LogHeader(string info, string tag = "LogHeader", bool hostOnly = false, bool logConsole = true) => Log($"   >-------------- {info} --------------<", tag, hostOnly: hostOnly, logConsole: logConsole);
 
     /// <summary>
-    /// Logs cheat detection messages with green console color.
-    /// </summary>
-    /// <param name="info">The cheat detection message.</param>
-    /// <param name="tag">The log tag/category.</param>
-    /// <param name="hostOnly">Whether to log only when the client is host.</param>
-    /// <param name="logConsole">Whether to output to console.</param>
-    internal void LogCheat(string info, string tag = "AntiCheat", bool hostOnly = false, bool logConsole = true) => Log(info, tag, color: ConsoleColor.Green, hostOnly: hostOnly, logConsole: logConsole);
-
-    /// <summary>
     /// Logs error messages with red console color.
     /// </summary>
     /// <param name="info">The error message.</param>

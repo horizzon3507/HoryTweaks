@@ -53,7 +53,7 @@ internal static class BetterDataManager
     internal static class Files
     {
         /// <summary>
-        /// The main data file containing outfit presets and cheat detection data.
+        /// The main data file containing outfit presets.
         /// </summary>
         internal static BetterDataFile BetterDataFile = new();
 
@@ -443,74 +443,4 @@ internal static class BetterDataManager
     }
 
     /// <summary>
-    /// Removes a player from all cheat detection lists by identifier.
-    /// </summary>
-    /// <param name="identifier">The player identifier (name, hashPUID, or friend code).</param>
-    /// <returns>True if the player was found and removed, false otherwise.</returns>
-    internal static bool RemovePlayer(string identifier)
-    {
-        identifier = identifier.Replace(' ', '_');
-        bool didFind = false;
-
-        foreach (var info in Files.BetterDataFile.CheatData.ToArray())
-        {
-            if (info.PlayerName.Replace(' ', '_') == identifier || info.HashPuid == identifier || info.FriendCode == identifier)
-            {
-                Files.BetterDataFile.CheatData.Remove(info);
-                didFind = true;
-            }
-        }
-        foreach (var info in Files.BetterDataFile.SickoData.ToArray())
-        {
-            if (info.PlayerName.Replace(' ', '_') == identifier || info.HashPuid == identifier || info.FriendCode == identifier)
-            {
-                Files.BetterDataFile.SickoData.Remove(info);
-                didFind = true;
-            }
-        }
-        foreach (var info in Files.BetterDataFile.AUMData.ToArray())
-        {
-            if (info.PlayerName.Replace(' ', '_') == identifier || info.HashPuid == identifier || info.FriendCode == identifier)
-            {
-                Files.BetterDataFile.AUMData.Remove(info);
-                didFind = true;
-            }
-        }
-        foreach (var info in Files.BetterDataFile.KNData.ToArray())
-        {
-            if (info.PlayerName.Replace(' ', '_') == identifier || info.HashPuid == identifier || info.FriendCode == identifier)
-            {
-                Files.BetterDataFile.KNData.Remove(info);
-                didFind = true;
-            }
-        }
-        foreach (var info in Files.BetterDataFile.MMCData.ToArray())
-        {
-            if (info.PlayerName.Replace(' ', '_') == identifier || info.HashPuid == identifier || info.FriendCode == identifier)
-            {
-                Files.BetterDataFile.MMCData.Remove(info);
-                didFind = true;
-            }
-        }
-
-        if (didFind)
-        {
-            Files.BetterDataFile.Save();
-        }
-
-        return didFind;
-    }
-
-    /// <summary>
-    /// Clears all cheat detection data from all categories.
-    /// </summary>
-    internal static void ClearCheatData()
-    {
-        Files.BetterDataFile.CheatData.Clear();
-        Files.BetterDataFile.SickoData.Clear();
-        Files.BetterDataFile.AUMData.Clear();
-        Files.BetterDataFile.KNData.Clear();
-        Files.BetterDataFile.MMCData.Clear();
-        Files.BetterDataFile.Save();
-    }
 }

@@ -219,7 +219,7 @@ public static class TranslationStrings
     public static readonly TranslationString WelcomeMsg_BAUDescription1 = new("WelcomeMsg.BAUDescription1");
 
     /// <summary>
-    /// Base Translation: Better Options
+    /// Base Translation: Tweaks
     /// </summary>
     public static readonly TranslationString BetterOption = new("BetterOption");
 

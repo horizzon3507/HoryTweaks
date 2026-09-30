@@ -41,7 +41,7 @@
   "WelcomeMsg.ThanksForDownloading": "¡Gracias por descargarlo!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> mejora la experiencia original de Among Us con funciones del cliente como {1}, herramientas para anfitriones y mucho más. Puedes jugar con personas que usan el juego original.",
 
-  "BetterOption": "Opciones mejoradas",
+  "BetterOption": "Tweaks",
   "BetterOption.Next": "Siguiente >",
   "BetterOption.Previous": "< Anterior",
   "BetterOption.SendBetterRpc": "<color=#4f92ff>Enviar RPC mejorados</color>",

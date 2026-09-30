@@ -38,43 +38,7 @@ internal static class ClientPatch
     [HarmonyPrefix]
     private static bool SignInStatusComponent_SetOnline_Prefix()
     {
-        // Get supported Among Us versions for BAU
-        var varSupportedVersions = BAUPlugin.ModInfo.SupportedAmongUsVersions;
-        Version currentVersion = new(BAUPlugin.AppVersion);
-        Version firstSupportedVersion = new(varSupportedVersions.First());
-        Version lastSupportedVersion = new(varSupportedVersions.Last());
-
-        // Check if current Among Us version is higher than supported range
-        if (currentVersion > firstSupportedVersion)
-        {
-            var verText = $"<b>{varSupportedVersions.First()}</b>";
-            // Format version range if there are multiple supported versions
-            if (firstSupportedVersion != lastSupportedVersion)
-            {
-                verText = $"<b>{varSupportedVersions.Last()}</b> - <b>{varSupportedVersions.First()}</b>";
-            }
-
-            // Show warning popup for newer Among Us version
-            Utils.ShowPopUp($"<size=200%>-= <color=#ff2200><b>Warning</b></color> =-</size>\n\n" +
-                $"<size=125%><color=#ffffbe>{BAUPlugin.ModInfo.PLUGIN_NAME} {BAUPlugin.ModInfo.VERSION_STRING}</color>\nsupports <color=#4f92ff>Among Us {verText}</color>,\n" +
-                $"<color=#4f92ff>Among Us <b>{BAUPlugin.AppVersion}</b></color> is above the supported versions!\n" +
-                $"<color=#ae1700>You may encounter minor to game breaking bugs.</color></size>");
-        }
-        // Check if current Among Us version is lower than supported range
-        else if (currentVersion < lastSupportedVersion)
-        {
-            var verText = $"<b>{varSupportedVersions.First()}</b>";
-            if (firstSupportedVersion != lastSupportedVersion)
-            {
-                verText = $"<b>{varSupportedVersions.Last()}</b> - <b>{varSupportedVersions.First()}</b>";
-            }
-
-            // Show warning popup for older Among Us version
-            Utils.ShowPopUp($"<size=200%>-= <color=#ff2200><b>Warning</b></color> =-</size>\n\n" +
-                $"<size=125%><color=#ffffbe>{BAUPlugin.ModInfo.PLUGIN_NAME} {BAUPlugin.ModInfo.VERSION_STRING}</color>\nsupports <color=#4f92ff>Among Us {verText}</color>,\n" +
-                $"<color=#4f92ff>Among Us <b>{BAUPlugin.AppVersion}</b></color> is below the supported versions!\n" +
-                $"<color=#ae1700>You may encounter minor to game breaking bugs.</color></size>");
-        }
+        StartupCompatibility.ShowNoticesOnce();
 
         return true;
     }

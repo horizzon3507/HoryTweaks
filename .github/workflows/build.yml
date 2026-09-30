@@ -8,14 +8,24 @@ on:
       - 'v*'
     paths:
       - 'src/**'
+<<<<<<< HEAD
       - 'tests/**'
       - 'api/**'
+||||||| fdaf4be
+=======
+      - 'tests/**'
+>>>>>>> origin/devin/1790800050-first-run-diagnostics
       - '.github/workflows/build.yml'
   pull_request:
     paths:
       - 'src/**'
+<<<<<<< HEAD
       - 'tests/**'
       - 'api/**'
+||||||| fdaf4be
+=======
+      - 'tests/**'
+>>>>>>> origin/devin/1790800050-first-run-diagnostics
       - '.github/workflows/build.yml'
   workflow_dispatch:
     inputs:
@@ -56,6 +66,9 @@ jobs:
           name: test-results
           path: tests/TestResults/*.trx
           if-no-files-found: error
+
+      - name: Run diagnostics tests
+        run: dotnet test tests/HoryTweaks.Diagnostics.Tests/HoryTweaks.Diagnostics.Tests.csproj --configuration Release
 
       - name: Build HoryTweaks
         run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false

@@ -15,7 +15,14 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 ### Added
 
+- A startup check that warns when a legacy `BetterAmongUs.dll` is still installed or loaded beside HoryTweaks, without touching the file.
+- A privacy-conscious diagnostic report written by `/dump` with the HoryTweaks version, game version, platform, compatibility checks, non-secret client options and recent redacted log lines.
+- Unit tests for the version comparison, legacy plugin detection and report redaction.
 - Unity-independent quality gate tests for settings serialization, compression and migration, update manifest version decisions, legacy ban list migration and translation placeholder validation, run in CI before packaging.
+
+### Changed
+
+- Localized the unsupported Among Us version warning and combined it with the legacy plugin warning in a single popup.
 
 ### Removed
 

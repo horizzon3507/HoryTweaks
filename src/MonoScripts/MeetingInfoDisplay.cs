@@ -1,4 +1,5 @@
-﻿using BetterAmongUs.Attributes;
+﻿using AmongUs.Data;
+using BetterAmongUs.Attributes;
 using BetterAmongUs.Data;
 using BetterAmongUs.Data.Config;
 using BetterAmongUs.Generated;
@@ -92,13 +93,19 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
 
         if (!BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_CustomColorBlindText))
         {
-            if (BAUConfigs.BetterColorblindText.Value)
+            if (!DataManager.Settings.Accessibility.ColorBlindMode)
             {
-                _pva.ColorBlindName.transform.localPosition = new Vector3(-0.91f, -0.19f, -0.05f);
+                _pva.ColorBlindName.gameObject.SetActive(false);
+            }
+            else if (BAUConfigs.BetterColorblindText.Value)
+            {
+                float offsetY = BAUConfigs.ColorblindTextOnTop.Value ? 0.19f : -0.19f;
+                _pva.ColorBlindName.transform.localPosition = new Vector3(-0.91f, offsetY, -0.05f);
             }
             else
             {
-                _pva.ColorBlindName.transform.localPosition = _pva.NameText.transform.localPosition - new Vector3(0f, 0.19f, 0f);
+                var nameOffset = new Vector3(0f, BAUConfigs.ColorblindTextOnTop.Value ? 0.19f : -0.19f, 0f);
+                _pva.ColorBlindName.transform.localPosition = _pva.NameText.transform.localPosition + nameOffset;
             }
         }
 

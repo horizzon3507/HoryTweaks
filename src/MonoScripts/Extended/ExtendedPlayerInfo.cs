@@ -43,6 +43,7 @@ internal sealed class ExtendedPlayerInfo : MonoBehaviour, IMonoExtension<Network
     }
 
     private float timeAccumulator = 0f;
+    private bool rateLimitLogged = false;
     internal void Update()
     {
         var time = Time.deltaTime;
@@ -53,7 +54,15 @@ internal sealed class ExtendedPlayerInfo : MonoBehaviour, IMonoExtension<Network
             {
                 if (ActivityInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
                 {
-                    BAUPlugin.Logger.Log($"{BaseMono.Object.ExtendedData().RealName} {ActivityInfo.RPCSentPS} RPCs sent.", "RPC");
+                    if (!rateLimitLogged)
+                    {
+                        BAUPlugin.Logger.Log($"{BaseMono.Object.ExtendedData().RealName} {ActivityInfo.RPCSentPS} RPCs sent.", "RPC");
+                        rateLimitLogged = true;
+                    }
+                }
+                else
+                {
+                    rateLimitLogged = false;
                 }
             }
 
@@ -64,6 +73,10 @@ internal sealed class ExtendedPlayerInfo : MonoBehaviour, IMonoExtension<Network
                 ActivityInfo.RPCSentPS -= 1;
                 timeAccumulator = 0f;
             }
+        }
+        else
+        {
+            rateLimitLogged = false;
         }
     }
 

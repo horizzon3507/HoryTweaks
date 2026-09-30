@@ -39,6 +39,9 @@ jobs:
       - name: Validate translations
         run: pwsh -NoProfile -File src/build/ValidateTranslations.ps1
 
+      - name: Test translation validator
+        run: pwsh -NoProfile -File src/build/ValidateTranslations.Tests.ps1
+
       - name: Build HoryTweaks
         run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false
 

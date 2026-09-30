@@ -88,7 +88,11 @@ jobs:
             plugin_dir="$(dirname "${dll_paths[0]}")"
             rm -- "${dll_paths[0]}"
             cp "$dll" "$plugin_dir/HoryTweaks.dll"
-            (cd "$extract_dir" && zip -q -r "$output" .)
+
+            local package_root
+            package_root="$(dirname "$(dirname "$plugin_dir")")"
+            test -f "$package_root/winhttp.dll"
+            (cd "$package_root" && zip -q -r "$output" .)
             rm -rf "$temp_dir"
           }
 

@@ -199,16 +199,24 @@ internal partial class BAUPlugin : BasePlugin
     private static void SetupConsole()
     {
         Encryptor.Initialize();
+        _manualLogSource = BepInEx.Logging.Logger.CreateLogSource(ModInfo.PLUGIN_GUID);
+        Logger = new BAULogger(_manualLogSource);
+        var customLogListener = new CustomLogListener(Logger, _manualLogSource);
+        BepInEx.Logging.Logger.Listeners.Add(customLogListener);
+
+        if (BAUConfigs.HideConsole.Value)
+        {
+            ConsoleManager.DetachConsole();
+            ConsoleManager.ConfigConsoleEnabled.Value = false;
+            return;
+        }
+
         ConsoleManager.CreateConsole();
         ConsoleManager.ConfigPreventClose.Value = true;
         if (ConsoleManager.ConfigConsoleEnabled.Value) ConsoleManager.DetachConsole();
         ConsoleManager.ConfigConsoleEnabled.Value = false;
         ConsoleManager.SetConsoleTitle($"Among Us - {ModInfo.PLUGIN_NAME} Console");
-        _manualLogSource = BepInEx.Logging.Logger.CreateLogSource(ModInfo.PLUGIN_GUID);
-        Logger = new BAULogger(_manualLogSource);
-        var customLogListener = new CustomLogListener(Logger, _manualLogSource);
-        BepInEx.Logging.Logger.Listeners.Add(customLogListener);
-        ConsoleManager.SetConsoleColor(ConsoleColor.Green);
-        ConsoleManager.ConsoleStream.WriteLine($".--------------------------------------------------------------------------------.\r\n|  ____       _   _                 _                                  _   _     |\r\n| | __ )  ___| |_| |_ ___ _ __     / \\   _ __ ___   ___  _ __   __ _  | | | |___ |\r\n| |  _ \\ / _ \\ __| __/ _ \\ '__|   / _ \\ | '_ ` _ \\ / _ \\| '_ \\ / _` | | | | / __||\r\n| | |_) |  __/ |_| ||  __/ |     / ___ \\| | | | | | (_) | | | | (_| | | |_| \\__ \\|\r\n| |____/ \\___|\\__|\\__\\___|_|    /_/   \\_\\_| |_| |_|\\___/|_| |_|\\__, |  \\___/|___/|\r\n|                                                              |___/             |\r\n'--------------------------------------------------------------------------------'");
+        ConsoleManager.SetConsoleColor(ConsoleColor.Yellow);
+        ConsoleManager.ConsoleStream.WriteLine("HH   HH                       TTTTTTT                           kk           \r\nHH   HH  oooo  rr rr  yy   yy   TTT   ww      ww   eee    aa aa kk  kk  sss  \r\nHHHHHHH oo  oo rrr  r yy   yy   TTT   ww      ww ee   e  aa aaa kkkkk  s     \r\nHH   HH oo  oo rr      yyyyyy   TTT    ww ww ww  eeeee  aa  aaa kk kk   sss  \r\nHH   HH  oooo  rr          yy   TTT     ww  ww    eeeee  aaa aa kk  kk     s \r\n                       yyyyy                                            sss  ");
     }
 }

@@ -47,10 +47,10 @@ internal static class MainMenuManagerPatch
             sizer.transform.position = new Vector3(sizer.transform.position.x, sizer.transform.position.y, -0.5f);
 
             // Scale down the logo slightly
-            logo.transform.localScale = new Vector3(0.003f, 0.0025f, 0f);
+            logo.transform.localScale = new Vector3(0.00155f, 0.00155f, 0f);
 
-            // Replace Among Us sprite with Better Among Us logo
-            logo.GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.BetterAmongUs-Logo.png", 1f);
+            // Replace Among Us sprite with HoryTweaks logo
+            logo.GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Logo.png", 1f);
         }
 
         // Apply custom colors to main menu background

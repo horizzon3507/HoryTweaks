@@ -30,7 +30,7 @@ internal sealed class BAULogger(ManualLogSource manualLogSource)
             if (logConsole)
             {
                 ConsoleManager.SetConsoleColor(color);
-                ConsoleManager.ConsoleStream.WriteLine($"{DateTime.Now:HH:mm} BetterAmongUs[{tag}]: {Utils.RemoveHtmlText(info)}");
+                ConsoleManager.ConsoleStream.WriteLine($"{DateTime.Now:HH:mm} HoryTweaks[{tag}]: {Utils.RemoveHtmlText(info)}");
             }
         }
         catch { }

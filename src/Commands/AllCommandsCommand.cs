@@ -17,7 +17,7 @@ internal sealed class AllCommandsCommand : BaseCommand
         var open = "<color=#858585>┌──────── </color>";
         var mid = "<color=#858585>├ </color>";
         var close = "<color=#858585>└──────── </color>";
-        list = $"<color=#00751f><b><size=150%>{TranslationStrings.Command_List_Title.LocalizedString}</size></b></color>\n" + open;
+        list = $"<color=#ffffbe><b><size=150%>{TranslationStrings.Command_List_Title.LocalizedString}</size></b></color>\n" + open;
 
         if (allNormalCommands.Length > 0)
         {

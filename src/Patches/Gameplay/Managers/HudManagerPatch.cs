@@ -13,7 +13,7 @@ namespace BetterAmongUs.Patches.Gameplay.Managers;
 [HarmonyPatch]
 internal static class HudManagerPatch
 {
-    internal static string WelcomeMessage => $"<b><color=#00b530><size=125%><align=\"center\">{TranslationStrings.WelcomeMsg_WelcomeToBAU.Format(TranslationStrings.BetterAmongUs)}\n{BAUPlugin.ModInfo.VERSION_STRING}</size>\n" +
+    internal static string WelcomeMessage => $"<b><color=#ffffbe><size=125%><align=\"center\">{TranslationStrings.WelcomeMsg_WelcomeToBAU.Format(TranslationStrings.BetterAmongUs)}\n{BAUPlugin.ModInfo.VERSION_STRING}</size>\n" +
         $"{TranslationStrings.WelcomeMsg_ThanksForDownloading}</align></color></b>\n<size=120%> </size>\n" +
         TranslationStrings.WelcomeMsg_BAUDescription1.Format(TranslationStrings.BAU, TranslationStrings.BetterOption_BetterNotifications);
 
@@ -35,7 +35,7 @@ internal static class HudManagerPatch
         if (!HasBeenWelcomed && GameState.IsInGame && GameState.IsLobby && !GameState.IsFreePlay)
         {
             // Show notification with welcome text
-            BetterNotificationManager.Notify($"<b><color=#00751f>{TranslationStrings.WelcomeMsg_WelcomeToBAU.Format(TranslationStrings.BetterAmongUs)}!</color></b>", 8f);
+            BetterNotificationManager.Notify($"<b><color=#ffffbe>{TranslationStrings.WelcomeMsg_WelcomeToBAU.Format(TranslationStrings.BetterAmongUs)}!</color></b>", 8f);
 
             // Send detailed welcome message to private chat
             Utils.AddChatPrivate(WelcomeMessage, overrideName: " ");

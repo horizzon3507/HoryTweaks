@@ -1,16 +1,14 @@
 # HoryTweaks
 
 <p align="center">
-  <img width="700" height="500" alt="BetterAmongUs logo retained from upstream" src="/assets/BetterAmongUs-Logo.png" />
+  <img width="700" alt="HoryTweaks logo" src="/assets/HoryTweaks-Logo.png" />
 </p>
 
 HoryTweaks is a client-side Among Us mod forked from D1GQ's BetterAmongUs. It adds client-side improvements, host gameplay validation and manual moderation tools while remaining compatible with unmodified players.
 
-> The existing BetterAmongUs logo and artwork are retained from upstream for now. No HoryTweaks artwork has been supplied.
-
 ## Compatibility
 
-HoryTweaks 0.1.0 targets **Among Us v19.0.0 / 2026.9.29**. It is not intended for older or newer game versions unless a later release says otherwise.
+HoryTweaks 0.1.1 targets **Among Us v19.0.0 / 2026.9.29**. It is not intended for older or newer game versions unless a later release says otherwise.
 
 Release downloads: [HoryTweaks releases](https://github.com/horizzon3507/HoryTweaks/releases)
 

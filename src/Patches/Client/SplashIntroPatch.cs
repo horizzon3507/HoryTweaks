@@ -123,7 +123,7 @@ internal static class SplashIntroPatch
 
         _betterLogo.name = "BetterLogo";
         _betterLogo.GetComponent<SpriteRenderer>().sprite =
-            Utils.LoadSprite("BetterAmongUs.Resources.Images.BetterAmongUs-Logo.png", 150f);
+            Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Logo.png", 289f);
     }
 
     private static bool CheckIfDone(SplashManager __instance, bool isSkip = false)

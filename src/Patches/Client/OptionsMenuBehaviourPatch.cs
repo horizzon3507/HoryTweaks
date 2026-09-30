@@ -49,7 +49,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterNotifications, BAUConfigs.BetterNotifications, 1, __instance, BetterNotificationManager.ClearNotifications);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ForceOwnLanguage, BAUConfigs.ForceOwnLanguage, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ChatDarkMode, BAUConfigs.ChatDarkMode, 1, __instance, ChatPatch.SetChatTheme);
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ChatInGame, BAUConfigs.ChatInGameplay, 1, __instance);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_HideConsole, BAUConfigs.HideConsole, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyInfo, BAUConfigs.LobbyPlayerInfo, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LessInfo, BAUConfigs.LessInfo, 1, __instance, MeetingHudPatch.UpdateHostIcon);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyTheme, BAUConfigs.DisableLobbyTheme, 1, __instance, ToggleLobbyTheme);

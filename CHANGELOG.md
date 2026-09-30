@@ -11,6 +11,23 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
+## v0.1.1-alpha · 29/09/2026
+
+### Added
+
+- HoryTweaks artwork in the splash screen, main menu and repository.
+- A client option to hide the HoryTweaks console after restarting.
+
+### Changed
+
+- Replaced the console banner and green branding accents with HoryTweaks branding.
+- Moved the upper colorblind label closer to the player and kept the player-color formatting used below.
+- Limited chat for living players to lobbies, meetings and exile sequences.
+
+### Fixed
+
+- Prevented the custom logger from recursively forwarding its own BepInEx output.
+
 ## v0.1.0-alpha · 29/09/2026
 
 The first HoryTweaks foundation separates the fork's identity and release channel while retaining compatibility with BetterAmongUs data and runtime packages. This version was prepared as an early HoryTweaks build on 29/09/2026 (`v0.1.0-alpha`).

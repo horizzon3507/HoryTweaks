@@ -214,7 +214,7 @@ public static class TranslationStrings
     public static readonly TranslationString WelcomeMsg_ThanksForDownloading = new("WelcomeMsg.ThanksForDownloading");
 
     /// <summary>
-    /// Base Translation: &lt;color=#0dff00&gt;{0}&lt;/color&gt; improves the vanilla Among Us experience with client-side features like {1}, host tools and more. You can play with people using the vanilla game.
+    /// Base Translation: &lt;color=#ffffbe&gt;{0}&lt;/color&gt; improves the vanilla Among Us experience with client-side features like {1}, host tools and more. You can play with people using the vanilla game.
     /// </summary>
     public static readonly TranslationString WelcomeMsg_BAUDescription1 = new("WelcomeMsg.BAUDescription1");
 
@@ -254,9 +254,9 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_ChatDarkMode = new("BetterOption.ChatDarkMode");
 
     /// <summary>
-    /// Base Translation: Chat In Gameplay
+    /// Base Translation: Hide Console (restart required)
     /// </summary>
-    public static readonly TranslationString BetterOption_ChatInGame = new("BetterOption.ChatInGame");
+    public static readonly TranslationString BetterOption_HideConsole = new("BetterOption.HideConsole");
 
     /// <summary>
     /// Base Translation: Show Lobby Info
@@ -554,7 +554,7 @@ public static class TranslationStrings
     public static readonly TranslationString Command_Help_Description = new("Command.Help.Description");
 
     /// <summary>
-    /// Base Translation: &lt;color=#0dff00&gt;{0}&lt;/color&gt; improves your vanilla Among Us experience with useful client-side features.\nOpen the pause menu to access more options and game settings.\nUse &lt;color=#e0b700&gt;/commands&lt;/color&gt; to see every available command.\n\nFeatures:\n- Host-side gameplay validation and manual moderation.\n- Additional options for hosts.\n- Enhanced settings to customize your game.\n- Commands to manage and improve your experience.\n- Client-side improvements and quality-of-life features.
+    /// Base Translation: &lt;color=#ffffbe&gt;{0}&lt;/color&gt; improves your vanilla Among Us experience with useful client-side features.\nOpen the pause menu to access more options and game settings.\nUse &lt;color=#e0b700&gt;/commands&lt;/color&gt; to see every available command.\n\nFeatures:\n- Host-side gameplay validation and manual moderation.\n- Additional options for hosts.\n- Enhanced settings to customize your game.\n- Commands to manage and improve your experience.\n- Client-side improvements and quality-of-life features.
     /// </summary>
     public static readonly TranslationString Command_Help_Body = new("Command.Help.Body");
 

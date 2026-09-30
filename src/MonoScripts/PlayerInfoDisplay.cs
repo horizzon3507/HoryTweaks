@@ -334,7 +334,7 @@ internal class PlayerInfoDisplay : MonoBehaviour
         {
             string verificationSymbol = betterData.IsVerifiedBetterUser || _player.IsLocalPlayer() ? "✓ " : "";
 
-            ssbTag.AppendFormat("<color=#0dff00>{1}{0}</color>",
+            ssbTag.AppendFormat("<color=#ffffbe>{1}{0}</color>",
                 TranslationStrings.Player_BetterUser.LocalizedString, verificationSymbol);
         }
         ssbTag.Append($"<color=#b554ff>ID: {_player.PlayerId}</color>");
@@ -383,7 +383,8 @@ internal class PlayerInfoDisplay : MonoBehaviour
 
         if (BAUConfigs.ColorblindTextOnTop.Value)
         {
-            text.transform.localPosition = new Vector3(0f, 1.3f, 0.4999f);
+            text.text = _player.cosmetics.GetColorBlindText();
+            text.transform.localPosition = new Vector3(0f, 1f, 0.4999f);
             return;
         }
 

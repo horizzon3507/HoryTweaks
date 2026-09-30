@@ -26,7 +26,7 @@ internal static class FindAGameManagerPatch
         foreach (var con in __instance.gameContainers)
         {
             var roll = con.GetComponent<ButtonRolloverHandler>();
-            roll.OverColor = (roll.OverColor * 0.6f) + (Color.green * 0.5f);
+            roll.OverColor = (roll.OverColor * 0.6f) + (Colors.Theme * 0.5f);
         }
 
         // Create scrollable container for game listings

@@ -3,6 +3,7 @@ using BetterAmongUs.Modules;
 using BetterAmongUs.Modules.OptionItems;
 using BetterAmongUs.Modules.OptionItems.NoneOption;
 using BetterAmongUs.Modules.Support;
+using BetterAmongUs.Utilities;
 using HarmonyLib;
 using UnityEngine;
 
@@ -49,7 +50,7 @@ internal static class GameSettingsPatch
         // Note: Use 2200 next ID
 
         // Create main settings tab
-        BetterSettingsTab = OptionTab.Create(3, TranslationStrings.BetterSetting, TranslationStrings.BetterSetting_Description, Color.green);
+        BetterSettingsTab = OptionTab.Create(3, TranslationStrings.BetterSetting, TranslationStrings.BetterSetting_Description, Colors.Theme);
 
         OptionHeaderItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_MainHeader_System);
         OptionPresetItem.Create();

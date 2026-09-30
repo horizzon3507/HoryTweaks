@@ -45,7 +45,6 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.ClientOptions.Clear();
 
         // Page 1: what the player sees on screen
-        ClientOptionItem.CreateHeader(TranslationStrings.BetterOption_PageInterface, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LessInfo, BAUConfigs.LessInfo, 1, __instance, MeetingHudPatch.UpdateHostIcon);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyInfo, BAUConfigs.LobbyPlayerInfo, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ShowFPS, BAUConfigs.ShowFPS, 1, __instance);
@@ -54,7 +53,6 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ForceOwnLanguage, BAUConfigs.ForceOwnLanguage, 1, __instance);
 
         // Page 2: in-game readability and map
-        ClientOptionItem.CreateHeader(TranslationStrings.BetterOption_PageGameplay, 2, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterColorblindText, BAUConfigs.BetterColorblindText, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ColorblindTextOnTop, BAUConfigs.ColorblindTextOnTop, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_MinimapIcons, BAUConfigs.MinimapIcons, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
@@ -63,7 +61,6 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyTheme, BAUConfigs.DisableLobbyTheme, 2, __instance, ToggleLobbyTheme);
 
         // Page 3: performance, connection and files
-        ClientOptionItem.CreateHeader(TranslationStrings.BetterOption_PagePerformance, 3, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 3, __instance, UpdateFrameRate);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_SendBetterRpc, BAUConfigs.SendBetterRpc, 3, __instance, SendBetterRpcAction);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 3, __instance, ConvertAllSettingFiles);

@@ -13,10 +13,6 @@ namespace BetterAmongUs.Modules;
 /// </summary>
 internal sealed class ClientOptionItem
 {
-    private const string HEADER_NAME = "PageHeader";
-
-    private static readonly Color HeaderColor = new Color32(255, 255, 190, 255);
-
     /// <summary>
     /// Gets the configuration entry associated with this option.
     /// </summary>
@@ -80,24 +76,6 @@ internal sealed class ClientOptionItem
         Config = config;
         ToggleButton = toggleButton;
         ToggleButton.name = translationStringName.LocalizedString;
-    }
-
-    /// <summary>
-    /// Creates the title shown above the options of a page.
-    /// </summary>
-    public static void CreateHeader(TranslationStrings.TranslationString translationStringName, int page, OptionsMenuBehaviour optionsMenuBehaviour)
-    {
-        var parent = GetOrCreatePage(page, optionsMenuBehaviour);
-        if (parent == null || parent.transform.Find(HEADER_NAME) != null)
-            return;
-
-        var header = UnityEngine.Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement.Text, parent.transform);
-        header.gameObject.name = HEADER_NAME;
-        header.gameObject.DestroyTextTranslators();
-        header.transform.localPosition = new Vector3(0f, 2.35f, -6f);
-        header.alignment = TextAlignmentOptions.Center;
-        header.color = HeaderColor;
-        header.text = translationStringName.LocalizedString;
     }
 
     /// <summary>

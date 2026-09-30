@@ -138,5 +138,18 @@
   "Command.PlayerInfo.Info": "Info",
   "Command.PlayerInfo.ID": "ID",
   "Command.PlayerInfo.Platform": "Plataforma",
-  "Command.PlayerInfo.FriendCode": "Código de amigo"
+  "Command.PlayerInfo.FriendCode": "Código de amigo",
+  "Update.Button": "Actualizar",
+  "Update.Complete": "¡Actualización de {0} instalada!\nReinicia el juego para terminar de actualizar.",
+  "Update.Failed.NoInternet": "La actualización falló: sin conexión a internet.\nRevisa tu conexión y presiona Actualizar de nuevo.",
+  "Update.Failed.MissingLink": "La actualización falló: el enlace de descarga falta o no es válido.\nDescarga la última versión desde GitHub.",
+  "Update.Failed.Download": "La actualización falló: la descarga no se completó.\nTu versión actual sigue instalada. Presiona Actualizar para intentarlo de nuevo.",
+  "Update.Failed.InvalidPayload": "La actualización falló: el archivo descargado no es una versión más nueva de {0}.\nTu versión actual sigue instalada. Descarga la última versión desde GitHub.",
+  "Update.Failed.Install": "La actualización falló: no se pudo instalar el nuevo archivo.\nTu versión actual sigue instalada. Cierra otros programas que usen la carpeta del juego e inténtalo de nuevo.",
+  "Update.Failed.Unexpected": "La actualización falló inesperadamente.\nTu versión actual sigue instalada. Revisa el registro de BepInEx para más detalles.",
+  "Update.Progress.Starting": "Iniciando descarga{0}",
+  "Update.Progress.Downloading": "Descargando{0}",
+  "Update.Progress.Verifying": "Verificando actualización...",
+  "Update.Progress.Installing": "Instalando actualización...",
+  "Update.Progress.Failed": "¡La descarga falló!"
 }

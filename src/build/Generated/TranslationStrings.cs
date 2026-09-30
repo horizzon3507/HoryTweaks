@@ -677,4 +677,69 @@ public static class TranslationStrings
     /// Base Translation: FriendCode
     /// </summary>
     public static readonly TranslationString Command_PlayerInfo_FriendCode = new("Command.PlayerInfo.FriendCode");
+
+    /// <summary>
+    /// Base Translation: Update
+    /// </summary>
+    public static readonly TranslationString Update_Button = new("Update.Button");
+
+    /// <summary>
+    /// Base Translation: {0} update installed!\nRestart the game to finish updating.
+    /// </summary>
+    public static readonly TranslationString Update_Complete = new("Update.Complete");
+
+    /// <summary>
+    /// Base Translation: Update failed: no internet connection.\nCheck your connection and press Update again.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_NoInternet = new("Update.Failed.NoInternet");
+
+    /// <summary>
+    /// Base Translation: Update failed: the download link is missing or invalid.\nDownload the latest release from GitHub instead.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_MissingLink = new("Update.Failed.MissingLink");
+
+    /// <summary>
+    /// Base Translation: Update failed: the download did not finish.\nYour current version is still installed. Press Update to try again.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_Download = new("Update.Failed.Download");
+
+    /// <summary>
+    /// Base Translation: Update failed: the downloaded file is not a newer {0} build.\nYour current version is still installed. Download the latest release from GitHub instead.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_InvalidPayload = new("Update.Failed.InvalidPayload");
+
+    /// <summary>
+    /// Base Translation: Update failed: the new file could not be installed.\nYour current version is still installed. Close other programs using the game folder and try again.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_Install = new("Update.Failed.Install");
+
+    /// <summary>
+    /// Base Translation: Update failed unexpectedly.\nYour current version is still installed. Check the BepInEx log for details.
+    /// </summary>
+    public static readonly TranslationString Update_Failed_Unexpected = new("Update.Failed.Unexpected");
+
+    /// <summary>
+    /// Base Translation: Starting download{0}
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Starting = new("Update.Progress.Starting");
+
+    /// <summary>
+    /// Base Translation: Downloading{0}
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Downloading = new("Update.Progress.Downloading");
+
+    /// <summary>
+    /// Base Translation: Verifying update...
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Verifying = new("Update.Progress.Verifying");
+
+    /// <summary>
+    /// Base Translation: Installing update...
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Installing = new("Update.Progress.Installing");
+
+    /// <summary>
+    /// Base Translation: Download failed!
+    /// </summary>
+    public static readonly TranslationString Update_Progress_Failed = new("Update.Progress.Failed");
 }

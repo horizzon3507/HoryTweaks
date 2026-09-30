@@ -138,5 +138,18 @@
   "Command.PlayerInfo.Info": "Info",
   "Command.PlayerInfo.ID": "ID",
   "Command.PlayerInfo.Platform": "Plattform",
-  "Command.PlayerInfo.FriendCode": "Freundescode"
+  "Command.PlayerInfo.FriendCode": "Freundescode",
+  "Update.Button": "Update",
+  "Update.Complete": "{0}-Update installiert!\nStarte das Spiel neu, um das Update abzuschließen.",
+  "Update.Failed.NoInternet": "Update fehlgeschlagen: keine Internetverbindung.\nPrüfe deine Verbindung und drücke erneut auf Update.",
+  "Update.Failed.MissingLink": "Update fehlgeschlagen: der Download-Link fehlt oder ist ungültig.\nLade stattdessen die neueste Version von GitHub herunter.",
+  "Update.Failed.Download": "Update fehlgeschlagen: der Download wurde nicht abgeschlossen.\nDeine aktuelle Version ist weiterhin installiert. Drücke auf Update, um es erneut zu versuchen.",
+  "Update.Failed.InvalidPayload": "Update fehlgeschlagen: die heruntergeladene Datei ist kein neuerer {0}-Build.\nDeine aktuelle Version ist weiterhin installiert. Lade stattdessen die neueste Version von GitHub herunter.",
+  "Update.Failed.Install": "Update fehlgeschlagen: die neue Datei konnte nicht installiert werden.\nDeine aktuelle Version ist weiterhin installiert. Schließe andere Programme, die den Spielordner verwenden, und versuche es erneut.",
+  "Update.Failed.Unexpected": "Update unerwartet fehlgeschlagen.\nDeine aktuelle Version ist weiterhin installiert. Details findest du im BepInEx-Log.",
+  "Update.Progress.Starting": "Download wird gestartet{0}",
+  "Update.Progress.Downloading": "Wird heruntergeladen{0}",
+  "Update.Progress.Verifying": "Update wird überprüft...",
+  "Update.Progress.Installing": "Update wird installiert...",
+  "Update.Progress.Failed": "Download fehlgeschlagen!"
 }

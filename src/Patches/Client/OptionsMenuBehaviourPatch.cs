@@ -52,6 +52,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ChatDarkMode, BAUConfigs.ChatDarkMode, 1, __instance, ChatPatch.SetChatTheme);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ChatInGame, BAUConfigs.ChatInGameplay, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyInfo, BAUConfigs.LobbyPlayerInfo, 1, __instance);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LessInfo, BAUConfigs.LessInfo, 1, __instance, MeetingHudPatch.UpdateHostIcon);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyTheme, BAUConfigs.DisableLobbyTheme, 1, __instance, ToggleLobbyTheme);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 1, __instance, UpdateFrameRate);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ShowFPS, BAUConfigs.ShowFPS, 1, __instance);
@@ -60,6 +61,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterMinimapColors, BAUConfigs.BetterMinimapColors, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_VentColorGroups, BAUConfigs.VentColorGroups, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterColorblindText, BAUConfigs.BetterColorblindText, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ColorblindTextOnTop, BAUConfigs.ColorblindTextOnTop, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 2, __instance, ConvertAllSettingFiles);
 
         // Button options (no toggle)

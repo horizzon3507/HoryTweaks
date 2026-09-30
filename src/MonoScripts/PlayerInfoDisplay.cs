@@ -416,12 +416,29 @@ internal class PlayerInfoDisplay : MonoBehaviour
         }
 
         var text = _player.cosmetics.colorBlindText;
+
+        if (!DataManager.Settings.Accessibility.ColorBlindMode)
+        {
+            if (text.enabled)
+                text.enabled = false;
+
+            return;
+        }
+
         if (!text.enabled)
             return;
 
         if (!BAUConfigs.BetterColorblindText.Value)
         {
-            text.transform.localPosition = new Vector3(0f, -0.2f, 0f);
+            text.transform.localPosition = BAUConfigs.ColorblindTextOnTop.Value
+                ? new Vector3(0f, 1.15f, 0f)
+                : new Vector3(0f, -0.2f, 0f);
+            return;
+        }
+
+        if (BAUConfigs.ColorblindTextOnTop.Value)
+        {
+            text.transform.localPosition = new Vector3(0f, 1.3f, 0.4999f);
             return;
         }
 

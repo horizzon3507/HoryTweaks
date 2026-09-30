@@ -44,6 +44,11 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<bool> LobbyPlayerInfo { get; } = new("Better Options", "LobbyPlayerInfo", true);
 
     /// <summary>
+    /// Gets the configuration entry for hiding extra mod information from the HUD.
+    /// </summary>
+    internal static BAUConfigEntry<bool> LessInfo { get; } = new("Better Options", "LessInfo", false);
+
+    /// <summary>
     /// Gets the configuration entry for disable lobby theme setting.
     /// </summary>
     internal static BAUConfigEntry<bool> DisableLobbyTheme { get; } = new("Better Options", "DisableLobbyTheme", true);
@@ -79,6 +84,11 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<bool> BetterColorblindText { get; } = new("Better Options", "BetterColorblindText", true);
 
     /// <summary>
+    /// Gets the configuration entry for placing the colorblind name above the player name instead of below it.
+    /// </summary>
+    internal static BAUConfigEntry<bool> ColorblindTextOnTop { get; } = new("Better Options", "ColorblindTextOnTop", false);
+
+    /// <summary>
     /// Gets the configuration entry for compress settings file setting.
     /// </summary>
     internal static BAUConfigEntry<bool> CompressSettingFiles { get; } = new("Better Options", "CompressSettingFiles", false);
@@ -106,8 +116,8 @@ internal static class BAUConfigs
         BAUModdedSupportEvents.OnBAUConfigEntriesLoadedEvent.InvokeAll([
             AntiCheat, SendBetterRpc, BetterNotifications,
             ForceOwnLanguage, ChatDarkMode, ChatInGameplay, LobbyPlayerInfo,
-            DisableLobbyTheme, UnlockFPS, ShowFPS,
-            MinimapIcons, VentColorGroups, CommandPrefix,
+            LessInfo, DisableLobbyTheme, UnlockFPS, ShowFPS,
+            MinimapIcons, VentColorGroups, ColorblindTextOnTop, CommandPrefix,
             FavoriteColor, SettingsPreset
         ]);
 

@@ -1,3 +1,4 @@
+using BetterAmongUs.Data.Config;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
 using BetterAmongUs.MonoScripts;
@@ -63,6 +64,16 @@ internal static class MeetingHudPatch
         if (MeetingHud.Instance == null)
             return;
 
+        if (MeetingHud.Instance.HostIcon == null || MeetingHud.Instance.ProceedButton == null)
+            return;
+
+        if (BAUConfigs.LessInfo.Value)
+        {
+            MeetingHud.Instance.HostIcon.gameObject.SetActive(false);
+            MeetingHud.Instance.ProceedButton.gameObject.SetActive(false);
+            return;
+        }
+
         if (GameData.Instance == null)
             return;
 
@@ -73,8 +84,11 @@ internal static class MeetingHudPatch
         var hostColor = host.Color;
         var hostRealName = host.ExtendedData().RealName;
 
-        if (MeetingHud.Instance.HostIcon == null || MeetingHud.Instance.ProceedButton == null)
-            return;
+        if (GameState.IsOnlineGame)
+        {
+            MeetingHud.Instance.HostIcon.gameObject.SetActive(true);
+            MeetingHud.Instance.ProceedButton.gameObject.SetActive(true);
+        }
 
         PlayerMaterial.SetColors(hostColor, MeetingHud.Instance.HostIcon);
         MeetingHud.Instance.ProceedButton.gameObject.GetComponentInChildren<TextMeshPro>().text = TranslationStrings.HostInMeeting.Format(hostRealName);

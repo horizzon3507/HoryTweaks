@@ -71,8 +71,10 @@ internal sealed class BetterPingTracker : MonoBehaviour
 
         StringBuilder sb = new();
 
+        bool lessInfo = BAUConfigs.LessInfo.Value;
+
         // Check AmongUsClient.Instance
-        if (AmongUsClient.Instance != null && !GameState.IsFreePlay)
+        if (!lessInfo && AmongUsClient.Instance != null && !GameState.IsFreePlay)
         {
             string pingColor = Utils.Color32ToHex(Utils.LerpColor([Color.green, Color.yellow, new Color(1f, 0.5f, 0f), Color.red], (25, 250), AmongUsClient.Instance.Ping));
             sb.AppendFormat("{0}: <b>{1}</b>\n", TranslationStrings.Ping.LocalizedString.ToUpper(), $"<{pingColor}>{AmongUsClient.Instance.Ping}</color>");
@@ -84,8 +86,11 @@ internal sealed class BetterPingTracker : MonoBehaviour
             sb.AppendFormat("{0}: <b>{1}</b>\n", TranslationStrings.Timer.LocalizedString.ToUpper(), $"<{timeColor}>{lobbyTimerDisplay}</color>");
         }
 
-        sb.Append($"<color=#00dbdb><size=75%>{BAUPlugin.ModInfo.PLUGIN_NAME} {BAUPlugin.ModInfo.VERSION_STRING}</size></color>\n");
-        sb.Append($"<color=#8A8A8A>{BAUPlugin.ModInfo.GITHUB}</color>\n".Size(52f));
+        if (!lessInfo)
+        {
+            sb.Append($"<color=#00dbdb><size=75%>{BAUPlugin.ModInfo.PLUGIN_NAME} {BAUPlugin.ModInfo.VERSION_STRING}</size></color>\n");
+            sb.Append($"<color=#8A8A8A>{BAUPlugin.ModInfo.GITHUB}</color>\n".Size(52f));
+        }
 
         if (BAUConfigs.ShowFPS.Value)
         {
@@ -94,7 +99,7 @@ internal sealed class BetterPingTracker : MonoBehaviour
         }
 
         // Add Host Info if not in lobby
-        if (GameState.IsInGamePlay && !GameState.IsFreePlay && AmongUsClient.Instance != null && !GameState.IsMeeting)
+        if (!lessInfo && GameState.IsInGamePlay && !GameState.IsFreePlay && AmongUsClient.Instance != null && !GameState.IsMeeting)
         {
             var hostInfo = AmongUsClient.Instance.GetHost();
             if (hostInfo != null && hostInfo.Character != null)

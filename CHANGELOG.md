@@ -11,7 +11,7 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
-## Unreleased
+## v0.1.2-alpha · 30/09/2026
 
 ### Added
 

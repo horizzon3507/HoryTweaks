@@ -8,7 +8,7 @@ HoryTweaks is a client-side Among Us mod forked from D1GQ's BetterAmongUs. It ad
 
 ## Compatibility
 
-HoryTweaks 0.1.1 targets **Among Us v19.0.0 / 2026.9.29**. It is not intended for older or newer game versions unless a later release says otherwise.
+HoryTweaks 0.1.2 targets **Among Us v19.0.0 / 2026.9.29**. It is not intended for older or newer game versions unless a later release says otherwise.
 
 On startup HoryTweaks compares the running game version with the supported version and looks for a leftover `BepInEx/plugins/BetterAmongUs.dll`. If either check finds a problem, the sign-in screen shows a warning that explains what to do. Nothing is changed or deleted for you.
 

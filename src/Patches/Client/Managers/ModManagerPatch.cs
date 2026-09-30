@@ -55,7 +55,7 @@ internal static class ModManagerPatch
                 // unless other mods have disabled custom mod stamps
                 if (!BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_CustomModStamp))
                 {
-                    modStamp.sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Mod.png", 741f);
+                    modStamp.sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Icon.png", 2280f);
                 }
             }
         }

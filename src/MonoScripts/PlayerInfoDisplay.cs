@@ -376,7 +376,7 @@ internal class PlayerInfoDisplay : MonoBehaviour
         if (!BAUConfigs.BetterColorblindText.Value)
         {
             text.transform.localPosition = BAUConfigs.ColorblindTextOnTop.Value
-                ? new Vector3(0f, 1.15f, 0f)
+                ? new Vector3(0f, 0.4f, 0f)
                 : new Vector3(0f, -0.2f, 0f);
             return;
         }
@@ -384,7 +384,7 @@ internal class PlayerInfoDisplay : MonoBehaviour
         if (BAUConfigs.ColorblindTextOnTop.Value)
         {
             text.text = _player.cosmetics.GetColorBlindText();
-            text.transform.localPosition = new Vector3(0f, 1f, 0.4999f);
+            text.transform.localPosition = new Vector3(0f, 0.4f, 0.4999f);
             return;
         }
 

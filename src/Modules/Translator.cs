@@ -16,6 +16,7 @@ internal static class Translator
     internal static Dictionary<string, int> TranslateIdLookup = [];
     internal static Dictionary<string, Dictionary<int, string>> TranslateMaps = [];
     private const string ResourcePath = "BetterAmongUs.Resources.Lang";
+    private static bool _loggedActiveLanguage;
 
     /// <summary>
     /// Initializes the translator by loading all language files from embedded resources.
@@ -24,7 +25,7 @@ internal static class Translator
     {
         BAUPlugin.Logger.Log("Loading language files...", "Translator");
         LoadLanguages();
-        BAUPlugin.Logger.Log("Language files loaded successfully", "Translator");
+        BAUPlugin.Logger.Log($"Language files loaded successfully: {string.Join(", ", TranslateIdLookup.Select(kvp => $"{kvp.Key}={kvp.Value}"))}", "Translator");
     }
 
     /// <summary>
@@ -209,6 +210,11 @@ internal static class Translator
         var langId = TranslationController.InstanceExists ? TranslationController.Instance.currentLanguage.languageID : SupportedLangs.English;
         if (useConsoleLanguage) langId = SupportedLangs.English;
         if (BAUConfigs.ForceOwnLanguage.Value) langId = GetUserSystemLanguage();
+        if (!_loggedActiveLanguage && TranslationController.InstanceExists && !useConsoleLanguage)
+        {
+            _loggedActiveLanguage = true;
+            BAUPlugin.Logger.Log($"Active language: {langId} ({(int)langId}), forced by system language: {BAUConfigs.ForceOwnLanguage.Value}", "Translator");
+        }
         string str = GetString(translationString, langId, showInvalid);
         if (formatting != null)
             str = string.Format(str, formatting);
@@ -315,9 +321,22 @@ internal static class Translator
             return cultureName switch
             {
                 string name when name.StartsWith("zh_CHT") => SupportedLangs.TChinese,
+                string name when name.StartsWith("zh-Hant") || name.StartsWith("zh_Hant") => SupportedLangs.TChinese,
                 string name when name.StartsWith("zh") => SupportedLangs.SChinese,
                 string name when name.StartsWith("ru") => SupportedLangs.Russian,
                 string name when name.StartsWith("en") => SupportedLangs.English,
+                string name when name.StartsWith("pt-BR") || name.StartsWith("pt_BR") => SupportedLangs.Brazilian,
+                string name when name.StartsWith("pt") => SupportedLangs.Portuguese,
+                string name when name.StartsWith("es-ES") || name.StartsWith("es_ES") => SupportedLangs.Spanish,
+                string name when name.StartsWith("es") => SupportedLangs.Latam,
+                string name when name.StartsWith("de") => SupportedLangs.German,
+                string name when name.StartsWith("fr") => SupportedLangs.French,
+                string name when name.StartsWith("it") => SupportedLangs.Italian,
+                string name when name.StartsWith("ja") => SupportedLangs.Japanese,
+                string name when name.StartsWith("ko") => SupportedLangs.Korean,
+                string name when name.StartsWith("nl") => SupportedLangs.Dutch,
+                string name when name.StartsWith("fil") || name.StartsWith("tl") => SupportedLangs.Filipino,
+                string name when name.StartsWith("ga") => SupportedLangs.Irish,
                 _ => TranslationController.Instance.currentLanguage.languageID
             };
         }

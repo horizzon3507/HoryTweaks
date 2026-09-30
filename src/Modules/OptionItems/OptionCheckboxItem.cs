@@ -108,7 +108,7 @@ public sealed class OptionCheckboxItem : OptionItem<bool>
     public sealed override string ValueAsString()
     {
         Color color = Value ? Color.green : Color.red;
-        string @bool = Value ? "On" : "Off";
+        string @bool = (Value ? TranslationStrings.BetterSetting_State_On : TranslationStrings.BetterSetting_State_Off).LocalizedString;
         return $"<color={Colors.Color32ToHex(color)}>{@bool}</color>";
     }
 

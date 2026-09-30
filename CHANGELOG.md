@@ -15,6 +15,10 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 ### Added
 
+- Localized On/Off labels and question-mark descriptions for the Tweaks settings.
+- Restore defaults, copy preset and paste preset rows on the Tweaks tab, each guarded by a second confirming click.
+- Custom preset names through the `/presetname` command, stored inside the existing `Preset-N.json` files.
+- Unit tests for the preset share code and preset name helpers.
 - A host moderation center in the HoryTweaks options tab with the current player list, kick and ban actions that ask for confirmation, quick access to the player, name and chat ban lists and the kicks and bans of the current session.
 - Automated tests for the game-independent moderation rules, history and list helpers under `tests/HoryTweaks.Tests`.
 - A startup check that warns when a legacy `BetterAmongUs.dll` is still installed or loaded beside HoryTweaks, without touching the file.

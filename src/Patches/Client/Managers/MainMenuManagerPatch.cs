@@ -49,7 +49,7 @@ internal static class MainMenuManagerPatch
             // Scale down the logo slightly
             logo.transform.localScale = new Vector3(0.00155f, 0.00155f, 0f);
 
-            // Replace Among Us sprite with Better Among Us logo
+            // Replace Among Us sprite with HoryTweaks logo
             logo.GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Logo.png", 1f);
         }
 

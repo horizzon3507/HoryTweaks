@@ -8,24 +8,14 @@ on:
       - 'v*'
     paths:
       - 'src/**'
-<<<<<<< HEAD
       - 'tests/**'
       - 'api/**'
-||||||| fdaf4be
-=======
-      - 'tests/**'
->>>>>>> origin/devin/1790800050-first-run-diagnostics
       - '.github/workflows/build.yml'
   pull_request:
     paths:
       - 'src/**'
-<<<<<<< HEAD
       - 'tests/**'
       - 'api/**'
-||||||| fdaf4be
-=======
-      - 'tests/**'
->>>>>>> origin/devin/1790800050-first-run-diagnostics
       - '.github/workflows/build.yml'
   workflow_dispatch:
     inputs:
@@ -56,8 +46,13 @@ jobs:
       - name: Test translation validator
         run: pwsh -NoProfile -File src/build/ValidateTranslations.Tests.ps1
 
-      - name: Run quality gate tests
-        run: dotnet test tests/HoryTweaks.Tests/HoryTweaks.Tests.csproj --configuration Release --logger "trx;LogFileName=HoryTweaks.Tests.trx" --results-directory tests/TestResults
+      - name: Run unit tests
+        run: |
+          set -euo pipefail
+          for project in tests/*/*.csproj; do
+            name="$(basename "$project" .csproj)"
+            dotnet test "$project" --configuration Release --logger "trx;LogFileName=$name.trx" --results-directory tests/TestResults
+          done
 
       - name: Upload test results
         if: always()
@@ -66,9 +61,6 @@ jobs:
           name: test-results
           path: tests/TestResults/*.trx
           if-no-files-found: error
-
-      - name: Run diagnostics tests
-        run: dotnet test tests/HoryTweaks.Diagnostics.Tests/HoryTweaks.Diagnostics.Tests.csproj --configuration Release
 
       - name: Build HoryTweaks
         run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false

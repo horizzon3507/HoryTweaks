@@ -1,6 +1,9 @@
 ﻿using BepInEx.Unity.IL2CPP.Utils;
 using BetterAmongUs.Attributes;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Modules.Support;
+using BetterAmongUs.Modules.Updater;
+using BetterAmongUs.Network;
 using BetterAmongUs.Network.Loaders;
 using BetterAmongUs.Utilities;
 using BetterAmongUs.Utilities.Extension;
@@ -87,21 +90,19 @@ internal sealed class BAUUpdateManager : MonoBehaviour
             text.fontSize = 1.5f;
             text.alignment = TextAlignmentOptions.Center;
             text.horizontalAlignment = HorizontalAlignmentOptions.Center;
-            text.SetText("Update");
+            text.SetText(TranslationStrings.Update_Button.LocalizedString);
         }
     }
 
     private void Start()
     {
-        var oldDll = BAUPlugin.ModInfo.Assembly.Location + ".old";
-        if (File.Exists(oldDll))
-        {
-            File.Delete(oldDll);
-        }
+        UpdateAssemblyInstaller.CleanupLeftovers(BAUPlugin.ModInfo.Assembly.Location);
     }
 
     /// <summary>
     /// Coroutine that handles the download process when the update button is pressed.
+    /// The main menu, ambience and loading bar are restored on every outcome, and success is only
+    /// reported when <see cref="BAUUpdateDownloader.CoDownloadAndInstall"/> confirms the install.
     /// </summary>
     /// <param name="button">The DoNotPressButton that was clicked.</param>
     /// <returns>An IEnumerator for the coroutine.</returns>
@@ -123,26 +124,98 @@ internal sealed class BAUUpdateManager : MonoBehaviour
         mainMenu?.SetActive(false);
         ambience?.SetActive(false);
 
-        if (BAUUpdateLoader.UpdateInfo != null && BAUUpdateLoader.UpdateInfo.DllLink != string.Empty)
+        UpdateOutcome? outcome = null;
+        var updateInfo = BAUUpdateLoader.UpdateInfo;
+        if (updateInfo == null || !updateInfo.IsNewUpdate())
         {
-            if (BAUUpdateLoader.UpdateInfo.IsNewUpdate())
-            {
-                yield return BAUUpdateLoader.UpdateInfo.CoDownload();
-                WaitForRestart = true;
-                mainMenu?.SetActive(true);
-                ambience?.SetActive(true);
-                yield return new WaitForSeconds(0.2f);
-                Utils.ShowPopUp("Update complete\nRestart required!");
-            }
+            outcome = UpdateOutcome.Failure(UpdateStatus.MissingDownloadLink, "No newer update is available in the feed.");
         }
         else
         {
-            mainMenu?.SetActive(true);
-            ambience?.SetActive(true);
-            yield return new WaitForSeconds(0.2f);
-            Utils.ShowPopUp("Download link missing!");
+            var routine = BAUUpdateDownloader.CoDownloadAndInstall(updateInfo, result => outcome = result);
+            while (true)
+            {
+                object? current;
+                try
+                {
+                    if (!routine.MoveNext())
+                    {
+                        break;
+                    }
+                    current = routine.Current;
+                }
+                catch (Exception ex)
+                {
+                    BAUPlugin.Logger.Error($"Update failed with an exception: {ex}");
+                    outcome = UpdateOutcome.Failure(UpdateStatus.Unexpected, ex.Message);
+                    break;
+                }
+                yield return current;
+            }
         }
 
+        if (outcome == null)
+        {
+            outcome = UpdateOutcome.Failure(UpdateStatus.Unexpected, "The update routine ended without reporting a result.");
+        }
+
+        if (outcome.IsSuccess)
+        {
+            WaitForRestart = true;
+            BAUPlugin.Logger.Log($"Update installed: {outcome.Detail}");
+        }
+        else
+        {
+            BAUPlugin.Logger.Error($"Update not installed ({outcome.Status}): {outcome.Detail}");
+        }
+
+        RestoreMenu(button, showUpdateButton: !outcome.IsSuccess);
+        yield return new WaitForSeconds(0.2f);
+        Utils.ShowPopUp(GetOutcomeMessage(outcome));
         _updateing = false;
+    }
+
+    /// <summary>
+    /// Brings the main menu back after an update attempt, never throwing so the flow always completes.
+    /// </summary>
+    private void RestoreMenu(DoNotPressButton button, bool showUpdateButton)
+    {
+        try
+        {
+            if (LoadingBarManager.InstanceExists)
+            {
+                CustomLoadingBarManager.ToggleLoadingBar(false);
+            }
+
+            if (showUpdateButton && button != null)
+            {
+                button.gameObject.SetActive(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            BAUPlugin.Logger.Warning($"Could not restore the update UI after the update attempt: {ex.Message}");
+        }
+
+        mainMenu?.SetActive(true);
+        ambience?.SetActive(true);
+    }
+
+    /// <summary>
+    /// Maps an outcome to the localized, actionable popup text shown to the player.
+    /// </summary>
+    private static string GetOutcomeMessage(UpdateOutcome outcome)
+    {
+        var modName = TranslationStrings.BetterAmongUs.LocalizedString;
+        return outcome.Status switch
+        {
+            UpdateStatus.Succeeded => TranslationStrings.Update_Complete.Format(modName),
+            UpdateStatus.NoInternet => TranslationStrings.Update_Failed_NoInternet.LocalizedString,
+            UpdateStatus.MissingDownloadLink => TranslationStrings.Update_Failed_MissingLink.LocalizedString,
+            UpdateStatus.DownloadFailed => TranslationStrings.Update_Failed_Download.LocalizedString,
+            UpdateStatus.InvalidPayload => TranslationStrings.Update_Failed_InvalidPayload.Format(modName),
+            UpdateStatus.InstallFailed => TranslationStrings.Update_Failed_Install.LocalizedString,
+            _ => TranslationStrings.Update_Failed_Unexpected.LocalizedString,
+        };
     }
 }

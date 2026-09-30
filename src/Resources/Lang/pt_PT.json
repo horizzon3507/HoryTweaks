@@ -144,5 +144,18 @@
   "Command.PlayerInfo.Info": "Informações",
   "Command.PlayerInfo.ID": "ID",
   "Command.PlayerInfo.Platform": "Plataforma",
-  "Command.PlayerInfo.FriendCode": "Código de amigo"
+  "Command.PlayerInfo.FriendCode": "Código de amigo",
+  "Update.Button": "Atualizar",
+  "Update.Complete": "Atualização do {0} instalada!\nReinicia o jogo para concluir a atualização.",
+  "Update.Failed.NoInternet": "A atualização falhou: sem ligação à internet.\nVerifica a tua ligação e carrega novamente em Atualizar.",
+  "Update.Failed.MissingLink": "A atualização falhou: a ligação de transferência está em falta ou é inválida.\nTransfere a versão mais recente a partir do GitHub.",
+  "Update.Failed.Download": "A atualização falhou: a transferência não foi concluída.\nA tua versão atual continua instalada. Carrega em Atualizar para tentar de novo.",
+  "Update.Failed.InvalidPayload": "A atualização falhou: o ficheiro transferido não é uma versão mais recente do {0}.\nA tua versão atual continua instalada. Transfere a versão mais recente a partir do GitHub.",
+  "Update.Failed.Install": "A atualização falhou: não foi possível instalar o novo ficheiro.\nA tua versão atual continua instalada. Fecha outros programas que usem a pasta do jogo e tenta de novo.",
+  "Update.Failed.Unexpected": "A atualização falhou de forma inesperada.\nA tua versão atual continua instalada. Consulta o registo do BepInEx para mais detalhes.",
+  "Update.Progress.Starting": "A iniciar transferência{0}",
+  "Update.Progress.Downloading": "A transferir{0}",
+  "Update.Progress.Verifying": "A verificar atualização...",
+  "Update.Progress.Installing": "A instalar atualização...",
+  "Update.Progress.Failed": "A transferência falhou!"
 }

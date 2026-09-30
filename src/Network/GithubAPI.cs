@@ -3,6 +3,7 @@ using BetterAmongUs.Attributes;
 using BetterAmongUs.Network.Loaders;
 using Il2CppInterop.Runtime.Attributes;
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -35,6 +36,11 @@ internal sealed class GithubAPI : MonoBehaviour
     internal static bool Downloading { get; private set; }
 
     private static bool hasTryConnect = false;
+
+    /// <summary>
+    /// Upper bound for the blocking connectivity probe in <see cref="IsInternetAvailable"/>.
+    /// </summary>
+    private static readonly TimeSpan ConnectivityProbeTimeout = TimeSpan.FromSeconds(10);
 
     /// <summary>
     /// Initializes and connects to the GitHub API.
@@ -113,6 +119,7 @@ internal sealed class GithubAPI : MonoBehaviour
     /// <returns>True if internet connection is available; otherwise, false.</returns>
     /// <remarks>
     /// Performs a quick test by attempting to connect to Google's 204 endpoint.
+    /// The probe blocks the caller but is bounded by <see cref="ConnectivityProbeTimeout"/>.
     /// </remarks>
     internal static bool IsInternetAvailable()
     {
@@ -123,8 +130,17 @@ internal sealed class GithubAPI : MonoBehaviour
         try
         {
             www = UnityWebRequest.Get("https://clients3.google.com/generate_204");
+            www.timeout = (int)ConnectivityProbeTimeout.TotalSeconds;
             www.SendWebRequest();
-            while (!www.isDone) { }
+            var stopwatch = Stopwatch.StartNew();
+            while (!www.isDone)
+            {
+                if (stopwatch.Elapsed > ConnectivityProbeTimeout)
+                {
+                    www.Abort();
+                    return false;
+                }
+            }
             return www.result == UnityWebRequest.Result.Success && www.responseCode == 204;
         }
         catch

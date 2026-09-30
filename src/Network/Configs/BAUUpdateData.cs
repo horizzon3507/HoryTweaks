@@ -1,8 +1,5 @@
-﻿using BetterAmongUs.Modules;
-using Semver;
-using System.Collections;
+﻿using Semver;
 using System.Text.Json.Serialization;
-using UnityEngine;
 
 namespace BetterAmongUs.Network.Configs;
 
@@ -44,44 +41,6 @@ internal sealed class BAUUpdateData
         {
             BAUPlugin.Logger.Error($"Update check failed: {ex.Message}");
             return false;
-        }
-    }
-
-    /// <summary>
-    /// Downloads and applies the update.
-    /// </summary>
-    /// <returns>IEnumerator for coroutine execution.</returns>
-    /// <remarks>
-    /// Downloads the new DLL file, renames the current DLL to .old,
-    /// and replaces it with the downloaded file.
-    /// </remarks>
-    internal IEnumerator CoDownload()
-    {
-        int count = 0;
-        float delay = 0;
-        while (!GithubAPI.IsInternetAvailable())
-        {
-            count++;
-            if (count >= 17)
-            {
-                yield break;
-            }
-            if (delay < 30f) delay += 2.5f;
-            yield return new WaitForSeconds(delay);
-        }
-
-        object waiting = true;
-        var dllPath = BAUPlugin.ModInfo.Assembly.Location;
-        yield return GitHubFile.CoDownloadFile(DllLink, dllPath + ".temp", path =>
-        {
-            File.Move(dllPath, dllPath + ".old");
-            File.Move(path, dllPath);
-            waiting = false;
-        }, true);
-
-        while (waiting is true)
-        {
-            yield return null;
         }
     }
 

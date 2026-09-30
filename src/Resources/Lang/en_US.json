@@ -144,5 +144,18 @@
   "Command.PlayerInfo.Info": "Info",
   "Command.PlayerInfo.ID": "ID",
   "Command.PlayerInfo.Platform": "Platform",
-  "Command.PlayerInfo.FriendCode": "FriendCode"
+  "Command.PlayerInfo.FriendCode": "FriendCode",
+  "Update.Button": "Update",
+  "Update.Complete": "{0} update installed!\nRestart the game to finish updating.",
+  "Update.Failed.NoInternet": "Update failed: no internet connection.\nCheck your connection and press Update again.",
+  "Update.Failed.MissingLink": "Update failed: the download link is missing or invalid.\nDownload the latest release from GitHub instead.",
+  "Update.Failed.Download": "Update failed: the download did not finish.\nYour current version is still installed. Press Update to try again.",
+  "Update.Failed.InvalidPayload": "Update failed: the downloaded file is not a newer {0} build.\nYour current version is still installed. Download the latest release from GitHub instead.",
+  "Update.Failed.Install": "Update failed: the new file could not be installed.\nYour current version is still installed. Close other programs using the game folder and try again.",
+  "Update.Failed.Unexpected": "Update failed unexpectedly.\nYour current version is still installed. Check the BepInEx log for details.",
+  "Update.Progress.Starting": "Starting download{0}",
+  "Update.Progress.Downloading": "Downloading{0}",
+  "Update.Progress.Verifying": "Verifying update...",
+  "Update.Progress.Installing": "Installing update...",
+  "Update.Progress.Failed": "Download failed!"
 }

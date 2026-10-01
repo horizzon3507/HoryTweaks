@@ -49,8 +49,13 @@ jobs:
         run: bash -n installers/install-horytweaks.sh
       - name: Test installer CLI with isolated game folders
         run: python -m unittest discover -s tests/installers -v
+      - name: Test PowerShell transaction
+        if: runner.os == 'Linux'
+        shell: pwsh
+        run: ./tests/installers/Test-InstallerTransaction.ps1
       - name: Test PowerShell transaction and Windows junction protection
-        shell: ${{ runner.os == 'Windows' && 'powershell' || 'pwsh' }}
+        if: runner.os == 'Windows'
+        shell: powershell
         run: ./tests/installers/Test-InstallerTransaction.ps1
       - name: Upload installers
         if: runner.os == 'Linux'

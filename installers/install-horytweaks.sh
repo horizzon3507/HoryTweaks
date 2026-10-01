@@ -56,7 +56,7 @@ def download(url, destination, optional=False):
         "--max-time", "300", "--max-filesize", str(LIMIT),
         "--output", str(destination), "--write-out", "%{http_code}", url,
     ], capture_output=True, text=True, timeout=950)
-    if optional and result.returncode == 22 and result.stdout == "404":
+    if optional and result.stdout == "404":
         return False
     if result.returncode:
         raise RuntimeError(f"Download failed (HTTP {result.stdout}): {result.stderr.strip()}")

@@ -1,0 +1,58 @@
+^show: true
+^type: 1
+^title: A New Identity
+^subtitle: The HoryTweaks fork officially begins!
+^listtitle: HoryTweaks v0.1.0
+^date: 2026-09-29T12:00:00.0000000Z
+
+^content-en_US:
+ # HoryTweaks v0.1.0
+
+ We are thrilled to announce the first release of **HoryTweaks**, a BetterAmongUs fork designed to enhance your Among Us experience!
+ ---
+
+ ## Change Log
+
+ #### Mod
+ - **Fork Identity**: Plugin metadata, update feeds and download links now point to HoryTweaks, and the build output is now HoryTweaks.dll
+ - **Compatibility**: Retains compatibility with BetterAmongUs data and runtime packages
+ ---
+ #### New Features
+ - **Brazilian Portuguese**: Complete pt-BR catalog with localized chat command help, errors and results
+ - **Translation Validation**: Translation keys and placeholders are now validated in CI
+ - **Release Packages**: Store-specific installation packages and standalone DLL artifacts
+ ---
+ #### Changed
+ - **Cheat Detection**: Automatic cheat detection, its database and settings were removed, while RPC routing, host gameplay validation, rate limiting, manual moderation and host commands remain
+ ---
+ #### Bug Fixes
+ - Fixed presets being lost when the settings format changes
+ - Fixed legacy settings and BepInEx configuration migration, original data is now backed up instead of deleted
+ ---
+ ## [Github](https://github.com/horizzon3507/HoryTweaks/)
+
+^content-pt_BR:
+ # HoryTweaks v0.1.0
+
+ Estamos felizes em anunciar a primeira versão do **HoryTweaks**, um fork do BetterAmongUs feito para melhorar sua experiência no Among Us!
+ ---
+
+ ## Change Log
+
+ #### Mod
+ - **Identidade do Fork**: Metadados do plugin, feeds de atualização e links de download agora apontam para o HoryTweaks, e a build agora gera o HoryTweaks.dll
+ - **Compatibilidade**: Mantém compatibilidade com dados e pacotes de runtime do BetterAmongUs
+ ---
+ #### Novidades
+ - **Português Brasileiro**: Catálogo completo em pt-BR com ajuda, erros e resultados dos comandos de chat traduzidos
+ - **Validação de Traduções**: Chaves e placeholders de tradução agora são validados no CI
+ - **Pacotes de Release**: Pacotes de instalação por loja e artefatos DLL independentes
+ ---
+ #### Mudanças
+ - **Detecção de Cheats**: A detecção automática de cheats, seu banco de dados e configurações foram removidos, enquanto roteamento RPC, validação de gameplay do host, limitação de taxa, moderação manual e comandos de host permanecem
+ ---
+ #### Correções
+ - Corrigida a perda de presets quando o formato das configurações muda
+ - Corrigida a migração de configurações legadas e do BepInEx, os dados originais agora são copiados em backup em vez de deletados
+ ---
+ ## [Github](https://github.com/horizzon3507/HoryTweaks/)

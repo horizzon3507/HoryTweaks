@@ -22,8 +22,9 @@ function Find-GameDirectories {
     $roots = [System.Collections.Generic.List[string]]::new()
     foreach ($key in @('HKCU:\Software\Valve\Steam', 'HKLM:\SOFTWARE\WOW6432Node\Valve\Steam')) {
         if (Test-Path $key) {
-            $value = Get-ItemPropertyValue -Path $key -Name 'SteamPath' -ErrorAction SilentlyContinue
-            if (-not $value) { $value = Get-ItemPropertyValue -Path $key -Name 'InstallPath' -ErrorAction SilentlyContinue }
+            $value = $null
+            try { $value = Get-ItemPropertyValue -Path $key -Name 'SteamPath' } catch {}
+            if (-not $value) { try { $value = Get-ItemPropertyValue -Path $key -Name 'InstallPath' } catch {} }
             if ($value) { $roots.Add($value) }
         }
     }

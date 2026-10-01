@@ -65,14 +65,18 @@ class InstallerTests(unittest.TestCase):
         return {str(p.relative_to(self.game)): p.read_bytes() for p in self.game.rglob("*")
                 if p.is_file() and ".horytweaks-backups" not in p.parts}
 
-    def run_installer(self, extra=(), digest=None, success=True, store="steam"):
-        digest = digest or hashlib.sha256(self.archive.read_bytes()).hexdigest()
+    def run_installer(self, extra=(), digest=None, success=True, store="steam", checksum=True):
         if ENGINE == "sh":
             command = ["bash", str(SCRIPT), "--game-dir", str(self.game), "--store", store,
-                       "--package", str(self.archive), "--sha256", digest, "--yes"]
+                       "--package", str(self.archive), "--yes"]
+            if checksum:
+                digest = digest or hashlib.sha256(self.archive.read_bytes()).hexdigest()
+                command += ["--sha256", digest]
         else:
-            arguments = ["-GameDir", str(self.game), "-Store", store, "-Package", str(self.archive),
-                         "-Sha256", digest, "-Yes"]
+            arguments = ["-GameDir", str(self.game), "-Store", store, "-Package", str(self.archive), "-Yes"]
+            if checksum:
+                digest = digest or hashlib.sha256(self.archive.read_bytes()).hexdigest()
+                arguments += ["-Sha256", digest]
             if ENGINE == "bat":
                 command = [str(ROOT / "installers/install-horytweaks.bat")] + arguments
             else:
@@ -118,6 +122,77 @@ class InstallerTests(unittest.TestCase):
         result = self.run_installer(digest="0" * 64, success=False)
         self.assertIn("SHA-256 mismatch", result.stdout + result.stderr)
         self.assertEqual(self.snapshot(), before)
+
+    def write_sidecar(self, content, name="SHA256SUMS.txt"):
+        path = self.archive.parent / name
+        path.write_text(content)
+        self.addCleanup(lambda: path.unlink(missing_ok=True))
+        return path
+
+    def test_package_sidecar_manifest_verifies_install(self):
+        digest = hashlib.sha256(self.archive.read_bytes()).hexdigest()
+        self.write_sidecar(f"{digest}  {self.archive.name}\n{'b' * 64}  other.zip\n")
+        result = self.run_installer(checksum=False)
+        self.assertIn("Verifying against", result.stdout + result.stderr)
+        self.assertEqual((self.game / PLUGIN).read_bytes(), PAYLOAD[PLUGIN])
+
+    def test_package_sidecar_sha256_file_verifies_install(self):
+        digest = hashlib.sha256(self.archive.read_bytes()).hexdigest()
+        self.write_sidecar(digest + "\n", name=self.archive.name + ".sha256")
+        self.run_installer(checksum=False)
+        self.assertEqual((self.game / PLUGIN).read_bytes(), PAYLOAD[PLUGIN])
+
+    def test_package_sidecar_mismatch_aborts_before_extraction(self):
+        before = self.snapshot()
+        self.write_sidecar(f"{'0' * 64}  {self.archive.name}\n")
+        result = self.run_installer(checksum=False, success=False)
+        self.assertIn("SHA-256 mismatch", result.stdout + result.stderr)
+        self.assertEqual(self.snapshot(), before)
+        self.assertFalse((self.game / ".horytweaks-backups").exists())
+
+    def test_package_without_checksum_source_is_rejected(self):
+        before = self.snapshot()
+        result = self.run_installer(checksum=False, success=False)
+        self.assertIn("checksum", (result.stdout + result.stderr).lower())
+        self.assertEqual(self.snapshot(), before)
+
+    def test_package_skip_checksum_installs_unverified(self):
+        flag = "--skip-checksum" if ENGINE == "sh" else "-SkipChecksum"
+        result = self.run_installer(extra=[flag], checksum=False)
+        self.assertIn("unverified", (result.stdout + result.stderr).lower())
+        self.assertEqual((self.game / PLUGIN).read_bytes(), PAYLOAD[PLUGIN])
+
+    @unittest.skipUnless(ENGINE == "sh", "Python engine only")
+    def test_checksum_parsing_and_sidecar_lookup(self):
+        engine = load_unix_engine()
+        good = "a" * 64
+        text = f"{good}  {self.archive.name}\n{'b' * 64}  other.zip\n"
+        self.assertEqual(engine["checksums_for"](text, self.archive.name), good)
+        self.assertIsNone(engine["checksums_for"](text, "missing.zip"))
+        with self.assertRaises(RuntimeError):
+            engine["checksums_for"](f"{good}  x.zip\n{'c' * 64}  x.zip\n", "x.zip")
+        sidecar = self.write_sidecar(good + "\n", name=self.archive.name + ".sha256")
+        self.assertEqual(engine["sidecar_checksum"](self.archive), (good, sidecar))
+        sidecar.unlink()
+        manifest = self.write_sidecar(text)
+        self.assertEqual(engine["sidecar_checksum"](self.archive), (good, manifest))
+        self.assertEqual(engine["sidecar_checksum"](self.root / "absent.zip"), (None, None))
+
+    @unittest.skipUnless(ENGINE == "sh", "Python engine only")
+    def test_missing_manifest_policy(self):
+        import types
+        engine = load_unix_engine()
+        yes = types.SimpleNamespace(yes=True)
+        no = types.SimpleNamespace(yes=False)
+        self.assertTrue(engine["unverified_allowed"](yes))
+        engine["ask"] = lambda prompt: "y"
+        self.assertTrue(engine["unverified_allowed"](no))
+        engine["ask"] = lambda prompt: "n"
+        self.assertFalse(engine["unverified_allowed"](no))
+        def no_tty(prompt):
+            raise RuntimeError("No terminal.")
+        engine["ask"] = no_tty
+        self.assertTrue(engine["unverified_allowed"](no))
 
     def test_invalid_zip_changes_nothing(self):
         before = self.snapshot()

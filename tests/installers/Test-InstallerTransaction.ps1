@@ -47,6 +47,34 @@ try {
         Write-Host 'PASS: destination junction rejected.'
         Remove-Item -LiteralPath (Join-Path $game 'dotnet')
     }
+
+    $package = Join-Path $root 'pkg.zip'
+    [IO.File]::WriteAllText($package, 'zip')
+    $manifest = Join-Path $root 'SHA256SUMS.txt'
+    $hash = 'A' * 64
+    [IO.File]::WriteAllText($manifest, "$hash  pkg.zip`n" + ('B' * 64) + "  other.zip`n")
+    if ((Get-ManifestHash (Get-Content -LiteralPath $manifest -Raw) 'pkg.zip') -ne $hash) { throw 'Manifest lookup failed.' }
+    if ($null -ne (Get-ManifestHash 'no entries' 'pkg.zip')) { throw 'Missing manifest entry should return null.' }
+    $duplicates = "$hash  pkg.zip`n$hash  pkg.zip`n"
+    $rejected = $false
+    try { Get-ManifestHash $duplicates 'pkg.zip' | Out-Null } catch { $rejected = $true }
+    if (-not $rejected) { throw 'Duplicate manifest entries were accepted.' }
+    $sidecar = Get-SidecarHash $package
+    if ($null -eq $sidecar -or $sidecar.Hash -ne $hash -or $sidecar.Source -ne $manifest) { throw 'Sidecar SHA256SUMS.txt not used.' }
+    Remove-Item -LiteralPath $manifest
+    $bare = 'C' * 64
+    [IO.File]::WriteAllText("$package.sha256", "$bare`n")
+    $sidecar = Get-SidecarHash $package
+    if ($null -eq $sidecar -or $sidecar.Hash -ne $bare) { throw 'Sidecar .sha256 file not used.' }
+    if ($null -ne (Get-SidecarHash (Join-Path $root 'absent.zip'))) { throw 'Absent sidecar should return null.' }
+    Write-Host 'PASS: checksum manifest and sidecar lookup.'
+
+    $script:readHostAnswer = 'n'
+    function Read-Host { param([object]$Prompt) $script:readHostAnswer }
+    if (Confirm-Unverified 'test-subject') { throw 'Declined unverified install should cancel.' }
+    $script:readHostAnswer = 'yes'
+    if (-not (Confirm-Unverified 'test-subject')) { throw 'Confirmed unverified install should continue.' }
+    Write-Host 'PASS: missing manifest requires interactive confirmation.'
 }
 finally {
     ${function:Copy-AtomicFile} = $originalCopy

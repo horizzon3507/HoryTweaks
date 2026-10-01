@@ -41,9 +41,9 @@ WINEDLLOVERRIDES="winhttp=n,b" PROTON_NO_ESYNC=1 %command%
 
 Both installers default to the latest published GitHub release. Set `--version v0.1.2` / `-Version v0.1.2` to pin a release. Steam, Epic and Microsoft Store share a package; itch.io uses its own package. `--yes` / `-Yes` skips the final confirmation, but supply the game folder and store to avoid the discovery prompts.
 
-Online downloads use bounded HTTPS requests with retries. When the release contains `SHA256SUMS.txt`, the ZIP must match its SHA-256. Older releases, including v0.1.2, have no checksum manifest: the installer explicitly reports that it is using the official HTTPS download without a published checksum. `--sha256` / `-Sha256` supplies an expected hash directly. A checksum from the same release detects corruption, not a compromised release publisher.
+Online downloads use bounded HTTPS requests with retries. When the release contains `SHA256SUMS.txt`, the ZIP must match its SHA-256 before anything is extracted. Older releases, including v0.1.2, have no checksum manifest: interactive runs warn and ask before continuing unverified, while `--yes` / `-Yes` or a non-interactive terminal installs the official HTTPS download after the same warning. `--skip-checksum` / `-SkipChecksum` skips verification entirely. `--sha256` / `-Sha256` supplies an expected hash directly and is always enforced. A checksum from the same release detects corruption, not a compromised release publisher.
 
-For offline installation, download the full store ZIP and obtain its hash from a trusted source. A DLL alone is not a complete installation package.
+For offline installation, download the full store ZIP and obtain its hash from a trusted source. A DLL alone is not a complete installation package. The expected hash can come from `--sha256` / `-Sha256`, a `SHA256SUMS.txt` or `<package>.sha256` file beside the ZIP, or the release checksum manifest fetched when `--version` / `-Version` is set. Without any of these, `--package` / `-Package` is refused unless `--skip-checksum` / `-SkipChecksum` is passed.
 
 ```sh
 bash install-horytweaks.sh --game-dir "/mnt/games/Among Us" --store steam \
@@ -55,7 +55,7 @@ bash install-horytweaks.sh --game-dir "/mnt/games/Among Us" --store steam \
 install-horytweaks.bat -GameDir "D:\Games\Among Us" -Store steam -Package "C:\Downloads\package.zip" -Sha256 <64-character-sha256> -Yes
 ```
 
-Replace the hash placeholder; do not paste it literally. Offline packages require a hash. The store and optional version are labels in offline mode: ensure the ZIP came from the right store's release asset.
+Replace the hash placeholder; do not paste it literally. When the release's `SHA256SUMS.txt` sits beside the ZIP (for example after downloading a release folder), the `--sha256` / `-Sha256` argument can be omitted. The store and optional version are labels in offline mode: ensure the ZIP came from the right store's release asset.
 
 ## Backups and recovery
 

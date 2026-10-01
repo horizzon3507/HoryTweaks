@@ -204,6 +204,26 @@ public static class TranslationStrings
     public static readonly TranslationString DisconnectReasonMeeting_Cheater = new("DisconnectReasonMeeting.Cheater");
 
     /// <summary>
+    /// Base Translation: Auto Rejoin
+    /// </summary>
+    public static readonly TranslationString Rejoin_AutoRejoin = new("Rejoin.AutoRejoin");
+
+    /// <summary>
+    /// Base Translation: Press Back to cancel
+    /// </summary>
+    public static readonly TranslationString Rejoin_CancelHint = new("Rejoin.CancelHint");
+
+    /// <summary>
+    /// Base Translation: Could not reconnect to lobby {0}.
+    /// </summary>
+    public static readonly TranslationString Rejoin_Failed = new("Rejoin.Failed");
+
+    /// <summary>
+    /// Base Translation: Reconnecting to lobby {0}... ({1}s)
+    /// </summary>
+    public static readonly TranslationString Rejoin_Reconnecting = new("Rejoin.Reconnecting");
+
+    /// <summary>
     /// Base Translation: Welcome To {0}
     /// </summary>
     public static readonly TranslationString WelcomeMsg_WelcomeToBAU = new("WelcomeMsg.WelcomeToBAU");

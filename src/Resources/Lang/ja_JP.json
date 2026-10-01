@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "ホストにキックされました",
   "DisconnectReasonMeeting.Banned": "ホストにBANされました",
   "DisconnectReasonMeeting.Cheater": "サーバーにBANされました",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "{0}へようこそ",
   "WelcomeMsg.ThanksForDownloading": "ダウンロードありがとうございます！",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color>は、{1}やホストツールなどのクライアント側機能で、バニラのAmong Usをさらに快適にします。バニラ版のプレイヤーとも一緒に遊べます。",

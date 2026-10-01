@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "호스트에 의해 추방됨",
   "DisconnectReasonMeeting.Banned": "호스트에 의해 차단됨",
   "DisconnectReasonMeeting.Cheater": "서버에 의해 차단됨",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "{0}에 오신 것을 환영합니다",
   "WelcomeMsg.ThanksForDownloading": "다운로드해 주셔서 감사합니다!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color>은(는) {1}, 호스트 도구 등 클라이언트 측 기능으로 바닐라 Among Us 경험을 개선합니다. 바닐라 게임을 사용하는 사람들과 함께 플레이할 수 있습니다.",

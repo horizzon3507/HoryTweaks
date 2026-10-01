@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "Caite Amach ag an Óstach",
   "DisconnectReasonMeeting.Banned": "Coiscthe ag an Óstach",
   "DisconnectReasonMeeting.Cheater": "Coiscthe ag an bhFreastalaí",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Fáilte go {0}",
   "WelcomeMsg.ThanksForDownloading": "Go raibh maith agat as íoslódáil!",
   "WelcomeMsg.BAUDescription1": "Cuireann <color=#ffffbe>{0}</color> feabhas ar ghnáth-eispéireas Among Us le gnéithe ar thaobh an chliaint amhail {1}, uirlisí óstaigh agus tuilleadh. Is féidir leat imirt le daoine atá ag úsáid an ghnáthchluiche.",

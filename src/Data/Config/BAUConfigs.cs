@@ -104,6 +104,11 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<int> SettingsPreset { get; } = new("Mod", "SettingsPreset", 0);
 
     /// <summary>
+    /// Gets the configuration entry for auto rejoining the lobby after an involuntary disconnect.
+    /// </summary>
+    internal static BAUConfigEntry<bool> AutoRejoin { get; } = new("Better Options", "AutoRejoin", true);
+
+    /// <summary>
     /// Loads configuration options from BepInEx config file.
     /// </summary>
     internal static void LoadConfigs()
@@ -113,7 +118,7 @@ internal static class BAUConfigs
             ForceOwnLanguage, ChatDarkMode, HideConsole, LobbyPlayerInfo,
             LessInfo, DisableLobbyTheme, UnlockFPS, ShowFPS,
             MinimapIcons, VentColorGroups, ColorblindTextOnTop, CommandPrefix,
-            FavoriteColor, SettingsPreset
+            FavoriteColor, SettingsPreset, AutoRejoin
         ]);
 
         OptionsMenuBehaviourPatch.UpdateFrameRate();

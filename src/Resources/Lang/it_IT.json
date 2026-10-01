@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "Espulso dall'host",
   "DisconnectReasonMeeting.Banned": "Bannato dall'host",
   "DisconnectReasonMeeting.Cheater": "Bannato dal server",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Benvenuto in {0}",
   "WelcomeMsg.ThanksForDownloading": "Grazie per il download!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> migliora l'esperienza vanilla di Among Us con funzionalità lato client come {1}, strumenti per l'host e altro ancora. Puoi giocare con chi usa il gioco vanilla.",

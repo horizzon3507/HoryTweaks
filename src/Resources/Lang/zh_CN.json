@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "被房主踢出",
   "DisconnectReasonMeeting.Banned": "被房主封禁",
   "DisconnectReasonMeeting.Cheater": "被服务器封禁",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "欢迎使用 {0}",
   "WelcomeMsg.ThanksForDownloading": "感谢下载！",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> 通过 {1}、房主工具等客户端功能改进原版 Among Us 的游戏体验。你可以与使用原版游戏的玩家一起游玩。",

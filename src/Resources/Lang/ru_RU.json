@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "Выгнан хостом",
   "DisconnectReasonMeeting.Banned": "Заблокирован хостом",
   "DisconnectReasonMeeting.Cheater": "Заблокирован сервером",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Добро пожаловать в {0}",
   "WelcomeMsg.ThanksForDownloading": "Спасибо за загрузку!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> улучшает ванильный Among Us клиентскими функциями, такими как {1}, инструменты хоста и не только. Вы можете играть с людьми, использующими ванильную игру.",

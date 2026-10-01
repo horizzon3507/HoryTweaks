@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "Na-kick ng Host",
   "DisconnectReasonMeeting.Banned": "Na-ban ng Host",
   "DisconnectReasonMeeting.Cheater": "Na-ban ng Server",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Maligayang Pagdating sa {0}",
   "WelcomeMsg.ThanksForDownloading": "Salamat sa pag-download!",
   "WelcomeMsg.BAUDescription1": "Pinagaganda ng <color=#ffffbe>{0}</color> ang vanilla na karanasan sa Among Us gamit ang mga client-side na feature tulad ng {1}, mga host tool at marami pang iba. Maaari kang makipaglaro sa mga taong gumagamit ng vanilla na laro.",

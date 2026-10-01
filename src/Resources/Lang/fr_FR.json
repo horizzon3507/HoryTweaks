@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "Expulsé par l'hôte",
   "DisconnectReasonMeeting.Banned": "Banni par l'hôte",
   "DisconnectReasonMeeting.Cheater": "Banni par le serveur",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Bienvenue sur {0}",
   "WelcomeMsg.ThanksForDownloading": "Merci d'avoir téléchargé !",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> améliore l'expérience vanilla d'Among Us grâce à des fonctionnalités côté client comme {1}, des outils pour l'hôte et bien plus. Vous pouvez jouer avec des personnes utilisant le jeu vanilla.",

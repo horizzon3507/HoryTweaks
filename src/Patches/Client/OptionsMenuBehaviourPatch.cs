@@ -67,6 +67,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_SendBetterRpc, BAUConfigs.SendBetterRpc, 3, __instance, SendBetterRpcAction);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 3, __instance, ConvertAllSettingFiles);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_HideConsole, BAUConfigs.HideConsole, 3, __instance);
+        ClientOptionItem.CreateToggle(TranslationStrings.Rejoin_AutoRejoin, BAUConfigs.AutoRejoin, 3, __instance);
 
         // Button options (no toggle)
         if (!BAUPlugin.ModInfo.Starlight)

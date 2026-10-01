@@ -759,6 +759,31 @@ public static class TranslationStrings
     public static readonly TranslationString BetterSetting_TempSetting_HideAndSeekImpNum = new("BetterSetting.TempSetting.HideAndSeekImpNum");
 
     /// <summary>
+    /// Base Translation: Copy recent chat messages to the clipboard
+    /// </summary>
+    public static readonly TranslationString Chat_Copy_Description = new("Chat.Copy.Description");
+
+    /// <summary>
+    /// Base Translation: Copied &lt;color=#e0b700&gt;{0}&lt;/color&gt; chat messages to the clipboard.
+    /// </summary>
+    public static readonly TranslationString Chat_Copy_Done = new("Chat.Copy.Done");
+
+    /// <summary>
+    /// Base Translation: No chat messages to copy.
+    /// </summary>
+    public static readonly TranslationString Chat_Copy_Empty = new("Chat.Copy.Empty");
+
+    /// <summary>
+    /// Base Translation: Extended Chat History
+    /// </summary>
+    public static readonly TranslationString Chat_ExtendedHistory = new("Chat.ExtendedHistory");
+
+    /// <summary>
+    /// Base Translation: Chat Timestamps
+    /// </summary>
+    public static readonly TranslationString Chat_Timestamps = new("Chat.Timestamps");
+
+    /// <summary>
     /// Base Translation: Banned
     /// </summary>
     public static readonly TranslationString HostTools_Ban = new("HostTools.Ban");

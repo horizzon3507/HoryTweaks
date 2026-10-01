@@ -6,6 +6,7 @@ param(
     [string]$Version = 'latest',
     [string]$Package,
     [ValidatePattern('^[a-fA-F0-9]{64}$')][string]$Sha256,
+    [switch]$SkipChecksum,
     [switch]$DryRun,
     [switch]$Yes,
     [switch]$Help
@@ -108,6 +109,46 @@ function Get-Sha256([string]$Path) {
         $stream.Dispose()
         $algorithm.Dispose()
     }
+}
+
+function Get-ManifestHash([string]$Text, [string]$Asset) {
+    $found = [regex]::Matches($Text, '(?m)^([0-9a-fA-F]{64}) [ *]' + [regex]::Escape($Asset) + '\r?$')
+    if ($found.Count -gt 1) { throw 'Checksum manifest lists this package more than once.' }
+    if ($found.Count -eq 0) { return $null }
+    return $found[0].Groups[1].Value
+}
+
+function Get-SidecarHash([string]$PackagePath) {
+    $name = Split-Path -Leaf $PackagePath
+    $candidates = @((Join-Path (Split-Path -Parent $PackagePath) 'SHA256SUMS.txt'), "$PackagePath.sha256")
+    if ([IO.Path]::GetExtension($PackagePath)) { $candidates += [IO.Path]::ChangeExtension($PackagePath, '.sha256') }
+    foreach ($file in $candidates) {
+        if (-not (Test-Path -LiteralPath $file -PathType Leaf)) { continue }
+        $text = Get-Content -LiteralPath $file -Raw
+        $hash = Get-ManifestHash $text $name
+        if ($hash) { return @{ Hash = $hash; Source = $file } }
+        $bare = $text.Trim()
+        if ($bare -match '^[0-9a-fA-F]{64}$') { return @{ Hash = $bare; Source = $file } }
+    }
+    return $null
+}
+
+function Get-ReleaseManifestHash([string]$Work, [string]$Version, [string]$Asset) {
+    try { $tag = Resolve-ReleaseVersion $Version } catch { return $null }
+    $checksums = Join-Path $Work 'SHA256SUMS.txt'
+    try {
+        if (-not (Get-ReleaseFile -Url "$Releases/download/$tag/SHA256SUMS.txt" -Destination $checksums -Optional)) { return $null }
+    }
+    catch { return $null }
+    return Get-ManifestHash (Get-Content -LiteralPath $checksums -Raw) $Asset
+}
+
+function Confirm-Unverified([string]$Subject) {
+    Write-Host "WARNING: $Subject has no checksum manifest; the package cannot be verified." -ForegroundColor Yellow
+    if ($Yes) { return $true }
+    try { $answer = Read-Host 'Continue without checksum verification? [y/N]' }
+    catch { return $true }
+    return $answer -in @('y', 'yes')
 }
 
 function Assert-SafeArchiveName([string]$Name) {
@@ -253,14 +294,14 @@ function Invoke-ModInstaller {
         Write-Host @'
 HoryTweaks Windows installer (close Among Us first).
 install-horytweaks.bat [-GameDir "C:\Games\Among Us"] [-Store steam|epic|msstore|itch]
-  [-Version latest|v0.1.2] [-DryRun] [-Yes]
-  [-Package "C:\Downloads\package.zip" -Sha256 <trusted ZIP hash>]
+  [-Version latest|v0.1.2] [-DryRun] [-Yes] [-SkipChecksum]
+  [-Package "C:\Downloads\package.zip" [-Sha256 <trusted ZIP hash>]]
+A sidecar SHA256SUMS.txt or <package>.sha256 beside the ZIP is also accepted.
 Steam libraries and Epic installations are detected. Other stores accept a manual path.
 Use -DryRun to validate without changing game files. Keep Install-HoryTweaks.ps1 beside the BAT.
 '@
         return
     }
-    if ($Package -and -not $Sha256) { throw '-Package requires -Sha256 from a trusted source.' }
     if (-not $GameDir) {
         $games = @(Find-GameDirectories)
         for ($i = 0; $i -lt $games.Count; $i++) { Write-Host "$($i + 1). $($games[$i])" }
@@ -286,6 +327,20 @@ Use -DryRun to validate without changing game files. Keep Install-HoryTweaks.ps1
         if ($Package) {
             $archive = (Get-Item -LiteralPath $Package).FullName
             $tag = if ($Version -eq 'latest') { 'offline' } else { Resolve-ReleaseVersion $Version }
+            if (-not $expected -and -not $SkipChecksum) {
+                $sidecar = Get-SidecarHash $archive
+                if ($null -ne $sidecar) {
+                    $expected = $sidecar.Hash
+                    Write-Host "Verifying against $($sidecar.Source)."
+                }
+                else {
+                    $expected = Get-ReleaseManifestHash $work $Version (Split-Path -Leaf $archive)
+                    if ($expected) { Write-Host 'Verifying against the release checksum manifest.' }
+                }
+                if (-not $expected) {
+                    throw '-Package requires -Sha256, a sidecar SHA256SUMS.txt or <package>.sha256, or -SkipChecksum to install unverified.'
+                }
+            }
         }
         else {
             $tag = Resolve-ReleaseVersion $Version
@@ -295,17 +350,16 @@ Use -DryRun to validate without changing game files. Keep Install-HoryTweaks.ps1
             $archive = Join-Path $work $asset
             Write-Host "Downloading $asset..."
             Get-ReleaseFile -Url ($base + $asset) -Destination $archive | Out-Null
-            if (-not $expected) {
+            if (-not $expected -and -not $SkipChecksum) {
                 $checksums = Join-Path $work 'SHA256SUMS.txt'
                 if (Get-ReleaseFile -Url ($base + 'SHA256SUMS.txt') -Destination $checksums -Optional) {
-                    $pattern = '(?m)^([0-9a-fA-F]{64})  ' + [regex]::Escape($asset) + '\r?$'
-                    $matches = [regex]::Matches((Get-Content -LiteralPath $checksums -Raw), $pattern)
-                    if ($matches.Count -ne 1) { throw 'Release checksum manifest does not identify this package.' }
-                    $expected = $matches[0].Groups[1].Value
+                    $expected = Get-ManifestHash (Get-Content -LiteralPath $checksums -Raw) $asset
+                    if (-not $expected) { throw 'Release checksum manifest does not identify this package.' }
                 }
-                else { Write-Host 'This older release has no checksum manifest; using the official HTTPS download.' }
+                elseif (-not (Confirm-Unverified "release $tag")) { Write-Host 'Cancelled. No game files changed.'; return }
             }
         }
+        if ($SkipChecksum -and -not $expected) { Write-Host 'WARNING: checksum verification skipped; installing an unverified package.' -ForegroundColor Yellow }
         $digest = Get-Sha256 $archive
         if ($expected -and $digest -ne $expected) { throw 'SHA-256 mismatch. Nothing was installed.' }
         Write-Host "ZIP SHA-256: $digest"

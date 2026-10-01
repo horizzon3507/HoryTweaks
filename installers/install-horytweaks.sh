@@ -89,6 +89,58 @@ def sha256(path):
     return digest.hexdigest()
 
 
+def checksums_for(manifest_text, asset_name):
+    """SHA-256 recorded for asset_name in sha256sum-format text, or None."""
+    matches = re.findall(r"^([0-9a-fA-F]{64}) [ *]" + re.escape(asset_name) + r"\r?$",
+                         manifest_text, re.M)
+    if len(matches) > 1:
+        raise RuntimeError("Checksum manifest lists this package more than once.")
+    return matches[0] if matches else None
+
+
+def sidecar_checksum(package):
+    """Checksum published beside a local package, as (hash, source) or (None, None)."""
+    candidates = [package.parent / "SHA256SUMS.txt",
+                  package.with_name(package.name + ".sha256")]
+    if package.suffix:
+        candidates.append(package.with_suffix(".sha256"))
+    for candidate in candidates:
+        if not candidate.is_file():
+            continue
+        text = candidate.read_text(errors="replace")
+        found = checksums_for(text, package.name)
+        if found:
+            return found, candidate
+        bare = text.strip()
+        if re.fullmatch(r"[0-9a-fA-F]{64}", bare):
+            return bare, candidate
+    return None, None
+
+
+def fetch_release_checksum(work, version, asset_name):
+    """Best-effort lookup of asset_name in the release's checksum manifest."""
+    try:
+        tag = resolve_version(version)
+        manifest = work / "SHA256SUMS.txt"
+        if not download(f"{RELEASES}/download/{tag}/SHA256SUMS.txt", manifest, optional=True):
+            return None
+    except Exception:
+        return None
+    return checksums_for(manifest.read_text(), asset_name)
+
+
+def unverified_allowed(args):
+    """Missing manifest policy: interactive installs must opt in; scripts continue."""
+    print("WARNING: this release has no checksum manifest; the package cannot be verified.")
+    if args.yes:
+        return True
+    try:
+        answer = ask("Continue without checksum verification? [y/N]: ")
+    except RuntimeError:
+        return True
+    return answer.lower() in ("y", "yes")
+
+
 def check_game_closed():
     if not shutil.which("pgrep"):
         raise RuntimeError("Install pgrep (procps) so the running-game check can complete.")
@@ -226,15 +278,16 @@ def main():
     parser.add_argument("--game-dir", type=Path, help="folder containing Among Us.exe")
     parser.add_argument("--store", choices=("steam", "epic", "msstore", "itch"))
     parser.add_argument("--version", default="latest", help="latest or a release tag, e.g. v0.1.2")
-    parser.add_argument("--package", type=Path, help="offline full ZIP (requires --sha256)")
+    parser.add_argument("--package", type=Path,
+                        help="offline full ZIP (verified via --sha256, a sidecar manifest, or --version)")
     parser.add_argument("--sha256", help="expected ZIP SHA-256, overrides published checksum")
+    parser.add_argument("--skip-checksum", action="store_true",
+                        help="install without any checksum verification")
     parser.add_argument("--dry-run", action="store_true", help="validate without changing game files")
     parser.add_argument("--yes", action="store_true", help="skip final confirmation")
     args = parser.parse_args()
     if args.sha256 and not re.fullmatch(r"[0-9a-fA-F]{64}", args.sha256):
         parser.error("--sha256 must contain 64 hexadecimal characters")
-    if args.package and not args.sha256:
-        parser.error("--package requires --sha256 from a trusted source")
     if args.game_dir is None:
         games = discover_games()
         for index, game in enumerate(games, 1):
@@ -257,6 +310,18 @@ def main():
         if args.package:
             archive = args.package.resolve(strict=True)
             version = "offline" if args.version == "latest" else resolve_version(args.version)
+            if expected is None and not args.skip_checksum:
+                expected, source = sidecar_checksum(archive)
+                if expected is not None:
+                    print(f"Verifying against {source}.")
+                else:
+                    expected = fetch_release_checksum(work, args.version, archive.name)
+                    if expected is not None:
+                        print("Verifying against the release checksum manifest.")
+                if expected is None:
+                    raise RuntimeError("Offline packages need a trusted checksum: pass --sha256, "
+                                       "place SHA256SUMS.txt or <package>.sha256 beside the ZIP, "
+                                       "or pass --skip-checksum to install unverified.")
         else:
             version = resolve_version(args.version)
             platform = "Itchio" if args.store == "itch" else "Steam-Epic-MsStore"
@@ -265,15 +330,17 @@ def main():
             archive = work / asset
             print(f"Downloading {asset}...")
             download(base + asset, archive)
-            if expected is None:
+            if expected is None and not args.skip_checksum:
                 checksums = work / "SHA256SUMS.txt"
                 if download(base + checksums.name, checksums, optional=True):
-                    matches = re.findall(r"^([0-9a-fA-F]{64})  " + re.escape(asset) + r"$", checksums.read_text(), re.M)
-                    if len(matches) != 1:
+                    expected = checksums_for(checksums.read_text(), asset)
+                    if expected is None:
                         raise RuntimeError("Release checksum manifest does not identify this package.")
-                    expected = matches[0]
-                else:
-                    print("This older release has no checksum manifest; using the official HTTPS download.")
+                elif not unverified_allowed(args):
+                    print("Cancelled. No game files changed.")
+                    return
+        if args.skip_checksum and expected is None:
+            print("WARNING: checksum verification skipped; installing an unverified package.")
         digest = sha256(archive)
         if expected and digest.lower() != expected.lower():
             raise RuntimeError("SHA-256 mismatch. Nothing was installed.")

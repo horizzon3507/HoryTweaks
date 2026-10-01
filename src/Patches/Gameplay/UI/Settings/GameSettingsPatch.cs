@@ -27,6 +27,9 @@ internal sealed class BetterGameSettings
     internal static OptionIntItem? RpcRateLimit;
 
     internal static OptionCheckboxItem? CancelInvalidSabotage;
+
+    internal static OptionCheckboxItem? HostTransferOnAfk;
+    internal static OptionIntItem? HostTransferAfkMinutes;
 }
 
 // Temporary settings for Hide & Seek impostor selection
@@ -88,6 +91,9 @@ internal static class GameSettingsPatch
             BetterGameSettings.RpcRateLimiting = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_RpcRateLimiting, true);
             BetterGameSettings.RpcRateLimiting.CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_RpcRateLimiting_Description);
             BetterGameSettings.RpcRateLimit = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_Setting_RateLimit, (25, 1000, 1), 50, ("", " PS"), BetterGameSettings.RpcRateLimiting);
+            BetterGameSettings.HostTransferOnAfk = OptionCheckboxItem.Create(BetterSettingsTab, TranslationStrings.HostTransfer_Setting_OnAfk, false);
+            BetterGameSettings.HostTransferOnAfk.CreateDescriptionButton(TranslationStrings.HostTransfer_Setting_OnAfk_Description);
+            BetterGameSettings.HostTransferAfkMinutes = OptionIntItem.Create(BetterSettingsTab, TranslationStrings.HostTransfer_Setting_AfkMinutes, (1, 60, 1), 5, ("", " min"), BetterGameSettings.HostTransferOnAfk);
         }
 
         BetterSettingsTab.UpdateVisuals();

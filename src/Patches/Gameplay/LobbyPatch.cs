@@ -1,6 +1,7 @@
 ﻿using BetterAmongUs.Data.Config;
 using BetterAmongUs.Interfaces;
 using BetterAmongUs.Modules;
+using BetterAmongUs.Modules.HostTransfer;
 using BetterAmongUs.Modules.OptionItems;
 using BetterAmongUs.Modules.Support;
 using BetterAmongUs.MonoScripts.Extended;
@@ -43,6 +44,8 @@ internal static class LobbyPatch
         {
             GameStartObj.SetLocalY(-2.8f);
         }
+
+        AfkHostTransfer.Tick();
     }
 
     [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.RpcExtendLobbyTimer))]

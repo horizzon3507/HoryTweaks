@@ -819,6 +819,96 @@ public static class TranslationStrings
     public static readonly TranslationString HostTools_InitializeTimeout = new("HostTools.InitializeTimeout");
 
     /// <summary>
+    /// Base Translation: Host transferred to {0} due to AFK
+    /// </summary>
+    public static readonly TranslationString HostTransfer_AfkSuccess = new("HostTransfer.AfkSuccess");
+
+    /// <summary>
+    /// Base Translation: Transfer the host role to a player
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Command_Description = new("HostTransfer.Command.Description");
+
+    /// <summary>
+    /// Base Translation: Cannot transfer host after the game ended
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_GameEnded = new("HostTransfer.Denied.GameEnded");
+
+    /// <summary>
+    /// Base Translation: Cannot transfer host while the game is starting
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_GameStarting = new("HostTransfer.Denied.GameStarting");
+
+    /// <summary>
+    /// Base Translation: No eligible player to receive host
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_NoEligibleTarget = new("HostTransfer.Denied.NoEligibleTarget");
+
+    /// <summary>
+    /// Base Translation: Only the host can transfer host
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_NotHost = new("HostTransfer.Denied.NotHost");
+
+    /// <summary>
+    /// Base Translation: Cannot transfer host outside a game
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_NotInGame = new("HostTransfer.Denied.NotInGame");
+
+    /// <summary>
+    /// Base Translation: AFK host transfer only works in a lobby
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_NotInLobby = new("HostTransfer.Denied.NotInLobby");
+
+    /// <summary>
+    /// Base Translation: Cannot transfer host to a dummy player
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_TargetIsDummy = new("HostTransfer.Denied.TargetIsDummy");
+
+    /// <summary>
+    /// Base Translation: Target is already the host
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_TargetIsHost = new("HostTransfer.Denied.TargetIsHost");
+
+    /// <summary>
+    /// Base Translation: Cannot transfer host to yourself
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_TargetIsSelf = new("HostTransfer.Denied.TargetIsSelf");
+
+    /// <summary>
+    /// Base Translation: Target player not found
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_TargetMissing = new("HostTransfer.Denied.TargetMissing");
+
+    /// <summary>
+    /// Base Translation: Target player is not ready
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Denied_TargetNotReady = new("HostTransfer.Denied.TargetNotReady");
+
+    /// <summary>
+    /// Base Translation: You are now the host
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Received = new("HostTransfer.Received");
+
+    /// <summary>
+    /// Base Translation: AFK Minutes
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Setting_AfkMinutes = new("HostTransfer.Setting.AfkMinutes");
+
+    /// <summary>
+    /// Base Translation: Transfer Host On AFK
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Setting_OnAfk = new("HostTransfer.Setting.OnAfk");
+
+    /// <summary>
+    /// Base Translation: Automatically transfers host to the player who has been in the lobby longest when you are AFK
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Setting_OnAfk_Description = new("HostTransfer.Setting.OnAfk.Description");
+
+    /// <summary>
+    /// Base Translation: Transferred host to {0}
+    /// </summary>
+    public static readonly TranslationString HostTransfer_Success = new("HostTransfer.Success");
+
+    /// <summary>
     /// Base Translation: Game Summary
     /// </summary>
     public static readonly TranslationString GameSummary = new("GameSummary");

@@ -1094,6 +1094,26 @@ public static class TranslationStrings
     public static readonly TranslationString Command_Dump_ReportSaved = new("Command.Dump.ReportSaved");
 
     /// <summary>
+    /// Base Translation: The diagnostic report will be uploaded to &lt;color=#b1b1b1&gt;0x0.st&lt;/color&gt;. Run &lt;color=#e0b700&gt;/dump upload&lt;/color&gt; again to confirm.
+    /// </summary>
+    public static readonly TranslationString Dump_Upload_Confirm = new("Dump.Upload.Confirm");
+
+    /// <summary>
+    /// Base Translation: Report upload failed ({0}). The local file was kept.
+    /// </summary>
+    public static readonly TranslationString Dump_Upload_Failed = new("Dump.Upload.Failed");
+
+    /// <summary>
+    /// Base Translation: Uploading the report to &lt;color=#b1b1b1&gt;0x0.st&lt;/color&gt;...
+    /// </summary>
+    public static readonly TranslationString Dump_Upload_InProgress = new("Dump.Upload.InProgress");
+
+    /// <summary>
+    /// Base Translation: Report uploaded: &lt;color=#b1b1b1&gt;{0}&lt;/color&gt; (link copied to clipboard)
+    /// </summary>
+    public static readonly TranslationString Dump_Upload_Success = new("Dump.Upload.Success");
+
+    /// <summary>
     /// Base Translation: Warning
     /// </summary>
     public static readonly TranslationString Startup_Warning_Title = new("Startup.Warning.Title");

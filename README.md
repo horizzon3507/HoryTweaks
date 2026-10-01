@@ -16,6 +16,14 @@ Release downloads: [HoryTweaks releases](https://github.com/horizzon3507/HoryTwe
 
 ## Installation
 
+### Guided installers
+
+Download `HoryTweaks-Installers.zip` from a release that includes it and extract all files. On Windows, run `install-horytweaks.bat` with `Install-HoryTweaks.ps1` beside it. On Linux/Steam Deck, run `bash install-horytweaks.sh` (Python 3, curl and pgrep required).
+
+The installers find Steam libraries, offer manual paths and store selection, support pinned versions and offline ZIPs, and back up replaced files with rollback on write failures. Windows also detects Epic installs. Settings and other plugins are preserved. See the [installer guide](installers/README.md) for dry runs, checksum verification, command-line options and recovery.
+
+### Manual installation
+
 1. Download the package for your game store from the [latest HoryTweaks release](https://github.com/horizzon3507/HoryTweaks/releases/latest).
    - Steam, Epic Games and Microsoft Store: `HoryTweaks-Steam-Epic-MsStore-<tag>.zip`
    - itch.io: `HoryTweaks-Itchio-<tag>.zip`

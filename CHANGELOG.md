@@ -11,6 +11,13 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
+## Unreleased
+
+### Added
+
+- Guided Windows and Linux/Steam Deck installers with game discovery, store and release selection, offline packages, dry runs, backups and rollback on installation errors.
+- Installer tests on Windows and Linux, downloadable installer scripts and SHA-256 manifests for future release assets.
+
 ## v0.1.2-alpha · 30/09/2026
 
 ### Added

@@ -1,12 +1,15 @@
 ﻿using BepInEx;
 using BetterAmongUs.Attributes;
+using BetterAmongUs.Commands.Arguments;
 using BetterAmongUs.Data;
 using BetterAmongUs.Data.Config;
 using BetterAmongUs.Diagnostics;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Modules;
+using BetterAmongUs.Network;
 using BetterAmongUs.Utilities;
 using BepInEx.Unity.IL2CPP;
+using BepInEx.Unity.IL2CPP.Utils;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -16,6 +19,19 @@ namespace BetterAmongUs.Commands;
 internal sealed class DumpCommand : BaseCommand
 {
     private const int RecentLogLines = 300;
+    private const string UploadArg = "upload";
+    private const float UploadConfirmWindowSeconds = 15f;
+
+    private static float uploadArmedUntil;
+    private static bool uploadConfirmed;
+
+    private readonly StringArgument _modeArgument;
+
+    public DumpCommand()
+    {
+        _modeArgument = new StringArgument(this, "{upload}") { ArgSuggestions = () => [UploadArg] };
+        Arguments = [_modeArgument];
+    }
 
     internal override string Name => "dump";
     internal override string Description => TranslationStrings.Command_Dump_Description.LocalizedString;
@@ -33,6 +49,17 @@ internal sealed class DumpCommand : BaseCommand
 
     internal override void Run()
     {
+        _modeArgument.TryParse(out var mode);
+        bool uploadRequested = mode.Equals(UploadArg, StringComparison.OrdinalIgnoreCase);
+        if (!string.IsNullOrEmpty(mode) && !uploadRequested)
+        {
+            CommandErrorText(TranslationStrings.Command_Error_InvalidSyntax.LocalizedString);
+            return;
+        }
+
+        if (uploadRequested && !ConfirmUpload())
+            return;
+
         string bepInExLog = Path.Combine(Paths.BepInExRootPath, "LogOutput.log");
         if (!File.Exists(bepInExLog))
         {
@@ -51,6 +78,7 @@ internal sealed class DumpCommand : BaseCommand
         string timestamp = DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss");
         string logFileName = "log-" + BAUPlugin.ModInfo.VERSION_STRING + "-" + timestamp + "-bepinex" + ".log";
         string reportFileName = "report-" + BAUPlugin.ModInfo.VERSION_STRING + "-" + timestamp + "-diagnostics" + ".txt";
+        string reportFilePath;
 
         if (!BAUPlugin.ModInfo.Starlight)
         {
@@ -63,7 +91,8 @@ internal sealed class DumpCommand : BaseCommand
             }
 
             File.WriteAllText(Path.Combine(logFolderPath, logFileName), decryptedLog);
-            File.WriteAllText(Path.Combine(logFolderPath, reportFileName), BuildDiagnosticReport(log));
+            reportFilePath = Path.Combine(logFolderPath, reportFileName);
+            File.WriteAllText(reportFilePath, BuildDiagnosticReport(log));
 
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
             {
@@ -85,11 +114,61 @@ internal sealed class DumpCommand : BaseCommand
             }
 
             File.WriteAllText(Path.Combine(logFolderPath, logFileName), decryptedLog);
-            File.WriteAllText(Path.Combine(logFolderPath, reportFileName), BuildDiagnosticReport(log));
+            reportFilePath = Path.Combine(logFolderPath, reportFileName);
+            File.WriteAllText(reportFilePath, BuildDiagnosticReport(log));
 
             CommandResultText(TranslationStrings.Command_Dump_Success.Format(logFolderPath));
             CommandResultText(TranslationStrings.Command_Dump_ReportSaved.Format(reportFileName));
         }
+
+        if (uploadRequested)
+            StartUpload(reportFilePath);
+    }
+
+    /// <summary>
+    /// Upload is an explicit opt-in: the first "/dump upload" of a session only warns
+    /// and arms a short window (the same arm-then-confirm pattern the restore-defaults
+    /// row uses), a second one inside the window confirms. Once confirmed, later uploads
+    /// in the session run without warning.
+    /// </summary>
+    private bool ConfirmUpload()
+    {
+        if (uploadConfirmed)
+            return true;
+
+        if (Time.unscaledTime < uploadArmedUntil)
+        {
+            uploadConfirmed = true;
+            uploadArmedUntil = 0f;
+            return true;
+        }
+
+        uploadArmedUntil = Time.unscaledTime + UploadConfirmWindowSeconds;
+        CommandResultText(TranslationStrings.Dump_Upload_Confirm.LocalizedString);
+        return false;
+    }
+
+    private void StartUpload(string reportFilePath)
+    {
+        if (AmongUsClient.Instance == null)
+        {
+            CommandErrorText(TranslationStrings.Dump_Upload_Failed.Format("no network client"));
+            return;
+        }
+
+        CommandResultText(TranslationStrings.Dump_Upload_InProgress.LocalizedString);
+        AmongUsClient.Instance.StartCoroutine(ReportUploader.CoUpload(reportFilePath, (url, error) =>
+        {
+            if (url != null)
+            {
+                GUIUtility.systemCopyBuffer = url;
+                CommandResultText(TranslationStrings.Dump_Upload_Success.Format(url));
+            }
+            else
+            {
+                CommandErrorText(TranslationStrings.Dump_Upload_Failed.Format(error ?? "unknown error"));
+            }
+        }));
     }
 
     /// <summary>

@@ -18,6 +18,7 @@
     <Compile Include="..\..\src\Data\BanListMigration.cs" Link="Linked\BanListMigration.cs" />
     <Compile Include="..\..\src\Data\Json\SettingsFileCodec.cs" Link="Linked\SettingsFileCodec.cs" />
     <Compile Include="..\..\src\Network\Configs\UpdateVersionCheck.cs" Link="Linked\UpdateVersionCheck.cs" />
+    <Compile Include="..\..\src\Network\ReportUploadRequest.cs" Link="Linked\ReportUploadRequest.cs" />
     <Compile Include="..\..\src\Modules\Moderation\ModerationRules.cs" Link="Linked\ModerationRules.cs" />
     <Compile Include="..\..\src\Modules\Moderation\ModerationHistory.cs" Link="Linked\ModerationHistory.cs" />
     <Compile Include="..\..\src\Modules\Moderation\ModerationLists.cs" Link="Linked\ModerationLists.cs" />

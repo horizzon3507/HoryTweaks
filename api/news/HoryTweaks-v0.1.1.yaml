@@ -1,0 +1,50 @@
+^show: true
+^type: 1
+^title: Fresh Paint
+^subtitle: HoryTweaks branding everywhere!
+^listtitle: HoryTweaks v0.1.1
+^date: 2026-09-29T18:00:00.0000000Z
+
+^content-en_US:
+ # HoryTweaks v0.1.1
+
+ We are thrilled to announce this update of **HoryTweaks**, a BetterAmongUs fork designed to enhance your Among Us experience!
+ ---
+
+ ## Change Log
+
+ #### New Features
+ - **HoryTweaks Artwork**: New artwork on the splash screen, main menu and mod stamp
+ - **Client Option Pages**: Client options are now grouped into Interface, Gameplay and Performance pages, each with its own title
+ - **Hide Console Option**: Added a client option to hide the HoryTweaks console after restarting
+ ---
+ #### Changed
+ - **Chat**: Chat for living players is now limited to lobbies, meetings and exile sequences
+ - **Colorblind Text**: Moved the upper colorblind label closer to the player
+ ---
+ #### Bug Fixes
+ - Fixed the custom logger recursively forwarding its own BepInEx output
+ ---
+ ## [Github](https://github.com/horizzon3507/HoryTweaks/)
+
+^content-pt_BR:
+ # HoryTweaks v0.1.1
+
+ Estamos felizes em anunciar esta atualização do **HoryTweaks**, um fork do BetterAmongUs feito para melhorar sua experiência no Among Us!
+ ---
+
+ ## Change Log
+
+ #### Novidades
+ - **Arte do HoryTweaks**: Nova arte na tela de splash, no menu principal e no selo do mod
+ - **Páginas de Opções**: As opções do cliente agora estão agrupadas em Interface, Gameplay e Performance, cada uma com seu título
+ - **Ocultar Console**: Nova opção para esconder o console do HoryTweaks após reiniciar
+ ---
+ #### Mudanças
+ - **Chat**: O chat para jogadores vivos agora fica limitado a lobbies, reuniões e sequências de ejeção
+ - **Texto para Daltônicos**: O rótulo superior para daltônicos foi movido para mais perto do jogador
+ ---
+ #### Correções
+ - Corrigido o logger customizado encaminhando recursivamente a própria saída do BepInEx
+ ---
+ ## [Github](https://github.com/horizzon3507/HoryTweaks/)

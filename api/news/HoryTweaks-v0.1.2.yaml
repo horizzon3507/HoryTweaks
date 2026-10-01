@@ -1,0 +1,52 @@
+^show: true
+^type: 1
+^title: Tools for Hosts
+^subtitle: Presets, moderation and diagnostics!
+^listtitle: HoryTweaks v0.1.2
+^date: 2026-09-30T12:00:00.0000000Z
+
+^content-en_US:
+ # HoryTweaks v0.1.2
+
+ We are thrilled to announce this update of **HoryTweaks**, a BetterAmongUs fork designed to enhance your Among Us experience!
+ ---
+
+ ## Change Log
+
+ #### New Features
+ - **Tweaks Tab**: Localized On/Off labels and descriptions, plus restore defaults, copy preset and paste preset rows guarded by a second confirming click
+ - **Preset Names**: Custom preset names through the /presetname command
+ - **Moderation Center**: New host moderation center with the current player list, kick and ban actions with confirmation, ban lists and session history
+ - **Diagnostic Report**: The /dump command now writes a privacy-conscious diagnostic report
+ ---
+ #### Changed
+ - **Version Warning**: The unsupported Among Us version warning is now localized and combined with the legacy plugin warning in a single popup
+ - **Legacy Plugin Check**: A startup check warns when a legacy BetterAmongUs.dll is still installed beside HoryTweaks
+ ---
+ #### Removed
+ - **Replay System**: Removed the unfinished replay recording system
+ ---
+ ## [Github](https://github.com/horizzon3507/HoryTweaks/)
+
+^content-pt_BR:
+ # HoryTweaks v0.1.2
+
+ Estamos felizes em anunciar esta atualização do **HoryTweaks**, um fork do BetterAmongUs feito para melhorar sua experiência no Among Us!
+ ---
+
+ ## Change Log
+
+ #### Novidades
+ - **Aba Tweaks**: Rótulos On/Off e descrições traduzidos, além de restaurar padrões, copiar preset e colar preset com confirmação em segundo clique
+ - **Nomes de Preset**: Nomes customizados de preset pelo comando /presetname
+ - **Central de Moderação**: Nova central de moderação para o host com a lista de jogadores, ações de kick e ban com confirmação, listas de ban e histórico da sessão
+ - **Relatório de Diagnóstico**: O comando /dump agora gera um relatório de diagnóstico que preserva sua privacidade
+ ---
+ #### Mudanças
+ - **Aviso de Versão**: O aviso de versão não suportada do Among Us agora é traduzido e combinado com o aviso de plugin legado em um único popup
+ - **Verificação de Plugin Legado**: Uma checagem na inicialização avisa quando um BetterAmongUs.dll legado ainda está instalado ao lado do HoryTweaks
+ ---
+ #### Removido
+ - **Sistema de Replay**: Removido o sistema inacabado de gravação de replays
+ ---
+ ## [Github](https://github.com/horizzon3507/HoryTweaks/)

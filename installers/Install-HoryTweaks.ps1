@@ -301,9 +301,9 @@ Use -DryRun to validate without changing game files. Keep Install-HoryTweaks.ps1
         foreach ($name in @($files) + @($Legacy)) {
             Assert-TargetPath $game $name
             $old = Join-Path $game $name
-            if ([IO.File]::Exists($old)) { $needed += (Get-Item -LiteralPath $old).Length }
+            if ([IO.File]::Exists($old)) { $needed += (Get-Item -LiteralPath $old -Force).Length }
         }
-        foreach ($name in $files) { $needed += (Get-Item -LiteralPath (Join-Path $stage $name)).Length }
+        foreach ($name in $files) { $needed += (Get-Item -LiteralPath (Join-Path $stage $name) -Force).Length }
         $drive = [IO.DriveInfo]::new([IO.Path]::GetPathRoot($game))
         if ($drive.IsReady -and $drive.AvailableFreeSpace -lt $needed) { throw 'Not enough free space for installation and backup.' }
         Write-Host "Target: $game`nStore: $Store`nRelease: $tag`nFiles: $($files.Count)"

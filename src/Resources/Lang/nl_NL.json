@@ -34,6 +34,11 @@
   "DisconnectReasonMeeting.Kicked": "Gekickt door host",
   "DisconnectReasonMeeting.Banned": "Verbannen door host",
   "DisconnectReasonMeeting.Cheater": "Verbannen door server",
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Welkom bij {0}",
   "WelcomeMsg.ThanksForDownloading": "Bedankt voor het downloaden!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> verbetert de vanilla Among Us-ervaring met client-side functies zoals {1}, hosttools en meer. Je kunt spelen met mensen die het vanilla spel gebruiken.",

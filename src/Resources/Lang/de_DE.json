@@ -37,6 +37,11 @@
   "DisconnectReasonMeeting.Banned": "Vom Host gebannt",
   "DisconnectReasonMeeting.Cheater": "Vom Server gebannt",
 
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Willkommen bei {0}",
   "WelcomeMsg.ThanksForDownloading": "Danke fürs Herunterladen!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> verbessert das klassische Among Us mit clientseitigen Funktionen wie {1}, Host-Werkzeugen und mehr. Du kannst mit Spielern spielen, die das unveränderte Spiel verwenden.",

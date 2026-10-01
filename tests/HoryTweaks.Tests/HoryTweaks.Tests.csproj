@@ -21,6 +21,7 @@
     <Compile Include="..\..\src\Modules\Moderation\ModerationRules.cs" Link="Linked\ModerationRules.cs" />
     <Compile Include="..\..\src\Modules\Moderation\ModerationHistory.cs" Link="Linked\ModerationHistory.cs" />
     <Compile Include="..\..\src\Modules\Moderation\ModerationLists.cs" Link="Linked\ModerationLists.cs" />
+    <Compile Include="..\..\src\Modules\RejoinPolicy.cs" Link="Linked\RejoinPolicy.cs" />
     <Compile Include="..\..\src\Utilities\ChatFormat.cs" Link="Linked\ChatFormat.cs" />
   </ItemGroup>
 

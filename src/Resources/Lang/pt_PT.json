@@ -37,6 +37,11 @@
   "DisconnectReasonMeeting.Banned": "Banido pelo anfitrião",
   "DisconnectReasonMeeting.Cheater": "Banido pelo servidor",
 
+  "Rejoin.AutoRejoin": "Reconexão Automática",
+  "Rejoin.CancelHint": "Prima Voltar para cancelar",
+  "Rejoin.Failed": "Não foi possível reconectar ao lobby {0}.",
+  "Rejoin.Reconnecting": "A reconectar ao lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Bem-vindo ao {0}",
   "WelcomeMsg.ThanksForDownloading": "Obrigado por descarregares!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> melhora a experiência original de Among Us com funcionalidades do lado do cliente, como {1}, ferramentas para anfitriões e muito mais. Podes jogar com pessoas que usam o jogo original.",

@@ -37,6 +37,11 @@
   "DisconnectReasonMeeting.Banned": "Banned By Host",
   "DisconnectReasonMeeting.Cheater": "Banned By Server",
 
+  "Rejoin.AutoRejoin": "Auto Rejoin",
+  "Rejoin.CancelHint": "Press Back to cancel",
+  "Rejoin.Failed": "Could not reconnect to lobby {0}.",
+  "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
+
   "WelcomeMsg.WelcomeToBAU": "Welcome To {0}",
   "WelcomeMsg.ThanksForDownloading": "Thanks for downloading!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> improves the vanilla Among Us experience with client-side features like {1}, host tools and more. You can play with people using the vanilla game.",

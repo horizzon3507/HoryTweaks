@@ -9,3 +9,4 @@ src/.vscode
 tests/**/bin
 tests/**/obj
 tests/TestResults
+tests/installers/__pycache__/

@@ -19,6 +19,8 @@ internal static class ChatPatch
 
     internal const string COMMAND_POSTFIX_ID = "<size=0%>IsCommand</size>";
 
+    private const int ChatHistoryMultiplier = 3;
+
     internal static bool IsChatVisible
     {
         get
@@ -212,6 +214,29 @@ internal static class ChatPatch
     {
         // Log chat publicly if player is alive, privately if dead
         BAUPlugin.Logger.LogPrivate($"{sourcePlayer.Data.PlayerName} -> {chatText}", "ChatLog");
+    }
+
+    // Prefix chat messages with the local receive time
+    [HarmonyPatch(typeof(ChatBubble), nameof(ChatBubble.SetText))]
+    [HarmonyPrefix]
+    private static void ChatBubble_SetText_Prefix(ref string chatText)
+    {
+        if (BAUConfigs.ChatTimestamps.Value)
+            chatText = ChatFormat.TimestampPrefix(DateTime.Now) + chatText;
+    }
+
+    // Grow the chat bubble pool so more scrollback is retained
+    [HarmonyPatch(typeof(ObjectPoolBehavior), nameof(ObjectPoolBehavior.InitPool))]
+    [HarmonyPrefix]
+    private static void ObjectPoolBehavior_InitPool_Prefix(ObjectPoolBehavior __instance, PoolableBehavior prefab)
+    {
+        if (!BAUConfigs.ChatExtendedHistory.Value)
+            return;
+
+        if (prefab == null || prefab.GetComponent<ChatBubble>() == null)
+            return;
+
+        __instance.poolSize *= ChatHistoryMultiplier;
     }
 
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.SetChatBubbleName))]

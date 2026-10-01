@@ -150,6 +150,13 @@
   "BetterSetting.Setting.HideAndSeekImpNum": "N.º de caçadores",
   "BetterSetting.TempSetting.HideAndSeekImpNum": "Caçador",
 
+
+  "Chat.Copy.Description": "Copy recent chat messages to the clipboard",
+  "Chat.Copy.Done": "Copied <color=#e0b700>{0}</color> chat messages to the clipboard.",
+  "Chat.Copy.Empty": "No chat messages to copy.",
+  "Chat.ExtendedHistory": "Extended Chat History",
+  "Chat.Timestamps": "Chat Timestamps",
+
   "HostTools.Ban": "Banido",
   "HostTools.Kick": "Expulso",
   "HostTools.KickMessage": "{0}! Motivo: <color=#fc0000>{1}</color>",

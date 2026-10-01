@@ -104,6 +104,16 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<int> SettingsPreset { get; } = new("Mod", "SettingsPreset", 0);
 
     /// <summary>
+    /// Gets the configuration entry for chat timestamps setting.
+    /// </summary>
+    internal static BAUConfigEntry<bool> ChatTimestamps { get; } = new("Better Options", "ChatTimestamps", true);
+
+    /// <summary>
+    /// Gets the configuration entry for extended chat history setting.
+    /// </summary>
+    internal static BAUConfigEntry<bool> ChatExtendedHistory { get; } = new("Better Options", "ChatExtendedHistory", true);
+
+    /// <summary>
     /// Loads configuration options from BepInEx config file.
     /// </summary>
     internal static void LoadConfigs()
@@ -113,7 +123,7 @@ internal static class BAUConfigs
             ForceOwnLanguage, ChatDarkMode, HideConsole, LobbyPlayerInfo,
             LessInfo, DisableLobbyTheme, UnlockFPS, ShowFPS,
             MinimapIcons, VentColorGroups, ColorblindTextOnTop, CommandPrefix,
-            FavoriteColor, SettingsPreset
+            FavoriteColor, SettingsPreset, ChatTimestamps, ChatExtendedHistory
         ]);
 
         OptionsMenuBehaviourPatch.UpdateFrameRate();

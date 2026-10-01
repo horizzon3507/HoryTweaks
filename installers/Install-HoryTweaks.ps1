@@ -96,6 +96,19 @@ function Resolve-ReleaseVersion([string]$Tag) {
     return $Tag
 }
 
+function Get-Sha256([string]$Path) {
+    $algorithm = [Security.Cryptography.SHA256]::Create()
+    $stream = [IO.File]::OpenRead($Path)
+    try {
+        $bytes = $algorithm.ComputeHash($stream)
+        return ([BitConverter]::ToString($bytes)).Replace('-', '')
+    }
+    finally {
+        $stream.Dispose()
+        $algorithm.Dispose()
+    }
+}
+
 function Assert-SafeArchiveName([string]$Name) {
     $parts = $Name.TrimEnd('/').Split('/')
     foreach ($part in $parts) {
@@ -292,7 +305,7 @@ Use -DryRun to validate without changing game files. Keep Install-HoryTweaks.ps1
                 else { Write-Host 'This older release has no checksum manifest; using the official HTTPS download.' }
             }
         }
-        $digest = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash
+        $digest = Get-Sha256 $archive
         if ($expected -and $digest -ne $expected) { throw 'SHA-256 mismatch. Nothing was installed.' }
         Write-Host "ZIP SHA-256: $digest"
         $stage = Join-Path $work 'stage'

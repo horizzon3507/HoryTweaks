@@ -24,15 +24,7 @@
   "Player.PlatformHidden": "Plataforma oculta",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
-  "PlayerMark.Button": "Marcar",
-  "PlayerMark.Title": "Marcar {0}",
-  "PlayerMark.Roles": "Papéis",
-  "PlayerMark.Status": "Estado",
-  "PlayerMark.Status.Suspect": "Suspeito",
-  "PlayerMark.Status.Cleared": "Limpo",
-  "PlayerMark.Status.Investigate": "Investigar",
   "Player.Level": "Nv",
-
   "LoadingBar.Complete": "Concluído",
   "LoadingBar.Initializing": "A inicializar a partida",
   "LoadingBar.StartingSession": "A iniciar a sessão de jogo",
@@ -41,7 +33,6 @@
   "LoadingBar.AssigningRoles": "A atribuir funções ({0}/{1})",
   "LoadingBar.WaitingForPlayers": "A aguardar jogadores ({0}/{1})",
   "LoadingBar.Finalizing": "A finalizar a ligação",
-
   "DisconnectReason.Left": "{0} saiu do jogo!",
   "DisconnectReason.Disconnect": "{0} desligou-se!",
   "DisconnectReason.Kicked": "{0} foi expulso por {1}!",
@@ -49,25 +40,18 @@
   "DisconnectReason.Cheater": "{0} foi banido pelo sistema antitrapaça da Innersloth!",
   "DisconnectReason.Error": "{0} foi expulso devido a um erro!",
   "DisconnectReason.Unknown": "{0} saiu do jogo por um motivo desconhecido?",
-
   "DisconnectReasonMeeting.Left": "Saiu da partida",
   "DisconnectReasonMeeting.Disconnect": "Desconectou",
   "DisconnectReasonMeeting.Kicked": "Expulso pelo anfitrião",
   "DisconnectReasonMeeting.Banned": "Banido pelo anfitrião",
   "DisconnectReasonMeeting.Cheater": "Banido pelo servidor",
-  "Meeting.Timer": "⏱ {0} / {1} restante",
-  "Meeting.PlayerNotVoted": "{0} jogador ainda não votou",
-  "Meeting.PlayersNotVoted": "{0} jogadores ainda não votaram",
-
   "Rejoin.AutoRejoin": "Reconexão Automática",
   "Rejoin.CancelHint": "Prima Voltar para cancelar",
   "Rejoin.Failed": "Não foi possível reconectar ao lobby {0}.",
   "Rejoin.Reconnecting": "A reconectar ao lobby {0}... ({1}s)",
-
   "WelcomeMsg.WelcomeToBAU": "Bem-vindo ao {0}",
   "WelcomeMsg.ThanksForDownloading": "Obrigado por descarregares!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> melhora a experiência original de Among Us com funcionalidades do lado do cliente, como {1}, ferramentas para anfitriões e muito mais. Podes jogar com pessoas que usam o jogo original.",
-
   "BetterOption": "Tweaks",
   "BetterOption.Next": "Seguinte >",
   "BetterOption.Previous": "< Anterior",
@@ -88,12 +72,10 @@
   "BetterOption.ColorblindTextOnTop": "Texto para daltónicos por cima",
   "BetterOption.CompressSettingFiles": "Comprimir ficheiros de definições",
   "BetterOption.ScrollZoom": "Zoom com a roda do rato",
-
   "BetterOption.SaveData": "Abrir dados guardados",
   "BetterOption.SaveData.InGame": "Não é possível abrir dados guardados durante uma partida!",
   "BetterOption.ToVanilla": "Voltar ao jogo original",
   "BetterOption.ToVanilla.InGame": "Não é possível voltar ao jogo original durante uma partida!",
-
   "BetterOption.Moderation": "Centro de moderação",
   "ModerationCenter.Back": "< Voltar",
   "ModerationCenter.Refresh": "Atualizar",
@@ -145,8 +127,6 @@
   "Gestures.NumberStep": "Shift ×5 · Ctrl ×10 nos números — ×25 juntos nos menus do mod",
   "Gestures.FavoriteColor": "Segura ou Shift+clica numa cor — cor favorita",
   "Gestures.SkipIntro": "Clica durante o logo — saltar a intro",
-
-
   "BetterSetting": "Tweaks",
   "BetterSetting.Description": "Edita as definições do HoryTweaks para a tua sala e as tuas partidas.",
   "BetterSetting.SetTo": "Definir como:",
@@ -167,7 +147,6 @@
   "BetterSetting.MainHeader.HostTools": "Ferramentas do anfitrião",
   "BetterSetting.MainHeader.Gameplay": "Definições de jogo",
   "BetterSetting.TextHeader.HostOnly": "Só para o anfitrião",
-
   "BetterSetting.Setting.KickCooldown": "Intervalo entre ações de moderação do anfitrião",
   "BetterSetting.Setting.InvalidFriendCode": "Expulsar jogadores com códigos de amigo inválidos",
   "BetterSetting.Setting.CancelInvalidSabotage": "Cancelar tentativas de sabotagem inválidas",
@@ -195,13 +174,10 @@
   "BetterSetting.Setting.RemovePetOnDeath": "Remover mascote ao morrer",
   "BetterSetting.Setting.HideAndSeekImpNum": "N.º de caçadores",
   "BetterSetting.TempSetting.HideAndSeekImpNum": "Caçador",
-
-
   "Chat.Copy.Description": "Copy recent chat messages to the clipboard",
   "Chat.Copy.Done": "Copied <color=#e0b700>{0}</color> chat messages to the clipboard.",
   "Chat.Copy.Empty": "No chat messages to copy.",
   "Chat.ExtendedHistory": "Extended Chat History",
-
   "HostTools.Ban": "Banido",
   "HostTools.Kick": "Expulso",
   "HostTools.KickMessage": "{0}! Motivo: <color=#fc0000>{1}</color>",
@@ -211,7 +187,6 @@
   "HostTools.InvalidFriendCode": "Código de amigo inválido",
   "HostTools.LevelTooLow": " está no nível {0}, o nível tem de ser {1} ou superior para entrar",
   "HostTools.InitializeTimeout": "Falha ao inicializar antes de terminar o tempo limite",
-
   "VoteBan.VoteCast": "{0} votou para expulsar {1}",
   "HostTransfer.AfkSuccess": "Host transferred to {0} due to AFK",
   "HostTransfer.Command.Description": "Transfer the host role to a player",
@@ -231,7 +206,6 @@
   "HostTransfer.Setting.OnAfk": "Transfer Host On AFK",
   "HostTransfer.Setting.OnAfk.Description": "Automatically transfers host to the player who has been in the lobby longest when you are AFK",
   "HostTransfer.Success": "Transferred host to {0}",
-
   "GameSummary": "Resumo do jogo",
   "Game.Summary.Hiders": "Escondidos",
   "Game.Summary.Seekers": "Caçadores",
@@ -245,7 +219,6 @@
   "Game.Summary.Result.CrematesDisconnected": "Tripulantes desligados",
   "Game.Summary.Result.TimeOut": "Tempo esgotado",
   "Game.Summary.Result.NoSurvivors": "Sem sobreviventes",
-
   "Command.Help.Description": "Obter ajuda sobre os comandos",
   "Command.Help.Body": "<color=#ffffbe>{0}</color> melhora a tua experiência com o Among Us original através de funcionalidades úteis do lado do cliente.\nAbre o menu de pausa para acederes a mais opções e definições de jogo.\nUsa <color=#e0b700>/commands</color> para veres todos os comandos disponíveis.\n\nFuncionalidades:\n- Validação de jogo pelo anfitrião e moderação manual.\n- Opções adicionais para anfitriões.\n- Definições melhoradas para personalizares o jogo.\n- Comandos para gerir e melhorar a tua experiência.\n- Melhorias do lado do cliente e funcionalidades de qualidade de vida.",
   "Command.Commands.Description": "Listar todos os comandos disponíveis",

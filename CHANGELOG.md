@@ -11,12 +11,24 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
-## Unreleased
+## v0.1.3-alpha · 02/10/2026
 
 ### Added
 
 - Guided Windows and Linux/Steam Deck installers with game discovery, store and release selection, offline packages, dry runs, backups and rollback on installation errors.
 - Installer tests on Windows and Linux, downloadable installer scripts and SHA-256 manifests for future release assets.
+- "Controls & Gestures" page (page 4) in the HoryTweaks options tab listing the mod's hidden shortcuts: scroll zoom, option value multipliers, chat autocomplete and chat history.
+- "Scroll Zoom" client toggle that enables or disables the scroll-wheel zoom.
+
+### Changed
+
+- The remaining hardcoded English strings are now localized: the loading bar texts, outfit preset descriptions, kick reasons, Info/ID labels, language-update notes, untranslated-key notices, server region names and speed-cap labels.
+
+### Fixed
+
+- The config loader now re-applies every client option on boot: BetterMinimapColors, BetterColorblindText and CompressSettingFiles were silently skipped before.
+- Client options read the canonical `HoryTweaks` config file; values stored in the old username-keyed config file are migrated once.
+- "?" help icons on options are anchored right beside the option title and no longer overlap the title text.
 
 ## v0.1.2-alpha · 30/09/2026
 

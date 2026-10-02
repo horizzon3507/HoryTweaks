@@ -24,15 +24,7 @@
   "Player.PlatformHidden": "Platform Hidden",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
-  "PlayerMark.Button": "Mark",
-  "PlayerMark.Title": "Mark {0}",
-  "PlayerMark.Roles": "Roles",
-  "PlayerMark.Status": "Status",
-  "PlayerMark.Status.Suspect": "Suspect",
-  "PlayerMark.Status.Cleared": "Cleared",
-  "PlayerMark.Status.Investigate": "Investigate",
   "Player.Level": "Lv",
-
   "LoadingBar.Complete": "Complete",
   "LoadingBar.Initializing": "Initializing Game",
   "LoadingBar.StartingSession": "Starting Game Session",
@@ -41,7 +33,6 @@
   "LoadingBar.AssigningRoles": "Assigning Roles ({0}/{1})",
   "LoadingBar.WaitingForPlayers": "Waiting for Players ({0}/{1})",
   "LoadingBar.Finalizing": "Finalizing Connection",
-
   "DisconnectReason.Left": "{0} Left the game!",
   "DisconnectReason.Disconnect": "{0} Disconnected!",
   "DisconnectReason.Kicked": "{0} Was kicked by {1}!",
@@ -49,26 +40,18 @@
   "DisconnectReason.Cheater": "{0} Was banned by Innersloth Anti-Cheat!",
   "DisconnectReason.Error": "{0} Was kicked due to an error!",
   "DisconnectReason.Unknown": "{0} Left the game due to unknown reason?",
-
   "DisconnectReasonMeeting.Left": "Left The Game",
   "DisconnectReasonMeeting.Disconnect": "Disconnected",
   "DisconnectReasonMeeting.Kicked": "Kicked By Host",
   "DisconnectReasonMeeting.Banned": "Banned By Host",
   "DisconnectReasonMeeting.Cheater": "Banned By Server",
-
-  "Meeting.Timer": "⏱ {0} / {1} left",
-  "Meeting.PlayerNotVoted": "{0} player has not voted",
-  "Meeting.PlayersNotVoted": "{0} players have not voted",
-
   "Rejoin.AutoRejoin": "Auto Rejoin",
   "Rejoin.CancelHint": "Press Back to cancel",
   "Rejoin.Failed": "Could not reconnect to lobby {0}.",
   "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
-
   "WelcomeMsg.WelcomeToBAU": "Welcome To {0}",
   "WelcomeMsg.ThanksForDownloading": "Thanks for downloading!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> improves the vanilla Among Us experience with client-side features like {1}, host tools and more. You can play with people using the vanilla game.",
-
   "BetterOption": "Tweaks",
   "BetterOption.Next": "Next >",
   "BetterOption.Previous": "< Prev",
@@ -89,12 +72,10 @@
   "BetterOption.ColorblindTextOnTop": "Colorblind Text On Top",
   "BetterOption.CompressSettingFiles": "Compress Setting Files",
   "BetterOption.ScrollZoom": "Scroll Zoom",
-
   "BetterOption.SaveData": "Open Save Data",
   "BetterOption.SaveData.InGame": "Cannot open save data while in gameplay!",
   "BetterOption.ToVanilla": "Switch To Vanilla",
   "BetterOption.ToVanilla.InGame": "Unable to switch to vanilla while in game!",
-
   "BetterOption.Moderation": "Moderation Center",
   "ModerationCenter.Back": "< Back",
   "ModerationCenter.Refresh": "Refresh",
@@ -131,7 +112,6 @@
   "ModerationCenter.HistoryTitle": "Kicks and bans this session",
   "ModerationCenter.HistoryEmpty": "No kicks or bans yet.",
   "ModerationCenter.HistoryEntry": "<color=#aaaaaa>{0}</color> {1} <color=#ffff00>{2}</color> {3}",
-
   "Gestures.Title": "Controls & Gestures",
   "Gestures.Subtitle": "Keyboard and mouse — not on touch or controller.",
   "Gestures.Section.Spectate": "Spectating",
@@ -147,7 +127,6 @@
   "Gestures.NumberStep": "Shift ×5 · Ctrl ×10 on numbers — ×25 combined in mod menus",
   "Gestures.FavoriteColor": "Hold or Shift+click a color chip — favorite color",
   "Gestures.SkipIntro": "Click during the logo — skip the intro",
-
   "BetterSetting": "Tweaks",
   "BetterSetting.Description": "Edit HoryTweaks settings for your lobby and gameplay.",
   "BetterSetting.SetTo": "Set To:",
@@ -168,7 +147,6 @@
   "BetterSetting.MainHeader.HostTools": "Host Tools",
   "BetterSetting.MainHeader.Gameplay": "Gameplay Settings",
   "BetterSetting.TextHeader.HostOnly": "Host Only",
-
   "BetterSetting.Setting.KickCooldown": "Host moderation cooldown",
   "BetterSetting.Setting.InvalidFriendCode": "Kick players with invalid friend codes",
   "BetterSetting.Setting.CancelInvalidSabotage": "Cancel invalid sabotage attempts",
@@ -196,12 +174,10 @@
   "BetterSetting.Setting.RemovePetOnDeath": "Remove pet on death",
   "BetterSetting.Setting.HideAndSeekImpNum": "# Seekers",
   "BetterSetting.TempSetting.HideAndSeekImpNum": "Seeker",
-
   "Chat.Copy.Description": "Copy recent chat messages to the clipboard",
   "Chat.Copy.Done": "Copied <color=#e0b700>{0}</color> chat messages to the clipboard.",
   "Chat.Copy.Empty": "No chat messages to copy.",
   "Chat.ExtendedHistory": "Extended Chat History",
-
   "HostTools.Ban": "Banned",
   "HostTools.Kick": "Kicked",
   "HostTools.KickMessage": "{0}! Reason: <color=#fc0000>{1}</color>",
@@ -211,7 +187,6 @@
   "HostTools.InvalidFriendCode": "Invalid friend code",
   "HostTools.LevelTooLow": " is level {0}, level must be equal or above {1} to join",
   "HostTools.InitializeTimeout": "Failed to initialize before the timeout expired",
-
   "VoteBan.VoteCast": "{0} voted to kick {1}",
   "HostTransfer.AfkSuccess": "Host transferred to {0} due to AFK",
   "HostTransfer.Command.Description": "Transfer the host role to a player",
@@ -231,7 +206,6 @@
   "HostTransfer.Setting.OnAfk": "Transfer Host On AFK",
   "HostTransfer.Setting.OnAfk.Description": "Automatically transfers host to the player who has been in the lobby longest when you are AFK",
   "HostTransfer.Success": "Transferred host to {0}",
-
   "GameSummary": "Game Summary",
   "Game.Summary.Hiders": "Hiders",
   "Game.Summary.Seekers": "Seekers",
@@ -245,7 +219,6 @@
   "Game.Summary.Result.CrematesDisconnected": "Cremates Disconnected",
   "Game.Summary.Result.TimeOut": "Time Out",
   "Game.Summary.Result.NoSurvivors": "No Survivors",
-
   "Command.Help.Description": "Get help with commands",
   "Command.Help.Body": "<color=#ffffbe>{0}</color> improves your vanilla Among Us experience with useful client-side features.\nOpen the pause menu to access more options and game settings.\nUse <color=#e0b700>/commands</color> to see every available command.\n\nFeatures:\n- Host-side gameplay validation and manual moderation.\n- Additional options for hosts.\n- Enhanced settings to customize your game.\n- Commands to manage and improve your experience.\n- Client-side improvements and quality-of-life features.",
   "Command.Commands.Description": "List all available commands",

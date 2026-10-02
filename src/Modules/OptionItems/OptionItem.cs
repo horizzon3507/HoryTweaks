@@ -397,7 +397,24 @@ public abstract class OptionItem
         SetupAUOption(optionBehaviourNum);
         var button = UnityEngine.Object.Instantiate(optionBehaviourNum.PlusBtn, Option.transform);
         optionBehaviourNum.DestroyObj();
-        button.transform.position = button.transform.position - new Vector3(4.75f, 0f, 0f);
+        var position = button.transform.position;
+        float x = position.x - 4.75f;
+        var titleRect = Option switch
+        {
+            NumberOption numberOption => numberOption.TitleText != null ? numberOption.TitleText.rectTransform : null,
+            ToggleOption toggleOption => toggleOption.TitleText != null ? toggleOption.TitleText.rectTransform : null,
+            _ => null,
+        };
+        if (titleRect != null)
+        {
+            // Anchor to the title's right edge: titles are right-aligned inside
+            // that rect, so this spot never lands on top of the text regardless
+            // of translation length or child-option indentation.
+            var corners = new Vector3[4];
+            titleRect.GetWorldCorners(corners);
+            x = Mathf.Max(corners[2].x, corners[3].x) + 0.3f;
+        }
+        button.transform.position = new Vector3(x, position.y, position.z);
         button.transform.GetComponentInChildren<TextMeshPro>(true).gameObject.DestroyObj();
         button.ReceiveMouseOut();
         button.interactableHoveredColor = Color.gray;

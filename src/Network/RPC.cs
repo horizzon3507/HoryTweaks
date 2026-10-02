@@ -1,4 +1,5 @@
 ﻿using BetterAmongUs.Enums;
+using BetterAmongUs.Modules.HostTransfer;
 using BetterAmongUs.MonoScripts.Extended;
 using BetterAmongUs.Utilities;
 using Hazel;
@@ -60,6 +61,11 @@ internal static class RPC
                 case CustomRPC.CheckSecretHashFromPlayer:
                     {
                         player.ExtendedData().HandshakeHandler.HandleSecretHashFromPlayer(reader);
+                    }
+                    break;
+                case CustomRPC.TransferHost:
+                    {
+                        HostTransfer.OnTransferReceived(player, reader);
                     }
                     break;
             }

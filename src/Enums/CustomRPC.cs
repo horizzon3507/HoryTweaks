@@ -14,4 +14,9 @@ internal enum CustomRPC : int
     /// RPC for checking the hash of a shared secret received from another player.
     /// </summary>
     CheckSecretHashFromPlayer = 152,
+
+    /// <summary>
+    /// RPC for broadcasting a voluntary host transfer initiated by the current host.
+    /// </summary>
+    TransferHost = 153,
 }

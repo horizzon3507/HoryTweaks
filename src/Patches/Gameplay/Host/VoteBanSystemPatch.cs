@@ -1,4 +1,5 @@
-﻿using BetterAmongUs.Modules;
+﻿using BetterAmongUs.Generated;
+using BetterAmongUs.Modules;
 using BetterAmongUs.Structs;
 using BetterAmongUs.Utilities;
 using HarmonyLib;
@@ -99,9 +100,10 @@ internal static class VoteBanSystemPatch
         }
 
         BAUPlugin.Logger.InGame(
-            $"{src.Character?.GetPlayerNameAndColor() ?? src.PlayerName} " +
-            $"voted to kick {client.Character?.GetPlayerNameAndColor() ?? client.PlayerName} " +
-            $"<#6F6F6F>(</color><#FFFFFF>{currentVotes}</color><#6F6F6F>/</color><#FFFFFF>{maxVotes}</color><#6F6F6F>)</color>"
+            TranslationStrings.VoteBan_VoteCast.Format(
+                src.Character?.GetPlayerNameAndColor() ?? src.PlayerName,
+                client.Character?.GetPlayerNameAndColor() ?? client.PlayerName) +
+            $" <#6F6F6F>(</color><#FFFFFF>{currentVotes}</color><#6F6F6F>/</color><#FFFFFF>{maxVotes}</color><#6F6F6F>)</color>"
         );
     }
 }

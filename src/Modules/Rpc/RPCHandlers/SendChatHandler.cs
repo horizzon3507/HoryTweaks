@@ -1,5 +1,6 @@
 using BetterAmongUs.Attributes;
 using BetterAmongUs.Data;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Utilities;
 using BetterAmongUs.Patches.Gameplay.UI.Settings;
 using Hazel;
@@ -20,7 +21,7 @@ internal sealed class SendChatHandler : RPCHandler
             if (TextFileHandler.CompareStringRegexMatches(BetterDataManager.Files.banChatListFilePath, text))
             {
                 var ban = BetterGameSettings.UseBanChatListBan.GetBool();
-                sender.Kick(ban, $"has been {(ban ? "banned" : "kicked")} due to\nchat message matching a banned pattern!");
+                sender.Kick(ban, TranslationStrings.HostTools_BanChatListMessage.LocalizedString);
             }
         }
     }

@@ -79,7 +79,7 @@ internal static class OptionsMenuBehaviourPatch
                 bool cannotOpen = GameState.IsInGame && !GameState.IsLobby;
                 if (cannotOpen)
                 {
-                    BetterNotificationManager.Notify($"Cannot open save data while in gameplay!", 2.5f);
+                    BetterNotificationManager.Notify(TranslationStrings.BetterOption_SaveData_InGame.LocalizedString, 2.5f);
                 }
                 return !cannotOpen;
             });
@@ -91,7 +91,7 @@ internal static class OptionsMenuBehaviourPatch
             bool cannotSwitch = GameState.IsInGame;
             if (cannotSwitch)
             {
-                BetterNotificationManager.Notify($"Unable to switch to vanilla while in game!", 2.5f);
+                BetterNotificationManager.Notify(TranslationStrings.BetterOption_ToVanilla_InGame.LocalizedString, 2.5f);
             }
             return !cannotSwitch;
         });

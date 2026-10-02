@@ -2,6 +2,7 @@
 using BetterAmongUs.Data;
 using BetterAmongUs.Data.Config;
 using BetterAmongUs.Data.Json;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Interfaces;
 using BetterAmongUs.Modules.Support;
 using BetterAmongUs.MonoScripts.Extended;
@@ -66,7 +67,7 @@ internal static class PlayerTabPatch
         for (int i = 0; i <= 5; i++)
         {
             int currentI = i;
-            var name = currentI == 0 ? "Among Us Preset" : $"Preset {i}";
+            var name = currentI == 0 ? TranslationStrings.Setting_Preset_Vanilla.LocalizedString : TranslationStrings.Setting_Preset.Format(i.ToString());
             var data = OutfitData.GetOutfitDataAt(currentI);
             var button = playerTab.CreateOutfitPresetButton(name, new Vector3(2.5f, 1.55f - currentI * 0.45f, 0f), out var playerPreview, () =>
             {

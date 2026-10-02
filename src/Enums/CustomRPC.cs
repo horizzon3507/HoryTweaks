@@ -19,4 +19,10 @@ internal enum CustomRPC : int
     /// RPC for broadcasting a voluntary host transfer initiated by the current host.
     /// </summary>
     TransferHost = 153,
+
+    /// <summary>
+    /// RPC for advertising that the sender is running HoryTweaks. Carries a flag hash;
+    /// upstream BetterAmongUs and other BAU-family mods never send it and ignore it.
+    /// </summary>
+    AdvertiseHoryUser = 154,
 }

@@ -277,10 +277,14 @@ internal static class ChatPatch
             if (betterData == null)
                 return;
 
-            // Show BAU user tag
+            // Show modded user tag
             if (sourcePlayer.IsLocalPlayer() || betterData.IsBetterUser)
             {
-                ssbTag.AppendFormat("<color=#ffffbe>{1}{0}</color>", TranslationStrings.Player_BetterUser.LocalizedString, betterData.IsVerifiedBetterUser || sourcePlayer.IsLocalPlayer() ? "✓ " : "");
+                bool isHoryUser = sourcePlayer.IsLocalPlayer() || betterData.IsHoryUser;
+                ssbTag.AppendFormat("<color={2}>{1}{0}</color>",
+                    isHoryUser ? TranslationStrings.Player_HoryUser.LocalizedString : TranslationStrings.Player_BetterUser.LocalizedString,
+                    betterData.IsVerifiedBetterUser || sourcePlayer.IsLocalPlayer() ? "✓ " : "",
+                    isHoryUser ? "#ffffbe" : "#a8d8ff");
             }
         }
 

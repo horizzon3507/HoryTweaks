@@ -63,6 +63,11 @@ internal static class RPC
                         player.ExtendedData().HandshakeHandler.HandleSecretHashFromPlayer(reader);
                     }
                     break;
+                case CustomRPC.AdvertiseHoryUser:
+                    {
+                        player.ExtendedData().HandshakeHandler.HandleHoryAdvertise(reader);
+                    }
+                    break;
                 case CustomRPC.TransferHost:
                     {
                         HostTransfer.OnTransferReceived(player, reader);
@@ -106,6 +111,11 @@ internal static class RPC
                 case (byte)CustomRPC.CheckSecretHashFromPlayer:
                     {
                         player.ExtendedData().HandshakeHandler.HandleSecretHashFromPlayer(reader);
+                    }
+                    break;
+                case (byte)CustomRPC.AdvertiseHoryUser:
+                    {
+                        player.ExtendedData().HandshakeHandler.HandleHoryAdvertise(reader);
                     }
                     break;
             }

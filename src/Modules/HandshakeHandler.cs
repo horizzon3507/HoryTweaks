@@ -2,6 +2,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 using BetterAmongUs.Data;
 using BetterAmongUs.Data.Config;
 using BetterAmongUs.Enums;
+using BetterAmongUs.Modules.Support;
 using BetterAmongUs.MonoScripts.Extended;
 using BetterAmongUs.Network;
 using BetterAmongUs.Utilities;
@@ -86,6 +87,26 @@ internal sealed class HandshakeHandler
             writer.WriteBytes(SharedSecret.GetPublicKey());
             writer.Write(SharedSecret.GetTempKey());
         }, _extendedData.BaseMono.ClientId);
+
+        RPC.SendCustomRpcPacked(CustomRPC.AdvertiseHoryUser, writer =>
+        {
+            writer.Write(ModdedUserClassification.HoryTweaksFlagHash);
+        }, _extendedData.BaseMono.ClientId);
+    }
+
+    /// <summary>
+    /// Handles a HoryTweaks advertise from another player.
+    /// </summary>
+    /// <param name="reader">MessageReader containing the advertised flag hash.</param>
+    internal void HandleHoryAdvertise(MessageReader reader)
+    {
+        if (_extendedData.BaseMono?.Object?.IsLocalPlayer() == true)
+            return;
+
+        if (ModdedUserClassification.IsHoryTweaksFlagHash(reader.ReadInt32()))
+        {
+            _extendedData.IsHoryUser = true;
+        }
     }
 
     /// <summary>

@@ -23,6 +23,7 @@
     <Compile Include="..\..\src\Modules\Moderation\ModerationHistory.cs" Link="Linked\ModerationHistory.cs" />
     <Compile Include="..\..\src\Modules\Moderation\ModerationLists.cs" Link="Linked\ModerationLists.cs" />
     <Compile Include="..\..\src\Modules\RejoinPolicy.cs" Link="Linked\RejoinPolicy.cs" />
+    <Compile Include="..\..\src\Modules\Support\ModdedUserClassification.cs" Link="Linked\ModdedUserClassification.cs" />
     <Compile Include="..\..\src\Utilities\ChatFormat.cs" Link="Linked\ChatFormat.cs" />
     <Compile Include="..\..\src\Utilities\SettingsSearchFilter.cs" Link="Linked\SettingsSearchFilter.cs" />
   </ItemGroup>

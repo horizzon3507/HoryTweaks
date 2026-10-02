@@ -288,21 +288,5 @@ public static class BAUModdedSupportFlags
     /// <returns>
     /// A integer hash value. Returns 0 for null or empty strings.
     /// </returns>
-    internal static int GetFlagHash(string input)
-    {
-        if (string.IsNullOrEmpty(input)) return 0;
-
-        int hash = 17;
-        hash = hash * 31 + input.Length;
-
-        for (int i = 0; i < input.Length; i++)
-        {
-            char c = input[i];
-            hash = hash * 31 + c;
-            hash = hash * 31 + i;
-        }
-
-        hash = hash * 31 + input.Length;
-        return hash;
-    }
+    internal static int GetFlagHash(string input) => ModdedUserClassification.GetFlagHash(input);
 }

@@ -114,4 +114,14 @@ internal static class HostTransferPolicy
     /// </summary>
     internal static bool ShouldTransferOnAfk(double idleSeconds, int afkMinutes) =>
         afkMinutes > 0 && idleSeconds >= afkMinutes * 60.0;
+
+    /// <summary>
+    /// Whether a received host-transfer announcement may be applied. Accepted when the sender is
+    /// the client currently believed to be host, or when the local HostId already moved to the
+    /// announced target — on locally hosted games the genuine migration broadcast can land before
+    /// the CustomRPC, and re-applying the same transfer is idempotent. A non-host announcing a
+    /// different target is rejected.
+    /// </summary>
+    internal static bool AcceptsRemoteTransfer(int senderClientId, int targetClientId, int currentHostId) =>
+        targetClientId >= 0 && (senderClientId == currentHostId || targetClientId == currentHostId);
 }

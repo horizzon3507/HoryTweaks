@@ -151,11 +151,12 @@ internal static class ChatCommandsPatch
             // Find closest matching command
             closestCommand = GetClosestCommand(typedParts[0]);
             bool isSuggestionValid = closestCommand != null
-                && (typedParts[0].Equals(closestCommand.Name, StringComparison.OrdinalIgnoreCase) || typedParts.Length == 1);
+                && (typedParts.Length == 1
+                    || closestCommand.Names.Any(name => typedParts[0].Equals(name, StringComparison.OrdinalIgnoreCase)));
 
             if (isSuggestionValid)
             {
-                HandleValidSuggestion(__instance, typedParts);
+                HandleValidSuggestion(__instance, text, typedParts);
             }
             else
             {
@@ -175,7 +176,7 @@ internal static class ChatCommandsPatch
         commandInfo.text = string.Empty;
     }
 
-    private static void HandleValidSuggestion(ChatController __instance, string[] typedParts)
+    private static void HandleValidSuggestion(ChatController __instance, string text, string[] typedParts)
     {
         if (closestCommand == null)
             return;
@@ -185,6 +186,10 @@ internal static class ChatCommandsPatch
         // Generate suggestion text
         string suggestion = GenerateSuggestion(typedParts);
         string fullSuggestion = CommandPrefix + suggestion;
+
+        // The ghost text can only overlay the input when it extends it glyph-for-glyph; an alias
+        // such as "th" expanding to "transferhost" would draw mismatched characters on top.
+        bool overlaysTypedText = fullSuggestion.StartsWith(text, StringComparison.OrdinalIgnoreCase);
 
         // Tab completion
         if (Input.GetKeyDown(KeyCode.Tab) && typedParts.Length >= 1)
@@ -199,7 +204,7 @@ internal static class ChatCommandsPatch
         }
 
         // Update UI elements
-        commandText.text = fullSuggestion;
+        commandText.text = overlaysTypedText ? fullSuggestion : string.Empty;
         commandInfo.text = $"{closestCommand.Description}{GenerateArgumentInfo()}{GenerateCanRunInfo()}";
     }
 

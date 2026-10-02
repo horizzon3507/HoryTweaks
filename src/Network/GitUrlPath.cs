@@ -1,7 +1,7 @@
 ﻿namespace BetterAmongUs.Network;
 
 /// <summary>
-/// Represents a Git URL path for accessing BetterAmongUs resources.
+/// Represents a Git URL path for accessing HoryTweaks resources.
 /// </summary>
 /// <param name="folder">The folder path within the repository.</param>
 internal struct GitUrlPath(string folder)

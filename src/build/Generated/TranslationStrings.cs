@@ -124,6 +124,11 @@ public static class TranslationStrings
     public static readonly TranslationString Setting_Presets = new("Setting.Presets");
 
     /// <summary>
+    /// Base Translation: Search settings...
+    /// </summary>
+    public static readonly TranslationString SettingsSearch_Placeholder = new("SettingsSearch.Placeholder");
+
+    /// <summary>
     /// Base Translation: Loading
     /// </summary>
     public static readonly TranslationString Player_Loading = new("Player.Loading");
@@ -1232,4 +1237,14 @@ public static class TranslationStrings
     /// Base Translation: Download failed!
     /// </summary>
     public static readonly TranslationString Update_Progress_Failed = new("Update.Progress.Failed");
+
+    /// <summary>
+    /// Base Translation: The {0} update package was downloaded to:\n{1}\nClose the game and extract it over the game folder to finish updating.
+    /// </summary>
+    public static readonly TranslationString Update_SavedToFolder = new("Update.SavedToFolder");
+
+    /// <summary>
+    /// Base Translation: {0} update downloaded!\nIt installs itself once the game closes. Restart the game to finish updating.
+    /// </summary>
+    public static readonly TranslationString Update_Staged_Restart = new("Update.Staged.Restart");
 }

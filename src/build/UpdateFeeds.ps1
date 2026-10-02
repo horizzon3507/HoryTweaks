@@ -23,6 +23,16 @@
     browser_download_url of the release's HoryTweaks.dll asset. Defaults to the
     canonical https://github.com/<RepoSlug>/releases/download/<tag>/HoryTweaks.dll
     that tests/HoryTweaks.Tests/UpdateManifestTests.cs asserts.
+.PARAMETER SteamEpicMsStorePackageUrl
+    browser_download_url of the release's full Steam/Epic/Microsoft Store
+    package (HoryTweaks-Steam-Epic-MsStore-<tag>.zip). Defaults to the canonical
+    asset URL; consumed by the in-game updater's store-package path.
+.PARAMETER ItchioPackageUrl
+    browser_download_url of the release's itch.io package
+    (HoryTweaks-Itchio-<tag>.zip). Defaults to the canonical asset URL.
+.PARAMETER Sha256SumsUrl
+    browser_download_url of the release's SHA256SUMS.txt checksum manifest.
+    Defaults to the canonical asset URL.
 .PARAMETER RepoSlug
     owner/name used for the canonical download URL.
 .PARAMETER RepoRoot
@@ -36,6 +46,12 @@ param(
     [string]$Tag,
 
     [string]$DllUrl,
+
+    [string]$SteamEpicMsStorePackageUrl,
+
+    [string]$ItchioPackageUrl,
+
+    [string]$Sha256SumsUrl,
 
     [string]$RepoSlug = 'horizzon3507/HoryTweaks',
 
@@ -85,8 +101,18 @@ if ($releaseType -eq 0 -and $hasOtherSuffix) {
     $releaseType = 2
 }
 
+$releaseBaseUrl = "https://github.com/$RepoSlug/releases/download/$tagName"
 if (-not $DllUrl) {
-    $DllUrl = "https://github.com/$RepoSlug/releases/download/$tagName/HoryTweaks.dll"
+    $DllUrl = "$releaseBaseUrl/HoryTweaks.dll"
+}
+if (-not $SteamEpicMsStorePackageUrl) {
+    $SteamEpicMsStorePackageUrl = "$releaseBaseUrl/HoryTweaks-Steam-Epic-MsStore-$tagName.zip"
+}
+if (-not $ItchioPackageUrl) {
+    $ItchioPackageUrl = "$releaseBaseUrl/HoryTweaks-Itchio-$tagName.zip"
+}
+if (-not $Sha256SumsUrl) {
+    $Sha256SumsUrl = "$releaseBaseUrl/SHA256SUMS.txt"
 }
 
 $apiDir = Join-Path $RepoRoot 'api'
@@ -138,8 +164,13 @@ Write-Feed 'update.json' ([ordered]@{
     hotfixNumber  = $hotfixNumber
 })
 Write-Feed 'update-V2.json' ([ordered]@{
-    valid   = $true
-    dllLink = $DllUrl
-    version = $version
+    valid      = $true
+    dllLink    = $DllUrl
+    version    = $version
+    packages   = [ordered]@{
+        steamEpicMsStore = $SteamEpicMsStorePackageUrl
+        itchio           = $ItchioPackageUrl
+    }
+    sha256Link = $Sha256SumsUrl
 })
 Write-Feed 'manifest.json' ([ordered]@{ News = $news })

@@ -241,5 +241,7 @@
   "Update.Progress.Downloading": "Загрузка{0}",
   "Update.Progress.Verifying": "Проверка обновления...",
   "Update.Progress.Installing": "Установка обновления...",
-  "Update.Progress.Failed": "Загрузка не удалась!"
+  "Update.Progress.Failed": "Загрузка не удалась!",
+  "Update.SavedToFolder": "The {0} update package was downloaded to:\n{1}\nClose the game and extract it over the game folder to finish updating.",
+  "Update.Staged.Restart": "{0} update downloaded!\nIt installs itself once the game closes. Restart the game to finish updating."
 }

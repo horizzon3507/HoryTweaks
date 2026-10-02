@@ -56,7 +56,7 @@ internal sealed class GithubAPI : MonoBehaviour
 
         hasTryConnect = true;
 
-        var obj = new GameObject("GithubAPI(BAU)") { hideFlags = HideFlags.HideAndDontSave };
+        var obj = new GameObject("GithubAPI(HoryTweaks)") { hideFlags = HideFlags.HideAndDontSave };
         DontDestroyOnLoad(obj);
         Instance = obj.AddComponent<GithubAPI>();
     }

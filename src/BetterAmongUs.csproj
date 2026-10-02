@@ -9,7 +9,7 @@
 		<RootNamespace>BetterAmongUs</RootNamespace>
 		<LangVersion>preview</LangVersion>
 		<Configurations>Debug;Release;Beta</Configurations>
-		<Version>0.1.2</Version>
+		<Version>0.1.3</Version>
 		<GitVersion>false</GitVersion>
 	</PropertyGroup>
 

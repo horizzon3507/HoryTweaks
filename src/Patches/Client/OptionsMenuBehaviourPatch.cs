@@ -61,6 +61,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_MinimapIcons, BAUConfigs.MinimapIcons, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterMinimapColors, BAUConfigs.BetterMinimapColors, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_VentColorGroups, BAUConfigs.VentColorGroups, 2, __instance, MiniMapBehaviourPatch.ForceCloseMiniMap);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ScrollZoom, BAUConfigs.ScrollZoom, 2, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyTheme, BAUConfigs.DisableLobbyTheme, 2, __instance, ToggleLobbyTheme);
 
         // Page 3: performance, connection and files

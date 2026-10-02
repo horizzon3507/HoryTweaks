@@ -62,6 +62,7 @@
   "BetterOption.BetterColorblindText": "향상된 색맹 보조 텍스트",
   "BetterOption.ColorblindTextOnTop": "색맹 보조 텍스트를 위에 표시",
   "BetterOption.CompressSettingFiles": "설정 파일 압축",
+  "BetterOption.ScrollZoom": "스크롤 줌",
   "BetterOption.SaveData": "저장 데이터 열기",
   "BetterOption.ToVanilla": "바닐라로 전환",
   "BetterOption.Moderation": "관리 센터",

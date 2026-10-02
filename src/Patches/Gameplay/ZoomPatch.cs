@@ -1,4 +1,5 @@
-﻿using BetterAmongUs.Modules;
+﻿using BetterAmongUs.Data.Config;
+using BetterAmongUs.Modules;
 using BetterAmongUs.Utilities;
 using HarmonyLib;
 using UnityEngine;
@@ -19,7 +20,8 @@ internal class ZoomPatch
         // - Player can move AND
         // - Not Guardian Angel AND
         // - Either not in gameplay OR player is dead
-        bool canZoom = GameState.IsCanMove &&
+        bool canZoom = BAUConfigs.ScrollZoom.Value &&
+              GameState.IsCanMove &&
               !PlayerControl.LocalPlayer.IsGhostRole() &&
               (!GameState.IsInGamePlay || !PlayerControl.LocalPlayer.IsAlive());
 

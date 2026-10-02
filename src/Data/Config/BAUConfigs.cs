@@ -89,6 +89,11 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<bool> CompressSettingFiles { get; } = new("Better Options", "CompressSettingFiles", false);
 
     /// <summary>
+    /// Gets the configuration entry for scroll wheel zoom setting.
+    /// </summary>
+    internal static BAUConfigEntry<bool> ScrollZoom { get; } = new("Better Options", "ScrollZoom", true);
+
+    /// <summary>
     /// Gets the configuration entry for command prefix setting.
     /// </summary>
     internal static BAUConfigEntry<string> CommandPrefix { get; } = new("Mod", "CommandPrefix", "/");
@@ -122,7 +127,9 @@ internal static class BAUConfigs
             SendBetterRpc, BetterNotifications,
             ForceOwnLanguage, ChatDarkMode, HideConsole, LobbyPlayerInfo,
             LessInfo, DisableLobbyTheme, UnlockFPS, ShowFPS,
-            MinimapIcons, VentColorGroups, ColorblindTextOnTop, CommandPrefix,
+            MinimapIcons, BetterMinimapColors, VentColorGroups,
+            BetterColorblindText, ColorblindTextOnTop, CompressSettingFiles,
+            ScrollZoom, CommandPrefix,
             FavoriteColor, SettingsPreset, AutoRejoin, ChatExtendedHistory
         ]);
 

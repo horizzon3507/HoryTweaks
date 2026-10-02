@@ -18,6 +18,7 @@
   "HostInMeeting": "Anfitrión: {0}",
   "Setting.Preset": "Preajuste {0}",
   "Setting.Presets": "Preajustes",
+  "SettingsSearch.Placeholder": "Search settings...",
   "Player.Loading": "Cargando",
   "Player.NoFriendCode": "Sin código de amigo",
   "Player.PlatformHidden": "Plataforma oculta",

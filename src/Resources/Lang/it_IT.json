@@ -24,6 +24,13 @@
   "Player.PlatformHidden": "Piattaforma nascosta",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
+  "PlayerMark.Button": "Segna",
+  "PlayerMark.Title": "Segna {0}",
+  "PlayerMark.Roles": "Ruoli",
+  "PlayerMark.Status": "Stato",
+  "PlayerMark.Status.Suspect": "Sospetto",
+  "PlayerMark.Status.Cleared": "Scagionato",
+  "PlayerMark.Status.Investigate": "Indagare",
   "Player.Level": "Lv",
 
   "LoadingBar.Complete": "Completato",

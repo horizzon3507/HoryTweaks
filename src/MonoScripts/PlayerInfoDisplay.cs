@@ -182,10 +182,12 @@ internal class PlayerInfoDisplay : MonoBehaviour
                 .Append($"<color=#ffd829>{TranslationStrings.Player_Level.LocalizedString}: {_player.Data.PlayerLevel + 1}</color>");
 
             _ssbTagBottom.Append($"<color={friendCodeColor}>{friendCode}</color>");
+            _ssbTagBottom.Append(PlayerMarks.FormatMarks(_player.PlayerId));
         }
         else if ((GameState.IsInGame || GameState.IsFreePlay) && !GameState.IsHideNSeek)
         {
             SetInGameInfo(_ssbTagTop);
+            _ssbTagBottom.Append(PlayerMarks.FormatMarks(_player.PlayerId));
         }
 
         if (!BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_NameOverride))

@@ -24,6 +24,13 @@
   "Player.PlatformHidden": "プラットフォーム非公開",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
+  "PlayerMark.Button": "マーク",
+  "PlayerMark.Title": "{0} をマーク",
+  "PlayerMark.Roles": "役職",
+  "PlayerMark.Status": "ステータス",
+  "PlayerMark.Status.Suspect": "黒",
+  "PlayerMark.Status.Cleared": "白",
+  "PlayerMark.Status.Investigate": "要観察",
   "Player.Level": "Lv",
 
   "LoadingBar.Complete": "完了",

@@ -24,6 +24,13 @@
   "Player.PlatformHidden": "Ardán Folaithe",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
+  "PlayerMark.Button": "Marcáil",
+  "PlayerMark.Title": "Marcáil {0}",
+  "PlayerMark.Roles": "Róil",
+  "PlayerMark.Status": "Stádas",
+  "PlayerMark.Status.Suspect": "Amhrasach",
+  "PlayerMark.Status.Cleared": "Glan",
+  "PlayerMark.Status.Investigate": "Imscrúdú",
   "Player.Level": "Lch",
 
   "LoadingBar.Complete": "Críochnaithe",

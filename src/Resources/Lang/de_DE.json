@@ -24,6 +24,13 @@
   "Player.PlatformHidden": "Plattform verborgen",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
+  "PlayerMark.Button": "Markieren",
+  "PlayerMark.Title": "{0} markieren",
+  "PlayerMark.Roles": "Rollen",
+  "PlayerMark.Status": "Status",
+  "PlayerMark.Status.Suspect": "Verdächtig",
+  "PlayerMark.Status.Cleared": "Entlastet",
+  "PlayerMark.Status.Investigate": "Untersuchen",
   "Player.Level": "Lvl",
 
   "LoadingBar.Complete": "Fertig",

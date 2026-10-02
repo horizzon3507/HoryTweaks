@@ -81,32 +81,15 @@ internal sealed class HandshakeHandler
 
         HasSendSharedSecret = true;
 
+        int tempKey = SharedSecret.GetTempKey();
+
         RPC.SendCustomRpcPacked(CustomRPC.SendSecretToPlayer, writer =>
         {
             writer.Write(SharedSecret.CryptoAvailable);
             writer.WriteBytes(SharedSecret.GetPublicKey());
-            writer.Write(SharedSecret.GetTempKey());
+            writer.Write(tempKey);
+            writer.Write(ModdedUserClassification.GetHoryTweaksHandshakeMark(tempKey));
         }, _extendedData.BaseMono.ClientId);
-
-        RPC.SendCustomRpcPacked(CustomRPC.AdvertiseHoryUser, writer =>
-        {
-            writer.Write(ModdedUserClassification.HoryTweaksFlagHash);
-        }, _extendedData.BaseMono.ClientId);
-    }
-
-    /// <summary>
-    /// Handles a HoryTweaks advertise from another player.
-    /// </summary>
-    /// <param name="reader">MessageReader containing the advertised flag hash.</param>
-    internal void HandleHoryAdvertise(MessageReader reader)
-    {
-        if (_extendedData.BaseMono?.Object?.IsLocalPlayer() == true)
-            return;
-
-        if (ModdedUserClassification.IsHoryTweaksFlagHash(reader.ReadInt32()))
-        {
-            _extendedData.IsHoryUser = true;
-        }
     }
 
     /// <summary>
@@ -123,6 +106,11 @@ internal sealed class HandshakeHandler
         byte[] sendersPublicKey = reader.ReadBytes();
         int tempKey = reader.ReadInt32();
 
+        // HoryTweaks peers append a tempKey-derived mark to the handshake payload; upstream
+        // BetterAmongUs writes nothing there, so anything else fails closed to Better-User.
+        bool advertisedHory = reader.BytesRemaining >= sizeof(int) &&
+            ModdedUserClassification.IsHoryTweaksHandshakeMark(tempKey, reader.ReadInt32());
+
         // Logger.Log($"Received public key ({sendersPublicKey.Length} bytes) from {_Data.PlayerName}");
 
         SharedSecret.UseFallback = !senderSupportsCrypto;
@@ -136,6 +124,7 @@ internal sealed class HandshakeHandler
         }
 
         _extendedData.IsBetterUser = true;
+        _extendedData.IsHoryUser = advertisedHory;
 
         TryHandlePendingVerificationData();
         SendSecretHashToSender(tempKey, _extendedData.BaseMono.ClientId);

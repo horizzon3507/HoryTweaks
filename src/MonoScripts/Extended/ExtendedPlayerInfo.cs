@@ -134,7 +134,7 @@ internal sealed class ExtendedPlayerInfo : MonoBehaviour, IMonoExtension<Network
     internal bool IsVerifiedBetterUser { get; set; } = false;
 
     /// <summary>
-    /// Gets or sets whether this player advertised the HoryTweaks mod flag.
+    /// Gets or sets whether this player's handshake payload carried the HoryTweaks mark.
     /// </summary>
     internal bool IsHoryUser { get; set; } = false;
 

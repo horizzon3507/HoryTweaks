@@ -109,11 +109,6 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<bool> AutoRejoin { get; } = new("Better Options", "AutoRejoin", true);
 
     /// <summary>
-    /// Gets the configuration entry for chat timestamps setting.
-    /// </summary>
-    internal static BAUConfigEntry<bool> ChatTimestamps { get; } = new("Better Options", "ChatTimestamps", true);
-
-    /// <summary>
     /// Gets the configuration entry for extended chat history setting.
     /// </summary>
     internal static BAUConfigEntry<bool> ChatExtendedHistory { get; } = new("Better Options", "ChatExtendedHistory", true);
@@ -128,7 +123,7 @@ internal static class BAUConfigs
             ForceOwnLanguage, ChatDarkMode, HideConsole, LobbyPlayerInfo,
             LessInfo, DisableLobbyTheme, UnlockFPS, ShowFPS,
             MinimapIcons, VentColorGroups, ColorblindTextOnTop, CommandPrefix,
-            FavoriteColor, SettingsPreset, AutoRejoin, ChatTimestamps, ChatExtendedHistory
+            FavoriteColor, SettingsPreset, AutoRejoin, ChatExtendedHistory
         ]);
 
         OptionsMenuBehaviourPatch.UpdateFrameRate();

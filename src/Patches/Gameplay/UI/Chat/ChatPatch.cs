@@ -216,15 +216,6 @@ internal static class ChatPatch
         BAUPlugin.Logger.LogPrivate($"{sourcePlayer.Data.PlayerName} -> {chatText}", "ChatLog");
     }
 
-    // Prefix chat messages with the local receive time
-    [HarmonyPatch(typeof(ChatBubble), nameof(ChatBubble.SetText))]
-    [HarmonyPrefix]
-    private static void ChatBubble_SetText_Prefix(ref string chatText)
-    {
-        if (BAUConfigs.ChatTimestamps.Value)
-            chatText = ChatFormat.TimestampPrefix(DateTime.Now) + chatText;
-    }
-
     // Grow the chat bubble pool so more scrollback is retained
     [HarmonyPatch(typeof(ObjectPoolBehavior), nameof(ObjectPoolBehavior.InitPool))]
     [HarmonyPrefix]

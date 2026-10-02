@@ -152,7 +152,6 @@
   "Chat.Copy.Done": "Copied <color=#e0b700>{0}</color> chat messages to the clipboard.",
   "Chat.Copy.Empty": "No chat messages to copy.",
   "Chat.ExtendedHistory": "Extended Chat History",
-  "Chat.Timestamps": "Chat Timestamps",
   "HostTools.Ban": "Na-ban",
   "HostTools.Kick": "Na-kick",
   "HostTools.KickMessage": "{0}! Dahilan: <color=#fc0000>{1}</color>",

@@ -789,11 +789,6 @@ public static class TranslationStrings
     public static readonly TranslationString Chat_ExtendedHistory = new("Chat.ExtendedHistory");
 
     /// <summary>
-    /// Base Translation: Chat Timestamps
-    /// </summary>
-    public static readonly TranslationString Chat_Timestamps = new("Chat.Timestamps");
-
-    /// <summary>
     /// Base Translation: Banned
     /// </summary>
     public static readonly TranslationString HostTools_Ban = new("HostTools.Ban");

@@ -124,11 +124,6 @@ public static class TranslationStrings
     public static readonly TranslationString Setting_Presets = new("Setting.Presets");
 
     /// <summary>
-    /// Base Translation: Search settings...
-    /// </summary>
-    public static readonly TranslationString SettingsSearch_Placeholder = new("SettingsSearch.Placeholder");
-
-    /// <summary>
     /// Base Translation: Loading
     /// </summary>
     public static readonly TranslationString Player_Loading = new("Player.Loading");

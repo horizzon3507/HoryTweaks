@@ -24,6 +24,13 @@
   "Player.PlatformHidden": "平台已隐藏",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
+  "PlayerMark.Button": "标记",
+  "PlayerMark.Title": "标记 {0}",
+  "PlayerMark.Roles": "角色",
+  "PlayerMark.Status": "状态",
+  "PlayerMark.Status.Suspect": "可疑",
+  "PlayerMark.Status.Cleared": "清白",
+  "PlayerMark.Status.Investigate": "待调查",
   "Player.Level": "Lv",
 
   "LoadingBar.Complete": "完成",

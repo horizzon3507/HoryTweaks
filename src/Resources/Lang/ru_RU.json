@@ -24,6 +24,13 @@
   "Player.PlatformHidden": "Платформа скрыта",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
+  "PlayerMark.Button": "Метка",
+  "PlayerMark.Title": "Метка: {0}",
+  "PlayerMark.Roles": "Роли",
+  "PlayerMark.Status": "Статус",
+  "PlayerMark.Status.Suspect": "Подозреваемый",
+  "PlayerMark.Status.Cleared": "Невиновен",
+  "PlayerMark.Status.Investigate": "Проверить",
   "Player.Level": "Ур",
 
   "LoadingBar.Complete": "Завершено",

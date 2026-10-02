@@ -24,6 +24,13 @@
   "Player.PlatformHidden": "플랫폼 숨김",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
+  "PlayerMark.Button": "표시",
+  "PlayerMark.Title": "{0} 표시",
+  "PlayerMark.Roles": "역할",
+  "PlayerMark.Status": "상태",
+  "PlayerMark.Status.Suspect": "의심",
+  "PlayerMark.Status.Cleared": "무혐의",
+  "PlayerMark.Status.Investigate": "조사 대상",
   "Player.Level": "Lv",
 
   "LoadingBar.Complete": "완료",

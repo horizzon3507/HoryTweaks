@@ -9,12 +9,12 @@ internal enum ModdedUserKind
     None,
 
     /// <summary>
-    /// The player completed the BetterAmongUs handshake but did not advertise HoryTweaks
-    /// (an upstream BetterAmongUs user, or another BAU-family mod).
+    /// The player completed the BetterAmongUs handshake but its handshake payload did not
+    /// carry the HoryTweaks mark (an upstream BetterAmongUs user, or another BAU-family mod).
     /// </summary>
     BetterUser,
 
-    /// <summary>The player advertised the HoryTweaks mod flag.</summary>
+    /// <summary>The player's handshake payload carried the HoryTweaks mark.</summary>
     HoryUser,
 }
 
@@ -24,8 +24,8 @@ internal enum ModdedUserKind
 internal static class ModdedUserClassification
 {
     /// <summary>
-    /// Flag value a HoryTweaks client advertises in the <c>CustomRPC.AdvertiseHoryUser</c> RPC.
-    /// Third-party mods may send the same value to identify as HoryTweaks-compatible
+    /// Flag value a HoryTweaks client derives its handshake mark from.
+    /// Third-party mods may send the same mark to identify as HoryTweaks-compatible
     /// (see examples/moddedsupport).
     /// </summary>
     internal const string HoryTweaksFlag = "mod.horytweaks";
@@ -39,6 +39,24 @@ internal static class ModdedUserClassification
     /// Checks whether a flag hash received on the wire is the HoryTweaks mod flag.
     /// </summary>
     internal static bool IsHoryTweaksFlagHash(int flagHash) => flagHash == HoryTweaksFlagHash;
+
+    /// <summary>
+    /// Computes the mark a HoryTweaks client appends to its
+    /// <c>CustomRPC.SendSecretToPlayer</c> handshake payload. The mark is derived from the
+    /// temporary key of that handshake exchange, so it is a property of the handshake data
+    /// itself rather than a standalone value peers can copy between messages.
+    /// </summary>
+    /// <param name="tempKey">The temporary key sent in the same handshake payload.</param>
+    internal static int GetHoryTweaksHandshakeMark(int tempKey) => GetFlagHash($"{HoryTweaksFlag}:{tempKey}");
+
+    /// <summary>
+    /// Checks whether a mark appended to a peer's handshake payload identifies the peer as
+    /// HoryTweaks. Only a payload carrying the mark computed from its own temporary key
+    /// counts as a positive identification.
+    /// </summary>
+    /// <param name="tempKey">The temporary key read from the same handshake payload.</param>
+    /// <param name="mark">The trailing mark read from the same handshake payload.</param>
+    internal static bool IsHoryTweaksHandshakeMark(int tempKey, int mark) => mark == GetHoryTweaksHandshakeMark(tempKey);
 
     /// <summary>
     /// Classifies a player from the detected handshake flags. A HoryTweaks advertise wins

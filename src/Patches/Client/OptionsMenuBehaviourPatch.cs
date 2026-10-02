@@ -70,6 +70,9 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_HideConsole, BAUConfigs.HideConsole, 3, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.Rejoin_AutoRejoin, BAUConfigs.AutoRejoin, 3, __instance);
 
+        // Page 4: read-only list of hidden controls and gestures
+        GestureHelpPage.Create(__instance);
+
         // Button options (no toggle)
         if (!BAUPlugin.ModInfo.Starlight)
         {

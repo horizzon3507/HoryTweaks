@@ -53,7 +53,6 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterNotifications, BAUConfigs.BetterNotifications, 1, __instance, BetterNotificationManager.ClearNotifications);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ChatDarkMode, BAUConfigs.ChatDarkMode, 1, __instance, ChatPatch.SetChatTheme);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ForceOwnLanguage, BAUConfigs.ForceOwnLanguage, 1, __instance);
-        ClientOptionItem.CreateToggle(TranslationStrings.Chat_Timestamps, BAUConfigs.ChatTimestamps, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.Chat_ExtendedHistory, BAUConfigs.ChatExtendedHistory, 1, __instance);
 
         // Page 2: in-game readability and map

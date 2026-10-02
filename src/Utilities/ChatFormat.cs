@@ -1,19 +1,12 @@
-using System.Globalization;
 using System.Text;
 
 namespace BetterAmongUs.Utilities;
 
 /// <summary>
-/// Unity-independent helpers for formatting chat text (timestamps, plain-text export).
+/// Unity-independent helpers for formatting chat text (plain-text export).
 /// </summary>
 internal static class ChatFormat
 {
-    /// <summary>
-    /// Returns the receive-time prefix for a chat message, e.g. "[14:32] ".
-    /// </summary>
-    internal static string TimestampPrefix(DateTime time) =>
-        string.Concat("[", time.ToString("HH:mm", CultureInfo.InvariantCulture), "] ");
-
     /// <summary>
     /// Removes TextMeshPro rich-text tags, leaving plain text.
     /// </summary>

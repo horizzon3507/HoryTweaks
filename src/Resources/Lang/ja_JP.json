@@ -151,7 +151,6 @@
   "Chat.Copy.Done": "Copied <color=#e0b700>{0}</color> chat messages to the clipboard.",
   "Chat.Copy.Empty": "No chat messages to copy.",
   "Chat.ExtendedHistory": "Extended Chat History",
-  "Chat.Timestamps": "Chat Timestamps",
   "HostTools.Ban": "BAN",
   "HostTools.Kick": "キック",
   "HostTools.KickMessage": "{0}されました！理由：<color=#fc0000>{1}</color>",

@@ -6,22 +6,6 @@ namespace BetterAmongUs.Tests;
 public class ChatFormatTests
 {
     [Fact]
-    public void TimestampPrefixFormatsLocalTime()
-    {
-        var time = new DateTime(2026, 10, 1, 14, 32, 59);
-
-        Assert.Equal("[14:32] ", ChatFormat.TimestampPrefix(time));
-    }
-
-    [Fact]
-    public void TimestampPrefixPadsSingleDigitHourAndMinute()
-    {
-        var time = new DateTime(2026, 10, 1, 3, 7, 0);
-
-        Assert.Equal("[03:07] ", ChatFormat.TimestampPrefix(time));
-    }
-
-    [Fact]
     public void StripRichTextRemovesColorAndSizeTags()
     {
         string input = "<color=#ffffbe>Name</color> hello <size=75%>small</size>";

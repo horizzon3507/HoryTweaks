@@ -214,7 +214,7 @@ internal sealed class ClientOptionItem
     /// <summary>
     /// Retrieves an existing page GameObject or creates a new one with navigation buttons.
     /// </summary>
-    private static GameObject? GetOrCreatePage(int page, OptionsMenuBehaviour optionsMenuBehaviour, bool doNotCreate = false)
+    internal static GameObject? GetOrCreatePage(int page, OptionsMenuBehaviour optionsMenuBehaviour, bool doNotCreate = false)
     {
         if (page == -1)
         {

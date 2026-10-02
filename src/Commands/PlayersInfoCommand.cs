@@ -19,7 +19,7 @@ internal sealed class PlayersInfoCommand : BaseCommand
             if (player == null || player.Data == null) continue;
 
             var hexColor = Utils.Color32ToHex(Palette.PlayerColors[player.CurrentOutfit.ColorId]);
-            sb.Append($"<color={hexColor}><b>{player.Data.PlayerName}</color> Info:</b>\n");
+            sb.Append($"<color={hexColor}><b>{player.Data.PlayerName}</color> {TranslationStrings.Command_PlayerInfo_Info.LocalizedString}:</b>\n");
             sb.Append($"<color=#c1c1c1>{player.Data.PlayerId}</color> - ");
             sb.Append($"<color=#c1c1c1>{Utils.GetHashStr($"{player.Data.Puid}")}</color> - ");
             sb.Append($"<color=#c1c1c1>{Utils.GetPlatformName(player)}</color> - ");

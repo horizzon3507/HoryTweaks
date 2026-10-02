@@ -1,4 +1,5 @@
 ﻿using BepInEx.Unity.IL2CPP.Utils;
+using BetterAmongUs.Generated;
 using BetterAmongUs.Managers;
 using BetterAmongUs.Modules;
 using BetterAmongUs.Modules.Support;
@@ -130,7 +131,7 @@ internal static class ClientPatch
         }
 
         // Mark loading as complete and hide bar after delay
-        CustomLoadingBarManager.SetLoadingPercent(100f, "Complete");
+        CustomLoadingBarManager.SetLoadingPercent(100f, TranslationStrings.LoadingBar_Complete.LocalizedString);
         yield return new WaitForSeconds(0.25f);
         CustomLoadingBarManager.ToggleLoadingBar(false);
     }
@@ -150,25 +151,25 @@ internal static class ClientPatch
                 yield break;
             }
 
-            string loadingText = "Initializing Game";
+            string loadingText = TranslationStrings.LoadingBar_Initializing.LocalizedString;
             float progress = 0f;
 
             // Progress through different loading stages
             if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
             {
-                loadingText = "Starting Game Session";
+                loadingText = TranslationStrings.LoadingBar_StartingSession.LocalizedString;
                 progress = 0.1f;
             }
             else if (LobbyBehaviour.Instance)
             {
-                loadingText = "Loading";
+                loadingText = TranslationStrings.Player_Loading.LocalizedString;
                 progress = 0.2f;
             }
             else if (!ShipStatus.Instance || AmongUsClient.Instance.ShipLoadingAsyncHandle.IsValid())
             {
                 bool isShipLoading = AmongUsClient.Instance.ShipLoadingAsyncHandle.IsValid();
 
-                loadingText = isShipLoading ? "Loading Ship Async" : "Spawning Ship";
+                loadingText = isShipLoading ? TranslationStrings.LoadingBar_LoadingShip.LocalizedString : TranslationStrings.LoadingBar_SpawningShip.LocalizedString;
                 progress = isShipLoading ? 0.3f : 0.4f;
             }
             else if (BAUPlugin.AllPlayerControls.Any(player => !player.roleAssigned))
@@ -178,7 +179,7 @@ internal static class ClientPatch
                 int assignedPlayers = BAUPlugin.AllPlayerControls.Count(pc => pc.roleAssigned);
                 float assignmentProgress = (float)assignedPlayers / Mathf.Max(1, totalPlayers);
 
-                loadingText = $"Assigning Roles ({assignedPlayers}/{totalPlayers})";
+                loadingText = TranslationStrings.LoadingBar_AssigningRoles.Format(assignedPlayers, totalPlayers);
                 progress = 0.4f + 0.3f * assignmentProgress;
             }
             else if (!client.IsReady)
@@ -187,7 +188,7 @@ internal static class ClientPatch
                 int readyClients = clients.CountIl2Cpp(c => c != null && c.Character != null && c.IsReady);
                 int totalClients = clients.CountIl2Cpp(c => c != null && c.Character != null);
 
-                loadingText = $"Waiting for Players ({readyClients}/{totalClients})";
+                loadingText = TranslationStrings.LoadingBar_WaitingForPlayers.Format(readyClients, totalClients);
                 progress = 0.8f + 0.2f * readyClients / Mathf.Max(1, totalClients);
             }
 
@@ -220,29 +221,29 @@ internal static class ClientPatch
                 yield break;
             }
 
-            string loadingText = "Initializing Game";
+            string loadingText = TranslationStrings.LoadingBar_Initializing.LocalizedString;
             float progress = 0;
 
             if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
             {
-                loadingText = "Starting Game Session";
+                loadingText = TranslationStrings.LoadingBar_StartingSession.LocalizedString;
                 progress = 0.1f;
             }
             else if (LobbyBehaviour.Instance)
             {
-                loadingText = "Loading";
+                loadingText = TranslationStrings.Player_Loading.LocalizedString;
                 progress = 0.25f;
             }
             else if (!ShipStatus.Instance || AmongUsClient.Instance.ShipLoadingAsyncHandle.IsValid())
             {
                 bool isShipLoading = AmongUsClient.Instance.ShipLoadingAsyncHandle.IsValid();
 
-                loadingText = isShipLoading ? "Loading Ship Async" : "Spawning Ship";
+                loadingText = isShipLoading ? TranslationStrings.LoadingBar_LoadingShip.LocalizedString : TranslationStrings.LoadingBar_SpawningShip.LocalizedString;
                 progress = isShipLoading ? 0.35f : 0.4f;
             }
             else if (!client.IsReady)
             {
-                loadingText = "Finalizing Connection";
+                loadingText = TranslationStrings.LoadingBar_Finalizing.LocalizedString;
                 progress = 0.75f;
             }
             else
@@ -251,7 +252,7 @@ internal static class ClientPatch
                 int readyClients = clients.CountIl2Cpp(c => c != null && c.Character != null && c.IsReady);
                 int totalClients = clients.CountIl2Cpp(c => c != null && c.Character != null);
 
-                loadingText = $"Waiting for Players ({readyClients}/{totalClients})";
+                loadingText = TranslationStrings.LoadingBar_WaitingForPlayers.Format(readyClients, totalClients);
                 progress = 0.85f + 0.15f * readyClients / Mathf.Max(1, totalClients);
             }
 

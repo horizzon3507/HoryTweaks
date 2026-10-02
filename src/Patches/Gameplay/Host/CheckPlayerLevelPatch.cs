@@ -1,4 +1,5 @@
-﻿using BetterAmongUs.Modules;
+﻿using BetterAmongUs.Generated;
+using BetterAmongUs.Modules;
 using BetterAmongUs.Patches.Gameplay.UI.Settings;
 using BetterAmongUs.Utilities;
 using HarmonyLib;
@@ -24,7 +25,7 @@ internal static class CheckPlayerLevelPatch
                 if (minPlayers > 1 && minPlayers > BAUPlugin.AllPlayerControls.Count)
                     return;
 
-                __instance.TryKick(setReasonInfo: $" is level {__instance.Data.PlayerLevel}, level must be equal or above {BetterGameSettings.KickLevelBelow.GetInt()} to join");
+                __instance.TryKick(setReasonInfo: TranslationStrings.HostTools_LevelTooLow.Format(__instance.Data.PlayerLevel, BetterGameSettings.KickLevelBelow.GetInt()));
             }
         }
     }

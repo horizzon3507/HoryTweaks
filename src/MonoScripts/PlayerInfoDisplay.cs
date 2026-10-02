@@ -179,7 +179,7 @@ internal class PlayerInfoDisplay : MonoBehaviour
             SetLobbyInfo(ref newName, betterData, _ssbTag);
 
             _ssbTagTop.Append($"<color=#9e9e9e>{platform}</color>")
-                .Append($"<color=#ffd829>Lv: {_player.Data.PlayerLevel + 1}</color>");
+                .Append($"<color=#ffd829>{TranslationStrings.Player_Level.LocalizedString}: {_player.Data.PlayerLevel + 1}</color>");
 
             _ssbTagBottom.Append($"<color={friendCodeColor}>{friendCode}</color>");
         }
@@ -340,7 +340,7 @@ internal class PlayerInfoDisplay : MonoBehaviour
                 verificationSymbol,
                 isHoryUser ? "#ffffbe" : "#a8d8ff");
         }
-        ssbTag.Append($"<color=#b554ff>ID: {_player.PlayerId}</color>");
+        ssbTag.Append($"<color=#b554ff>{TranslationStrings.Command_PlayerInfo_ID.LocalizedString}: {_player.PlayerId}</color>");
     }
 
     /// <summary>

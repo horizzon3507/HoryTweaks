@@ -58,7 +58,7 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
         var IdLabel = LevelDisplay.transform.Find("LevelLabel");
         var IdNumber = LevelDisplay.transform.Find("LevelNumber");
         IdLabel.gameObject.DestroyTextTranslators();
-        IdLabel.GetComponent<TextMeshPro>().text = "ID";
+        IdLabel.GetComponent<TextMeshPro>().text = TranslationStrings.Command_PlayerInfo_ID.LocalizedString;
         IdNumber.GetComponent<TextMeshPro>().text = pva.PlayerId.Value.ToString();
         IdLabel.name = "IdLabel";
         IdNumber.name = "IdNumber";

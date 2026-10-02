@@ -57,26 +57,6 @@ internal sealed class OptionTab
     internal Color Color { get; private set; }
 
     /// <summary>
-    /// Gets the current search filter text for this tab, or an empty string when unfiltered.
-    /// </summary>
-    internal string SearchQuery { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the search field pinned to the top of this tab, when one was created.
-    /// </summary>
-    internal OptionSearchField? SearchField { get; set; }
-
-    /// <summary>
-    /// Sets the search filter text and re-lays out the tab's options.
-    /// </summary>
-    /// <param name="query">The raw search text; null is treated as empty.</param>
-    internal void SetSearchQuery(string? query)
-    {
-        SearchQuery = query ?? string.Empty;
-        UpdateVisuals();
-    }
-
-    /// <summary>
     /// Creates a new option tab or returns an existing one with the same ID.
     /// </summary>
     /// <param name="Id">The unique identifier for the tab.</param>
@@ -174,28 +154,14 @@ internal sealed class OptionTab
             return;
 
         AUTab.gameObject.SetActive(true);
-        float spacingNum = SearchField == null ? 0f : OptionSearchField.ReservedHeight;
-
-        var rows = new SettingsSearchFilter.Row[Children.Count];
-        for (var i = 0; i < Children.Count; i++)
+        float spacingNum = 0f;
+        foreach (var opt in Children)
         {
-            var opt = Children[i];
-            if (opt == null) continue;
-
-            var isGroupLabel = opt is OptionHeaderItem or OptionTitleItem or OptionDividerItem;
-            var normallyVisible = opt.Obj != null && opt.Tab != null && opt.Tab.Id == Id && !opt.Hide;
-            rows[i] = new SettingsSearchFilter.Row(isGroupLabel, normallyVisible, opt.SearchTitle, opt.SearchDescription);
-        }
-        var visible = SettingsSearchFilter.ComputeVisible(rows, SearchQuery);
-
-        for (var i = 0; i < Children.Count; i++)
-        {
-            var opt = Children[i];
             if (opt == null) continue;
             if (opt.Obj == null) continue;
             if (opt.Tab == null) continue;
 
-            if (!visible[i])
+            if (opt.Tab.Id != Id || opt.Hide)
             {
                 opt.Obj.gameObject.SetActive(false);
                 continue;

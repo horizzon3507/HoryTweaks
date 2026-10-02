@@ -42,17 +42,6 @@ public abstract class OptionItem
     internal OptionBehaviour? Option { get; set; }
     internal GameObject? Obj { get; set; }
     internal OptionItem? Parent { get; set; }
-    internal TranslationStrings.TranslationString? TranslationDescription { get; private set; }
-
-    /// <summary>
-    /// The localized title used for search matching, or null when the item has no name.
-    /// </summary>
-    internal string? SearchTitle => TranslationName.Key == null ? null : Name;
-
-    /// <summary>
-    /// The localized description used for search matching, or null when none was set.
-    /// </summary>
-    internal string? SearchDescription => TranslationDescription?.LocalizedString;
 
     /// <summary>
     /// Gets a value indicating whether this option has child options.
@@ -401,8 +390,6 @@ public abstract class OptionItem
     /// <param name="description">The translation string of the description to display.</param>
     internal void CreateDescriptionButton(TranslationStrings.TranslationString description)
     {
-        TranslationDescription = description;
-
         if (Option == null)
             return;
 

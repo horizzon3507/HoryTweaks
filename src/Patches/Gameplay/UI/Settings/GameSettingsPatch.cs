@@ -55,7 +55,6 @@ internal static class GameSettingsPatch
 
         // Create main settings tab
         BetterSettingsTab = OptionTab.Create(3, TranslationStrings.BetterSetting, TranslationStrings.BetterSetting_Description, Colors.Theme);
-        OptionSearchField.Create(BetterSettingsTab);
 
         OptionHeaderItem.Create(BetterSettingsTab, TranslationStrings.BetterSetting_MainHeader_System);
         OptionPresetItem.Create().CreateDescriptionButton(TranslationStrings.BetterSetting_Setting_Presets_Description);

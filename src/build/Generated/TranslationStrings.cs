@@ -119,6 +119,11 @@ public static class TranslationStrings
     public static readonly TranslationString Setting_Preset = new("Setting.Preset");
 
     /// <summary>
+    /// Base Translation: Among Us Preset
+    /// </summary>
+    public static readonly TranslationString Setting_Preset_Vanilla = new("Setting.Preset.Vanilla");
+
+    /// <summary>
     /// Base Translation: Presets
     /// </summary>
     public static readonly TranslationString Setting_Presets = new("Setting.Presets");
@@ -147,6 +152,51 @@ public static class TranslationStrings
     /// Base Translation: Hory-User
     /// </summary>
     public static readonly TranslationString Player_HoryUser = new("Player.HoryUser");
+
+    /// <summary>
+    /// Base Translation: Lv
+    /// </summary>
+    public static readonly TranslationString Player_Level = new("Player.Level");
+
+    /// <summary>
+    /// Base Translation: Complete
+    /// </summary>
+    public static readonly TranslationString LoadingBar_Complete = new("LoadingBar.Complete");
+
+    /// <summary>
+    /// Base Translation: Initializing Game
+    /// </summary>
+    public static readonly TranslationString LoadingBar_Initializing = new("LoadingBar.Initializing");
+
+    /// <summary>
+    /// Base Translation: Starting Game Session
+    /// </summary>
+    public static readonly TranslationString LoadingBar_StartingSession = new("LoadingBar.StartingSession");
+
+    /// <summary>
+    /// Base Translation: Loading Ship Async
+    /// </summary>
+    public static readonly TranslationString LoadingBar_LoadingShip = new("LoadingBar.LoadingShip");
+
+    /// <summary>
+    /// Base Translation: Spawning Ship
+    /// </summary>
+    public static readonly TranslationString LoadingBar_SpawningShip = new("LoadingBar.SpawningShip");
+
+    /// <summary>
+    /// Base Translation: Assigning Roles ({0}/{1})
+    /// </summary>
+    public static readonly TranslationString LoadingBar_AssigningRoles = new("LoadingBar.AssigningRoles");
+
+    /// <summary>
+    /// Base Translation: Waiting for Players ({0}/{1})
+    /// </summary>
+    public static readonly TranslationString LoadingBar_WaitingForPlayers = new("LoadingBar.WaitingForPlayers");
+
+    /// <summary>
+    /// Base Translation: Finalizing Connection
+    /// </summary>
+    public static readonly TranslationString LoadingBar_Finalizing = new("LoadingBar.Finalizing");
 
     /// <summary>
     /// Base Translation: {0} Left the game!
@@ -339,14 +389,29 @@ public static class TranslationStrings
     public static readonly TranslationString BetterOption_CompressSettingFiles = new("BetterOption.CompressSettingFiles");
 
     /// <summary>
+    /// Base Translation: Scroll Zoom
+    /// </summary>
+    public static readonly TranslationString BetterOption_ScrollZoom = new("BetterOption.ScrollZoom");
+
+    /// <summary>
     /// Base Translation: Open Save Data
     /// </summary>
     public static readonly TranslationString BetterOption_SaveData = new("BetterOption.SaveData");
 
     /// <summary>
+    /// Base Translation: Cannot open save data while in gameplay!
+    /// </summary>
+    public static readonly TranslationString BetterOption_SaveData_InGame = new("BetterOption.SaveData.InGame");
+
+    /// <summary>
     /// Base Translation: Switch To Vanilla
     /// </summary>
     public static readonly TranslationString BetterOption_ToVanilla = new("BetterOption.ToVanilla");
+
+    /// <summary>
+    /// Base Translation: Unable to switch to vanilla while in game!
+    /// </summary>
+    public static readonly TranslationString BetterOption_ToVanilla_InGame = new("BetterOption.ToVanilla.InGame");
 
     /// <summary>
     /// Base Translation: Moderation Center
@@ -527,6 +592,81 @@ public static class TranslationStrings
     /// Base Translation: &lt;color=#aaaaaa&gt;{0}&lt;/color&gt; {1} &lt;color=#ffff00&gt;{2}&lt;/color&gt; {3}
     /// </summary>
     public static readonly TranslationString ModerationCenter_HistoryEntry = new("ModerationCenter.HistoryEntry");
+
+    /// <summary>
+    /// Base Translation: Controls &amp; Gestures
+    /// </summary>
+    public static readonly TranslationString Gestures_Title = new("Gestures.Title");
+
+    /// <summary>
+    /// Base Translation: Keyboard and mouse — not on touch or controller.
+    /// </summary>
+    public static readonly TranslationString Gestures_Subtitle = new("Gestures.Subtitle");
+
+    /// <summary>
+    /// Base Translation: Spectating
+    /// </summary>
+    public static readonly TranslationString Gestures_Section_Spectate = new("Gestures.Section.Spectate");
+
+    /// <summary>
+    /// Base Translation: Scroll wheel — zoom while dead, in lobby or freeplay
+    /// </summary>
+    public static readonly TranslationString Gestures_Zoom = new("Gestures.Zoom");
+
+    /// <summary>
+    /// Base Translation: Lobby
+    /// </summary>
+    public static readonly TranslationString Gestures_Section_Lobby = new("Gestures.Section.Lobby");
+
+    /// <summary>
+    /// Base Translation: Host: hold or Shift+click Start — instant start
+    /// </summary>
+    public static readonly TranslationString Gestures_InstantStart = new("Gestures.InstantStart");
+
+    /// <summary>
+    /// Base Translation: Click Start during the countdown — cancel
+    /// </summary>
+    public static readonly TranslationString Gestures_CancelStart = new("Gestures.CancelStart");
+
+    /// <summary>
+    /// Base Translation: Chat
+    /// </summary>
+    public static readonly TranslationString Gestures_Section_Chat = new("Gestures.Section.Chat");
+
+    /// <summary>
+    /// Base Translation: / — commands, ghost text, Tab to complete
+    /// </summary>
+    public static readonly TranslationString Gestures_ChatCommands = new("Gestures.ChatCommands");
+
+    /// <summary>
+    /// Base Translation: Up/Down — history · Ctrl+X — cut · Ctrl+V — paste
+    /// </summary>
+    public static readonly TranslationString Gestures_ChatHistory = new("Gestures.ChatHistory");
+
+    /// <summary>
+    /// Base Translation: /help · /commands — command list · /setprefix — new prefix
+    /// </summary>
+    public static readonly TranslationString Gestures_ChatHelp = new("Gestures.ChatHelp");
+
+    /// <summary>
+    /// Base Translation: More
+    /// </summary>
+    public static readonly TranslationString Gestures_Section_More = new("Gestures.Section.More");
+
+    /// <summary>
+    /// Base Translation: Shift ×5 · Ctrl ×10 on numbers — ×25 combined in mod menus
+    /// </summary>
+    public static readonly TranslationString Gestures_NumberStep = new("Gestures.NumberStep");
+
+    /// <summary>
+    /// Base Translation: Hold or Shift+click a color chip — favorite color
+    /// </summary>
+    public static readonly TranslationString Gestures_FavoriteColor = new("Gestures.FavoriteColor");
+
+    /// <summary>
+    /// Base Translation: Click during the logo — skip the intro
+    /// </summary>
+    public static readonly TranslationString Gestures_SkipIntro = new("Gestures.SkipIntro");
 
     /// <summary>
     /// Base Translation: Tweaks
@@ -809,14 +949,29 @@ public static class TranslationStrings
     public static readonly TranslationString HostTools_BanNameListMessage = new("HostTools.BanNameListMessage");
 
     /// <summary>
+    /// Base Translation: has been {0} due to\nchat message matching a banned pattern!
+    /// </summary>
+    public static readonly TranslationString HostTools_BanChatListMessage = new("HostTools.BanChatListMessage");
+
+    /// <summary>
     /// Base Translation: Invalid friend code
     /// </summary>
     public static readonly TranslationString HostTools_InvalidFriendCode = new("HostTools.InvalidFriendCode");
 
     /// <summary>
+    /// Base Translation:  is level {0}, level must be equal or above {1} to join
+    /// </summary>
+    public static readonly TranslationString HostTools_LevelTooLow = new("HostTools.LevelTooLow");
+
+    /// <summary>
     /// Base Translation: Failed to initialize before the timeout expired
     /// </summary>
     public static readonly TranslationString HostTools_InitializeTimeout = new("HostTools.InitializeTimeout");
+
+    /// <summary>
+    /// Base Translation: {0} voted to kick {1}
+    /// </summary>
+    public static readonly TranslationString VoteBan_VoteCast = new("VoteBan.VoteCast");
 
     /// <summary>
     /// Base Translation: Host transferred to {0} due to AFK

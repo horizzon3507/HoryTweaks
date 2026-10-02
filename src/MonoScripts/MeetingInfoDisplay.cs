@@ -64,8 +64,6 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
         IdLabel.name = "IdLabel";
         IdNumber.name = "IdNumber";
         PlayerLevel.transform.position += new Vector3(0.23f, 0f);
-
-        PlayerMarkMenu.AttachMarkButton(pva, pva.PlayerId.Value);
     }
 
     /// <summary>
@@ -165,7 +163,6 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
             return;
 
         _ssbInfo.Append(_playerInfo.GetRoleInfo(true));
-        _ssbTag.Append(PlayerMarks.FormatMarks(_pva.PlayerId.Value));
 
         UpdateNameTextPosition(_ssbInfo.ToString(), _ssbInfo.ToString());
 

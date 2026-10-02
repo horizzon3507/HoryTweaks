@@ -24,15 +24,7 @@
   "Player.PlatformHidden": "Plattform verborgen",
   "Player.BetterUser": "Better-User",
   "Player.HoryUser": "Hory-User",
-  "PlayerMark.Button": "Markieren",
-  "PlayerMark.Title": "{0} markieren",
-  "PlayerMark.Roles": "Rollen",
-  "PlayerMark.Status": "Status",
-  "PlayerMark.Status.Suspect": "Verdächtig",
-  "PlayerMark.Status.Cleared": "Entlastet",
-  "PlayerMark.Status.Investigate": "Untersuchen",
   "Player.Level": "Lvl",
-
   "LoadingBar.Complete": "Fertig",
   "LoadingBar.Initializing": "Spiel wird initialisiert",
   "LoadingBar.StartingSession": "Spielsitzung wird gestartet",
@@ -41,7 +33,6 @@
   "LoadingBar.AssigningRoles": "Rollen werden zugewiesen ({0}/{1})",
   "LoadingBar.WaitingForPlayers": "Warten auf Spieler ({0}/{1})",
   "LoadingBar.Finalizing": "Verbindung wird abgeschlossen",
-
   "DisconnectReason.Left": "{0} hat das Spiel verlassen!",
   "DisconnectReason.Disconnect": "{0} hat die Verbindung getrennt!",
   "DisconnectReason.Kicked": "{0} wurde von {1} gekickt!",
@@ -49,26 +40,18 @@
   "DisconnectReason.Cheater": "{0} wurde von Innersloths Anti-Cheat gebannt!",
   "DisconnectReason.Error": "{0} wurde wegen eines Fehlers gekickt!",
   "DisconnectReason.Unknown": "{0} hat das Spiel aus unbekanntem Grund verlassen?",
-
   "DisconnectReasonMeeting.Left": "Spiel verlassen",
   "DisconnectReasonMeeting.Disconnect": "Verbindung getrennt",
   "DisconnectReasonMeeting.Kicked": "Vom Host gekickt",
   "DisconnectReasonMeeting.Banned": "Vom Host gebannt",
   "DisconnectReasonMeeting.Cheater": "Vom Server gebannt",
-
-  "Meeting.Timer": "⏱ {0} / {1} übrig",
-  "Meeting.PlayerNotVoted": "{0} Spieler hat noch nicht abgestimmt",
-  "Meeting.PlayersNotVoted": "{0} Spieler haben noch nicht abgestimmt",
-
   "Rejoin.AutoRejoin": "Auto Rejoin",
   "Rejoin.CancelHint": "Press Back to cancel",
   "Rejoin.Failed": "Could not reconnect to lobby {0}.",
   "Rejoin.Reconnecting": "Reconnecting to lobby {0}... ({1}s)",
-
   "WelcomeMsg.WelcomeToBAU": "Willkommen bei {0}",
   "WelcomeMsg.ThanksForDownloading": "Danke fürs Herunterladen!",
   "WelcomeMsg.BAUDescription1": "<color=#ffffbe>{0}</color> verbessert das klassische Among Us mit clientseitigen Funktionen wie {1}, Host-Werkzeugen und mehr. Du kannst mit Spielern spielen, die das unveränderte Spiel verwenden.",
-
   "BetterOption": "Tweaks",
   "BetterOption.Next": "Weiter >",
   "BetterOption.Previous": "< Zurück",
@@ -89,12 +72,10 @@
   "BetterOption.ColorblindTextOnTop": "Farbenblindentext oben anzeigen",
   "BetterOption.CompressSettingFiles": "Einstellungsdateien komprimieren",
   "BetterOption.ScrollZoom": "Scroll-Zoom",
-
   "BetterOption.SaveData": "Speicherdaten öffnen",
   "BetterOption.SaveData.InGame": "Speicherdaten können während des Spiels nicht geöffnet werden!",
   "BetterOption.ToVanilla": "Zum unveränderten Spiel wechseln",
   "BetterOption.ToVanilla.InGame": "Während des Spiels kann nicht zum unveränderten Spiel gewechselt werden!",
-
   "BetterOption.Moderation": "Moderationszentrum",
   "ModerationCenter.Back": "< Zurück",
   "ModerationCenter.Refresh": "Aktualisieren",
@@ -146,8 +127,6 @@
   "Gestures.NumberStep": "Shift ×5 · Strg ×10 bei Zahlen — ×25 kombiniert in Mod-Menüs",
   "Gestures.FavoriteColor": "Farbfeld halten oder Shift+klicken — Lieblingsfarbe",
   "Gestures.SkipIntro": "Während des Logos klicken — Intro überspringen",
-
-
   "BetterSetting": "Tweaks",
   "BetterSetting.Description": "Bearbeite die HoryTweaks-Einstellungen für deine Lobby und dein Spiel.",
   "BetterSetting.SetTo": "Festlegen auf:",
@@ -168,7 +147,6 @@
   "BetterSetting.MainHeader.HostTools": "Host-Werkzeuge",
   "BetterSetting.MainHeader.Gameplay": "Spieleinstellungen",
   "BetterSetting.TextHeader.HostOnly": "Nur Host",
-
   "BetterSetting.Setting.KickCooldown": "Abklingzeit für Host-Moderation",
   "BetterSetting.Setting.InvalidFriendCode": "Spieler mit ungültigem Freundescode kicken",
   "BetterSetting.Setting.CancelInvalidSabotage": "Ungültige Sabotageversuche abbrechen",
@@ -196,7 +174,6 @@
   "BetterSetting.Setting.RemovePetOnDeath": "Haustier beim Tod entfernen",
   "BetterSetting.Setting.HideAndSeekImpNum": "# Sucher",
   "BetterSetting.TempSetting.HideAndSeekImpNum": "Sucher",
-
   "Chat.Copy.Description": "Copy recent chat messages to the clipboard",
   "Chat.Copy.Done": "Copied <color=#e0b700>{0}</color> chat messages to the clipboard.",
   "Chat.Copy.Empty": "No chat messages to copy.",
@@ -210,7 +187,6 @@
   "HostTools.InvalidFriendCode": "Ungültiger Freundescode",
   "HostTools.LevelTooLow": " ist Level {0}, das Level muss mindestens {1} sein, um beizutreten",
   "HostTools.InitializeTimeout": "Initialisierung vor Ablauf des Zeitlimits fehlgeschlagen",
-
   "VoteBan.VoteCast": "{0} stimmte für den Kick von {1}",
   "HostTransfer.AfkSuccess": "Host transferred to {0} due to AFK",
   "HostTransfer.Command.Description": "Transfer the host role to a player",
@@ -230,7 +206,6 @@
   "HostTransfer.Setting.OnAfk": "Transfer Host On AFK",
   "HostTransfer.Setting.OnAfk.Description": "Automatically transfers host to the player who has been in the lobby longest when you are AFK",
   "HostTransfer.Success": "Transferred host to {0}",
-
   "GameSummary": "Spielübersicht",
   "Game.Summary.Hiders": "Versteckte",
   "Game.Summary.Seekers": "Sucher",
@@ -244,7 +219,6 @@
   "Game.Summary.Result.CrematesDisconnected": "Crewmitglieder getrennt",
   "Game.Summary.Result.TimeOut": "Zeit abgelaufen",
   "Game.Summary.Result.NoSurvivors": "Keine Überlebenden",
-
   "Command.Help.Description": "Hilfe zu den Befehlen anzeigen",
   "Command.Help.Body": "<color=#ffffbe>{0}</color> verbessert dein unverändertes Among Us mit nützlichen clientseitigen Funktionen.\nÖffne das Pausenmenü für weitere Optionen und Spieleinstellungen.\nVerwende <color=#e0b700>/commands</color>, um alle verfügbaren Befehle anzuzeigen.\n\nFunktionen:\n- Hostseitige Spielvalidierung und manuelle Moderation.\n- Zusätzliche Optionen für Hosts.\n- Erweiterte Einstellungen zum Anpassen deines Spiels.\n- Befehle zur Verwaltung und Verbesserung deines Spielerlebnisses.\n- Clientseitige Verbesserungen und Komfortfunktionen.",
   "Command.Commands.Description": "Alle verfügbaren Befehle auflisten",

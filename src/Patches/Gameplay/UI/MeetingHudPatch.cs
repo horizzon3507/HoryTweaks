@@ -39,8 +39,6 @@ internal static class MeetingHudPatch
             pva.gameObject.AddComponent<MeetingInfoDisplay>().Init(target, pva);
         }
 
-        __instance.gameObject.AddComponent<MeetingTimerDisplay>().Init(__instance);
-
         if (!GameState.IsOnlineGame)
             return;
 

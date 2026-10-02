@@ -332,10 +332,13 @@ internal class PlayerInfoDisplay : MonoBehaviour
 
         if ((_player.IsLocalPlayer() || betterData.IsBetterUser) && !GameState.IsInGamePlay)
         {
+            bool isHoryUser = _player.IsLocalPlayer() || betterData.IsHoryUser;
             string verificationSymbol = betterData.IsVerifiedBetterUser || _player.IsLocalPlayer() ? "✓ " : "";
 
-            ssbTag.AppendFormat("<color=#ffffbe>{1}{0}</color>",
-                TranslationStrings.Player_BetterUser.LocalizedString, verificationSymbol);
+            ssbTag.AppendFormat("<color={2}>{1}{0}</color>",
+                isHoryUser ? TranslationStrings.Player_HoryUser.LocalizedString : TranslationStrings.Player_BetterUser.LocalizedString,
+                verificationSymbol,
+                isHoryUser ? "#ffffbe" : "#a8d8ff");
         }
         ssbTag.Append($"<color=#b554ff>ID: {_player.PlayerId}</color>");
     }

@@ -23,6 +23,13 @@ internal static class SendBAUSupportFlagsExamplePatch
     /// <para>
     /// <b>Important:</b> This functionality only works on protocol version +25 (modded protocol)!
     /// </para>
+    /// <para>
+    /// <b>Mod identity:</b> HoryTweaks clients additionally identify themselves to peers over
+    /// custom RPC 154 (AdvertiseHoryUser) by sending GetFlagHash("mod.horytweaks") as the payload.
+    /// Send the same hash from your mod if you want HoryTweaks clients to recognize your users
+    /// as HoryTweaks-compatible; users that only complete the standard BAU secret handshake are
+    /// shown as "Better-User".
+    /// </para>
     /// </remarks>
     [HarmonyPatch(typeof(NetworkedPlayerInfo), nameof(NetworkedPlayerInfo.Serialize))]
     [HarmonyPriority(Priority.Last)]

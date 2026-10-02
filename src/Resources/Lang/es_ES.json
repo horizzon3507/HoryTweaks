@@ -22,7 +22,8 @@
   "Player.Loading": "Cargando",
   "Player.NoFriendCode": "Sin código de amigo",
   "Player.PlatformHidden": "Plataforma oculta",
-  "Player.BetterUser": "Usuario Hory",
+  "Player.BetterUser": "Better-User",
+  "Player.HoryUser": "Hory-User",
 
   "DisconnectReason.Left": "¡{0} abandonó la partida!",
   "DisconnectReason.Disconnect": "¡{0} se desconectó!",

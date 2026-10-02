@@ -134,6 +134,17 @@ internal sealed class ExtendedPlayerInfo : MonoBehaviour, IMonoExtension<Network
     internal bool IsVerifiedBetterUser { get; set; } = false;
 
     /// <summary>
+    /// Gets or sets whether this player advertised the HoryTweaks mod flag.
+    /// </summary>
+    internal bool IsHoryUser { get; set; } = false;
+
+    /// <summary>
+    /// Gets which BAU-family mod this player is running.
+    /// </summary>
+    [HideFromIl2Cpp]
+    internal ModdedUserKind ModdedUser => ModdedUserClassification.Classify(IsBetterUser, IsHoryUser);
+
+    /// <summary>
     /// Gets or sets whether disconnect message has been shown.
     /// </summary>
     internal bool HasShowDcMsg { get; set; } = false;

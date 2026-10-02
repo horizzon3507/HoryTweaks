@@ -124,6 +124,11 @@ public static class TranslationStrings
     public static readonly TranslationString Setting_Presets = new("Setting.Presets");
 
     /// <summary>
+    /// Base Translation: Search settings...
+    /// </summary>
+    public static readonly TranslationString SettingsSearch_Placeholder = new("SettingsSearch.Placeholder");
+
+    /// <summary>
     /// Base Translation: Loading
     /// </summary>
     public static readonly TranslationString Player_Loading = new("Player.Loading");
@@ -139,9 +144,14 @@ public static class TranslationStrings
     public static readonly TranslationString Player_PlatformHidden = new("Player.PlatformHidden");
 
     /// <summary>
-    /// Base Translation: Hory User
+    /// Base Translation: Better-User
     /// </summary>
     public static readonly TranslationString Player_BetterUser = new("Player.BetterUser");
+
+    /// <summary>
+    /// Base Translation: Hory-User
+    /// </summary>
+    public static readonly TranslationString Player_HoryUser = new("Player.HoryUser");
 
     /// <summary>
     /// Base Translation: {0} Left the game!

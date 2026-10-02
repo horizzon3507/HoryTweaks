@@ -238,5 +238,7 @@
   "Update.Progress.Downloading": "Téléchargement{0}",
   "Update.Progress.Verifying": "Vérification de la mise à jour...",
   "Update.Progress.Installing": "Installation de la mise à jour...",
-  "Update.Progress.Failed": "Échec du téléchargement !"
+  "Update.Progress.Failed": "Échec du téléchargement !",
+  "Update.SavedToFolder": "The {0} update package was downloaded to:\n{1}\nClose the game and extract it over the game folder to finish updating.",
+  "Update.Staged.Restart": "{0} update downloaded!\nIt installs itself once the game closes. Restart the game to finish updating."
 }

@@ -1,5 +1,6 @@
 ﻿using BepInEx.Unity.IL2CPP.Utils;
 using BetterAmongUs.Attributes;
+using BetterAmongUs.Data;
 using BetterAmongUs.Generated;
 using BetterAmongUs.Modules.Support;
 using BetterAmongUs.Modules.Updater;
@@ -15,7 +16,7 @@ using UnityEngine;
 namespace BetterAmongUs.Managers;
 
 /// <summary>
-/// Manages update functionality for BetterAmongUs, including download and installation.
+/// Manages update functionality for HoryTweaks, including download and installation.
 /// </summary>
 [RegisterInIl2Cpp]
 internal sealed class BAUUpdateManager : MonoBehaviour
@@ -39,7 +40,7 @@ internal sealed class BAUUpdateManager : MonoBehaviour
     /// </summary>
     internal static void Init()
     {
-        var obj = new GameObject("UpdateManager(BAU)") { hideFlags = HideFlags.HideAndDontSave };
+        var obj = new GameObject("UpdateManager(HoryTweaks)") { hideFlags = HideFlags.HideAndDontSave };
         DontDestroyOnLoad(obj);
         Instance = obj.AddComponent<BAUUpdateManager>();
     }
@@ -97,6 +98,7 @@ internal sealed class BAUUpdateManager : MonoBehaviour
     private void Start()
     {
         UpdateAssemblyInstaller.CleanupLeftovers(BAUPlugin.ModInfo.Assembly.Location);
+        UpdatePackageInstaller.ResumeOrCleanup(Path.Combine(BetterDataManager.GetPathToAmongUsData(), UpdatePackageInstaller.UpdateFolderName));
     }
 
     /// <summary>
@@ -159,7 +161,7 @@ internal sealed class BAUUpdateManager : MonoBehaviour
             outcome = UpdateOutcome.Failure(UpdateStatus.Unexpected, "The update routine ended without reporting a result.");
         }
 
-        if (outcome.IsSuccess)
+        if (outcome.Obtained)
         {
             WaitForRestart = true;
             BAUPlugin.Logger.Log($"Update installed: {outcome.Detail}");
@@ -169,7 +171,7 @@ internal sealed class BAUUpdateManager : MonoBehaviour
             BAUPlugin.Logger.Error($"Update not installed ({outcome.Status}): {outcome.Detail}");
         }
 
-        RestoreMenu(button, showUpdateButton: !outcome.IsSuccess);
+        RestoreMenu(button, showUpdateButton: !outcome.Obtained);
         yield return new WaitForSeconds(0.2f);
         Utils.ShowPopUp(GetOutcomeMessage(outcome));
         _updateing = false;
@@ -210,6 +212,8 @@ internal sealed class BAUUpdateManager : MonoBehaviour
         return outcome.Status switch
         {
             UpdateStatus.Succeeded => TranslationStrings.Update_Complete.Format(modName),
+            UpdateStatus.Staged => TranslationStrings.Update_Staged_Restart.Format(modName),
+            UpdateStatus.SavedToDisk => TranslationStrings.Update_SavedToFolder.Format(modName, outcome.Detail),
             UpdateStatus.NoInternet => TranslationStrings.Update_Failed_NoInternet.LocalizedString,
             UpdateStatus.MissingDownloadLink => TranslationStrings.Update_Failed_MissingLink.LocalizedString,
             UpdateStatus.DownloadFailed => TranslationStrings.Update_Failed_Download.LocalizedString,

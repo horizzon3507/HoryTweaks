@@ -239,5 +239,7 @@
   "Update.Progress.Downloading": "Baixando{0}",
   "Update.Progress.Verifying": "Verificando atualização...",
   "Update.Progress.Installing": "Instalando atualização...",
-  "Update.Progress.Failed": "O download falhou!"
+  "Update.Progress.Failed": "O download falhou!",
+  "Update.SavedToFolder": "O pacote de atualização do {0} foi baixado para:\n{1}\nFeche o jogo e extraia-o sobre a pasta do jogo para concluir a atualização.",
+  "Update.Staged.Restart": "Atualização do {0} baixada!\nEla se instala quando o jogo é fechado. Reinicie o jogo para concluir a atualização."
 }

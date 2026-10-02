@@ -5,7 +5,7 @@
 /// </summary>
 internal sealed class UpdateOutcome
 {
-    private UpdateOutcome(UpdateStatus status, string detail)
+    internal UpdateOutcome(UpdateStatus status, string detail)
     {
         Status = status;
         Detail = detail;
@@ -25,6 +25,12 @@ internal sealed class UpdateOutcome
     /// Gets whether the update was fully installed.
     /// </summary>
     internal bool IsSuccess => Status == UpdateStatus.Succeeded;
+
+    /// <summary>
+    /// Gets whether the update payload was obtained for the install to proceed: applied
+    /// now, staged for apply on exit, or saved for a manual install.
+    /// </summary>
+    internal bool Obtained => Status is UpdateStatus.Succeeded or UpdateStatus.Staged or UpdateStatus.SavedToDisk;
 
     /// <summary>
     /// Creates a successful outcome.

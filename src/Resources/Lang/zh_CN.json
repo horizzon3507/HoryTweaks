@@ -238,5 +238,7 @@
   "Update.Progress.Downloading": "正在下载{0}",
   "Update.Progress.Verifying": "正在验证更新...",
   "Update.Progress.Installing": "正在安装更新...",
-  "Update.Progress.Failed": "下载失败！"
+  "Update.Progress.Failed": "下载失败！",
+  "Update.SavedToFolder": "The {0} update package was downloaded to:\n{1}\nClose the game and extract it over the game folder to finish updating.",
+  "Update.Staged.Restart": "{0} update downloaded!\nIt installs itself once the game closes. Restart the game to finish updating."
 }

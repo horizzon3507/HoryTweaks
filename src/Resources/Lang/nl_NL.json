@@ -238,5 +238,7 @@
   "Update.Progress.Downloading": "Downloaden{0}",
   "Update.Progress.Verifying": "Update controleren...",
   "Update.Progress.Installing": "Update installeren...",
-  "Update.Progress.Failed": "Download mislukt!"
+  "Update.Progress.Failed": "Download mislukt!",
+  "Update.SavedToFolder": "The {0} update package was downloaded to:\n{1}\nClose the game and extract it over the game folder to finish updating.",
+  "Update.Staged.Restart": "{0} update downloaded!\nIt installs itself once the game closes. Restart the game to finish updating."
 }

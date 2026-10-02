@@ -238,5 +238,7 @@
   "Update.Progress.Downloading": "다운로드 중{0}",
   "Update.Progress.Verifying": "업데이트 확인 중...",
   "Update.Progress.Installing": "업데이트 설치 중...",
-  "Update.Progress.Failed": "다운로드 실패!"
+  "Update.Progress.Failed": "다운로드 실패!",
+  "Update.SavedToFolder": "The {0} update package was downloaded to:\n{1}\nClose the game and extract it over the game folder to finish updating.",
+  "Update.Staged.Restart": "{0} update downloaded!\nIt installs itself once the game closes. Restart the game to finish updating."
 }

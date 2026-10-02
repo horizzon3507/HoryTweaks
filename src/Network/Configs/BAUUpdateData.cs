@@ -1,4 +1,5 @@
-﻿using Semver;
+﻿using BetterAmongUs.Modules.Updater;
+using Semver;
 using System.Text.Json.Serialization;
 
 namespace BetterAmongUs.Network.Configs;
@@ -26,6 +27,19 @@ internal sealed class BAUUpdateData
     /// </summary>
     [JsonPropertyName("version")]
     public string Version { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the full release package links per store variant, when the feed
+    /// advertises them. Absent on feeds generated before package advertising existed.
+    /// </summary>
+    [JsonPropertyName("packages")]
+    public UpdatePackageLinks? Packages { get; set; }
+
+    /// <summary>
+    /// Gets or sets the URL of the release's SHA256SUMS.txt checksum manifest.
+    /// </summary>
+    [JsonPropertyName("sha256Link")]
+    public string Sha256Link { get; set; } = string.Empty;
 
     /// <summary>
     /// Determines if this update is newer than the currently installed version.

@@ -11,6 +11,16 @@ internal enum UpdateStatus
     Succeeded,
 
     /// <summary>
+    /// The full release package is staged and a helper applies it once the game exits.
+    /// </summary>
+    Staged,
+
+    /// <summary>
+    /// The verified release package was saved to disk; it has to be applied by hand.
+    /// </summary>
+    SavedToDisk,
+
+    /// <summary>
     /// No internet connection could be confirmed.
     /// </summary>
     NoInternet,

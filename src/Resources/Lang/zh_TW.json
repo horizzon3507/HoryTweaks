@@ -18,6 +18,7 @@
   "HostInMeeting": "房主：{0}",
   "Setting.Preset": "預設 {0}",
   "Setting.Presets": "預設",
+  "SettingsSearch.Placeholder": "Search settings...",
   "Player.Loading": "載入中",
   "Player.NoFriendCode": "無好友代碼",
   "Player.PlatformHidden": "平台已隱藏",

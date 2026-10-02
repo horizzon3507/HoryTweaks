@@ -38,6 +38,10 @@
   "DisconnectReasonMeeting.Banned": "Vom Host gebannt",
   "DisconnectReasonMeeting.Cheater": "Vom Server gebannt",
 
+  "Meeting.Timer": "⏱ {0} / {1} übrig",
+  "Meeting.PlayerNotVoted": "{0} Spieler hat noch nicht abgestimmt",
+  "Meeting.PlayersNotVoted": "{0} Spieler haben noch nicht abgestimmt",
+
   "Rejoin.AutoRejoin": "Auto Rejoin",
   "Rejoin.CancelHint": "Press Back to cancel",
   "Rejoin.Failed": "Could not reconnect to lobby {0}.",

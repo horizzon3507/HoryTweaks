@@ -1,12 +1,12 @@
 using AmongUs.GameOptions;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using Hazel;
 using InnerNet;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Game;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Networking.Rpc.Handlers;
+namespace HoryTweaks.Networking.Rpc.Handlers;
 
 [RegisterRPCHandler]
 internal sealed class CheckShapeshiftHandler : RPCHandler

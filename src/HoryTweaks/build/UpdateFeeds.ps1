@@ -7,22 +7,22 @@
     Rewrites three files so the in-mod updater and news feed point at a release:
 
       - api/update.json      legacy feed (dllLink + release metadata fields)
-      - api/update-V2.json   current feed read by src/Network/Loaders/BAUUpdateLoader.cs
+      - api/update-V2.json   current feed read by src/HoryTweaks/Remote/Updates/BAUUpdateLoader.cs
       - api/manifest.json    News index rebuilt from the files under api/news/
 
     .github/workflows/update-feeds.yml runs this on every published release; run
     it by hand to repair the feeds:
 
-        pwsh src/build/UpdateFeeds.ps1 -Tag v0.1.3 [-DllUrl <url>] [-RequireNews]
+        pwsh src/HoryTweaks/build/UpdateFeeds.ps1 -Tag v0.1.3 [-DllUrl <url>] [-RequireNews]
 .PARAMETER Tag
     Release tag, with or without the leading v (v0.1.3 or 0.1.3). Optional
-    channel suffixes map onto the legacy feed fields per VERSIONING.md and
-    src/Enums/ReleaseTypes.cs: -stable/none => releaseType 0, -beta[N] => 1,
-    anything else (alpha, rc, ...) => 2; -HN sets isHotfix/hotfixNumber.
+    channel suffixes map onto the legacy feed fields per VERSIONING.md:
+    -stable/none => releaseType 0, -beta[N] => 1, anything else (alpha, rc, ...)
+    => 2; -HN sets isHotfix/hotfixNumber.
 .PARAMETER DllUrl
     browser_download_url of the release's HoryTweaks.dll asset. Defaults to the
     canonical https://github.com/<RepoSlug>/releases/download/<tag>/HoryTweaks.dll
-    that tests/HoryTweaks.Tests/UpdateManifestTests.cs asserts.
+    that tests/HoryTweaks.Tests/Updates/UpdateManifestTests.cs asserts.
 .PARAMETER SteamEpicMsStorePackageUrl
     browser_download_url of the release's full Steam/Epic/Microsoft Store
     package (HoryTweaks-Steam-Epic-MsStore-<tag>.zip). Defaults to the canonical
@@ -128,24 +128,19 @@ if ($RequireNews) {
     }
 }
 
-$newsFiles = Get-ChildItem -LiteralPath $newsDir -Filter '*.yaml' -File
+$newsFiles = Get-ChildItem -LiteralPath $newsDir -Filter '*.yaml' -File | Where-Object Name -ne 'Template.yaml'
 $entries = foreach ($file in $newsFiles) {
     $match = [regex]::Match($file.Name, 'v(?<maj>\d+)\.(?<min>\d+)\.(?<pat>\d+)(?:-H(?<hot>\d+))?')
-    $isTemplate = $file.Name -eq 'Template.yaml'
     [pscustomobject]@{
         Name      = $file.Name
-        IsTemplate = $isTemplate
-        Versioned = $match.Success -and -not $isTemplate
+        Versioned = $match.Success
         Major     = if ($match.Success) { [int]$match.Groups['maj'].Value } else { 0 }
         Minor     = if ($match.Success) { [int]$match.Groups['min'].Value } else { 0 }
         Patch     = if ($match.Success) { [int]$match.Groups['pat'].Value } else { 0 }
         Hotfix    = if ($match.Success -and $match.Groups['hot'].Success) { [int]$match.Groups['hot'].Value } else { 0 }
     }
 }
-$template = @($entries | Where-Object IsTemplate | Sort-Object Name)
-$rest = @($entries | Where-Object { -not $_.IsTemplate } |
-    Sort-Object @{ Expression = { if ($_.Versioned) { 0 } else { 1 } } }, Major, Minor, Patch, Hotfix, Name)
-$news = [string[]](@($template + $rest) | ForEach-Object Name)
+$news = [string[]]@($entries | Sort-Object @{ Expression = { if ($_.Versioned) { 0 } else { 1 } } }, Major, Minor, Patch, Hotfix, Name | ForEach-Object Name)
 
 $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
 function Write-Feed([string]$Name, [System.Collections.IDictionary]$Data) {

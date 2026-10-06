@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Rejoin;
+namespace HoryTweaks.Core.Rejoin;
 
 /// <summary>
 /// How a local disconnect should be treated by the auto-rejoin routine.

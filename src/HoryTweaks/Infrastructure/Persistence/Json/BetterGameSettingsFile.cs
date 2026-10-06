@@ -2,10 +2,10 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using BetterAmongUs.Core.Presets;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Core.Presets;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Infrastructure.Persistence.Json;
+namespace HoryTweaks.Infrastructure.Persistence.Json;
 
 /// <summary>
 /// Represents a compressed JSON file for storing game settings with GZIP compression.

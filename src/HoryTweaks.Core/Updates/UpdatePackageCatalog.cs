@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Pure selection logic mapping a store variant to its advertised release package.

@@ -1,19 +1,19 @@
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using Rewired;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Features.Chat;
-using BetterAmongUs.Features.PlayerInfo;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Features.Chat;
+using HoryTweaks.Features.PlayerInfo;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Meeting;
+namespace HoryTweaks.Features.Meeting;
 
 [HarmonyPatch]
 internal static class MeetingHudPatch

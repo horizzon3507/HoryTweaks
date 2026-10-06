@@ -2,10 +2,10 @@ using AmongUs.InnerNet.GameDataMessages;
 
 using Hazel;
 using InnerNet;
-using BetterAmongUs.Utilities;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Utilities;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Networking;
+namespace HoryTweaks.Networking;
 
 /// <summary>
 /// Provides helper methods for working with InnerNet messaging, RPC handling, and message serialization.

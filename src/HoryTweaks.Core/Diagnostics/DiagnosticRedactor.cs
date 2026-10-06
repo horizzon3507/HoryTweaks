@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace BetterAmongUs.Core.Diagnostics;
+namespace HoryTweaks.Core.Diagnostics;
 
 /// <summary>
 /// Removes identifying values from text before it is written to a shareable diagnostic report.

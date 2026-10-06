@@ -1,13 +1,13 @@
 
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Infrastructure.Persistence.Json;
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Core.Presets;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.Persistence;
+using HoryTweaks.Generated;
+using HoryTweaks.Infrastructure.Persistence.Json;
+using HoryTweaks.Modules.OptionItems;
+using HoryTweaks.Core.Presets;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Persistence;
 
-namespace BetterAmongUs.Features.GameOptions.Items;
+namespace HoryTweaks.Features.GameOptions.Items;
 
 /// <summary>
 /// Represents a preset option item that set the settings preset.

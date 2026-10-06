@@ -1,9 +1,9 @@
 
 using System.Reflection;
-using BetterAmongUs.Features.Commands;
-using BetterAmongUs.Networking.Rpc;
+using HoryTweaks.Features.Commands;
+using HoryTweaks.Networking.Rpc;
 
-namespace BetterAmongUs.Plugin.Registration;
+namespace HoryTweaks.Plugin.Registration;
 
 /// <summary>
 /// Generic attribute for automatically registering static instances of a specified base type or interface.

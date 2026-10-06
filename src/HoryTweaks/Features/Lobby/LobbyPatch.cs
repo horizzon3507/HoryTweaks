@@ -1,18 +1,18 @@
 
 
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.OptionItems;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Features.HostTransfer;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.UnityInterop;
-using BetterAmongUs.Localization;
+using HoryTweaks.Features.HostTransfer;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.UnityInterop;
+using HoryTweaks.Localization;
 
-namespace BetterAmongUs.Features.Lobby;
+namespace HoryTweaks.Features.Lobby;
 
 [HarmonyPatch]
 internal static class LobbyPatch

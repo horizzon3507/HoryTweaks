@@ -1,7 +1,7 @@
 using AmongUs.Data.Player;
 using HarmonyLib;
 
-namespace BetterAmongUs.Features.Rejoin;
+namespace HoryTweaks.Features.Rejoin;
 
 [HarmonyPatch]
 internal static class DisconnectPenaltyPatch

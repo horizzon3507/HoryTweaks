@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Text;
 
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Stages a verified release package under the writable data folder and schedules its

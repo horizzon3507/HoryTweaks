@@ -1,10 +1,10 @@
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using Hazel;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Networking.Rpc.Handlers.NetObjectHandlers;
+namespace HoryTweaks.Networking.Rpc.Handlers.NetObjectHandlers;
 
 [RegisterRPCHandler]
 internal sealed class UpdateSystemHandler : RPCHandler

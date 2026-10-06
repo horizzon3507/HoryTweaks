@@ -22,7 +22,7 @@ Alpha and beta cuts are development artifacts by default. Publish the numeric ta
 
 ## Release checklist
 
-1. Update `VERSION_NUMBER` in `src/BAUPlugin.ModInfo.cs`, `Version` in `src/BetterAmongUs.csproj`, both update feeds and the README compatibility version.
+1. Update `VersionPrefix` in `src/HoryTweaks/HoryTweaks.csproj` (the plugin version is generated from it) and the README compatibility version, and add `api/news/HoryTweaks-vX.Y.Z.yaml` with `^show: true`. The Update feeds workflow rewrites `api/update.json`, `api/update-V2.json` and `api/manifest.json` after the release is published.
 2. Add the channel-labelled entry to `CHANGELOG.md`.
 3. Validate translations and build `HoryTweaks.dll`.
 4. Test a clean install and an upgrade from BetterAmongUs with both store packages.

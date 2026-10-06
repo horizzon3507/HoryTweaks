@@ -2,7 +2,7 @@ using System.IO.Compression;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace BetterAmongUs.Core.Presets;
+namespace HoryTweaks.Core.Presets;
 
 /// <summary>
 /// Encodes preset settings into a compact share code and decodes them back with strict validation.

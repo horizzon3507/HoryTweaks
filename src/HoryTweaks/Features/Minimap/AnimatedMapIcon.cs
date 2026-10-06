@@ -1,9 +1,9 @@
 
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Features.Minimap;
+namespace HoryTweaks.Features.Minimap;
 
 /// <summary>
 /// Animates a map icon by smoothly scaling it up and down when conditions are met.

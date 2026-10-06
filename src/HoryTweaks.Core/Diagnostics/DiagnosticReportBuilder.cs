@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace BetterAmongUs.Core.Diagnostics;
+namespace HoryTweaks.Core.Diagnostics;
 
 /// <summary>
 /// Assembles a plain-text diagnostic report made of titled sections with key/value entries and free lines.

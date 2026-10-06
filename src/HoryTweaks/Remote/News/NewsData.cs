@@ -1,9 +1,9 @@
 
 
-using BetterAmongUs.Infrastructure.Persistence;
-using BetterAmongUs.Localization;
+using HoryTweaks.Infrastructure.Persistence;
+using HoryTweaks.Localization;
 
-namespace BetterAmongUs.Remote.News;
+namespace HoryTweaks.Remote.News;
 
 /// <summary>
 /// Represents the data structure for mod news items within the game.

@@ -5,11 +5,11 @@ using System.Collections;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Networking;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Remote.News;
-using BetterAmongUs.Remote.Updates;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Remote.News;
+using HoryTweaks.Remote.Updates;
 
-namespace BetterAmongUs.Remote;
+namespace HoryTweaks.Remote;
 
 /// <summary>
 /// Manages API connections to GitHub for news, updates, and user data.

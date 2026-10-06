@@ -1,7 +1,7 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 
-namespace BetterAmongUs.Features.Hud;
+namespace HoryTweaks.Features.Hud;
 
 [HarmonyPatch(typeof(KillOverlay))]
 internal static class KillOverlayPatch

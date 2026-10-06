@@ -1,14 +1,14 @@
 using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils;
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
 using InnerNet;
 using UnityEngine;
-using BetterAmongUs.Core.Rejoin;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Core.Rejoin;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Features.Rejoin;
+namespace HoryTweaks.Features.Rejoin;
 
 /// <summary>
 /// Remembers the last online lobby the local player joined and, after an

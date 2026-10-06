@@ -1,6 +1,6 @@
 using System.IO.Compression;
 
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Validates a downloaded store release package before anything on disk is touched:

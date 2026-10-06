@@ -1,4 +1,4 @@
-namespace BetterAmongUs;
+namespace HoryTweaks;
 
 internal partial class BAUPlugin
 {

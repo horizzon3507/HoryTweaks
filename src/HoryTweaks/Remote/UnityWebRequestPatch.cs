@@ -1,11 +1,11 @@
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 using HarmonyLib;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace BetterAmongUs.Remote;
+namespace HoryTweaks.Remote;
 
 [HarmonyPatch]
 internal static class UnityWebRequestPatch

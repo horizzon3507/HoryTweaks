@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Full-package download links advertised by the update feed's <c>packages</c> object.

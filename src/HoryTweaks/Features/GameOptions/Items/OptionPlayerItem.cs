@@ -1,13 +1,13 @@
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 
 using UnityEngine;
-using BetterAmongUs.Features.GameOptions.Items;
-using BetterAmongUs.Localization;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Features.GameOptions.Items;
+using HoryTweaks.Localization;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Modules.OptionItems;
+namespace HoryTweaks.Modules.OptionItems;
 
 /// <summary>
 /// Represents an option item that selects a player from the current game.

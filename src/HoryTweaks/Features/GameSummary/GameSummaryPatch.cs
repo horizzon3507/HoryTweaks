@@ -1,19 +1,19 @@
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Game;
-using BetterAmongUs.Localization;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Game;
+using HoryTweaks.Localization;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.GameSummary;
+namespace HoryTweaks.Features.GameSummary;
 
 [HarmonyPatch]
 internal static class GameSummaryPatch

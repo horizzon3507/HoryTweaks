@@ -1,7 +1,7 @@
 using Il2CppInterop.Runtime.Injection;
 using System.Reflection;
 
-namespace BetterAmongUs.Plugin.Registration;
+namespace HoryTweaks.Plugin.Registration;
 
 /// <summary>
 /// Attribute to register a class in the Il2Cpp runtime, optionally specifying interfaces to implement.

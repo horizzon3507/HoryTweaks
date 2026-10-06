@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Features.Hud;
+namespace HoryTweaks.Features.Hud;
 
 /// <summary>
 /// Manages custom loading bar functionality for BetterAmongUs.

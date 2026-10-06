@@ -1,15 +1,15 @@
 using AmongUs.GameOptions;
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
 using InnerNet;
 using UnityEngine;
-using BetterAmongUs.Core.Moderation;
-using BetterAmongUs.Features.Moderation;
-using BetterAmongUs.Game;
-using BetterAmongUs.Game.Players;
+using HoryTweaks.Core.Moderation;
+using HoryTweaks.Features.Moderation;
+using HoryTweaks.Game;
+using HoryTweaks.Game.Players;
 
-namespace BetterAmongUs.Utilities;
+namespace HoryTweaks.Utilities;
 
 /// <summary>
 /// Provides extension methods and utilities for working with PlayerControl instances.

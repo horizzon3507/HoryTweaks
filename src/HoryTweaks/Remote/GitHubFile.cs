@@ -1,13 +1,13 @@
 
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 using Il2CppInterop.Runtime.Attributes;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using BetterAmongUs.Features.Hud;
+using HoryTweaks.Features.Hud;
 
-namespace BetterAmongUs.Remote;
+namespace HoryTweaks.Remote;
 
 /// <summary>
 /// Provides methods for downloading files from GitHub repositories.

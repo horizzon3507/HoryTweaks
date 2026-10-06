@@ -1,10 +1,10 @@
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 using System.Text;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class PlayersInfoCommand : BaseCommand

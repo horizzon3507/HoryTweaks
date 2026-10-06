@@ -1,12 +1,12 @@
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 using System.Diagnostics;
-using BetterAmongUs.Core.Moderation;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Persistence;
+using HoryTweaks.Core.Moderation;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Persistence;
 
-namespace BetterAmongUs.Features.Moderation;
+namespace HoryTweaks.Features.Moderation;
 
 /// <summary>
 /// Runs host moderation actions with the host and game-state checks applied in code, independent of the UI.

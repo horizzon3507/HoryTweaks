@@ -1,19 +1,19 @@
 
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Features.Chat;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.UnityInterop;
-using static BetterAmongUs.Features.Lobby.LobbyPatch;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Features.Chat;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.UnityInterop;
+using static HoryTweaks.Features.Lobby.LobbyPatch;
 
-namespace BetterAmongUs.Features.Hud;
+namespace HoryTweaks.Features.Hud;
 
 /// <summary>
 /// Provides enhanced ping tracking and display functionality with additional information.

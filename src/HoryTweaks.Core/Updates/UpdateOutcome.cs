@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Explicit result of an update step or of the whole update attempt.

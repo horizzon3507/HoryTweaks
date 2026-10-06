@@ -1,14 +1,14 @@
 
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Features.Commands.Arguments;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Core.Presets;
-using BetterAmongUs.Features.GameOptions.Items;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Generated;
+using HoryTweaks.Modules.OptionItems;
+using HoryTweaks.Features.Commands.Arguments;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Core.Presets;
+using HoryTweaks.Features.GameOptions.Items;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class PresetNameCommand : BaseCommand

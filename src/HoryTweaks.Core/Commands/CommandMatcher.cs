@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Commands;
+namespace HoryTweaks.Core.Commands;
 
 /// <summary>
 /// A command as seen by <see cref="CommandMatcher"/>: its primary name, all matchable

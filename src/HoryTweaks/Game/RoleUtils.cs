@@ -1,7 +1,7 @@
 using AmongUs.GameOptions;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
-namespace BetterAmongUs.Game;
+namespace HoryTweaks.Game;
 
 /// <summary>
 /// Provides helper methods for working with Among Us roles and their properties.

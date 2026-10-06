@@ -2,9 +2,9 @@ using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils;
 
 using UnityEngine;
-using BetterAmongUs.Features.GameOptions;
+using HoryTweaks.Features.GameOptions;
 
-namespace BetterAmongUs.Features.Moderation;
+namespace HoryTweaks.Features.Moderation;
 
 /// <summary>
 /// Manages the cooldown period between player kick actions.

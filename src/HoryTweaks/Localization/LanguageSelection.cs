@@ -1,10 +1,10 @@
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Localization;
+namespace HoryTweaks.Localization;
 
 /// <summary>
 /// Picks the active language (game, forced system, or console English) and orders the

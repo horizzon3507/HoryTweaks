@@ -3,11 +3,11 @@ using BepInEx;
 using Il2CppInterop.Runtime.Attributes;
 using Semver;
 using System.Collections;
-using BetterAmongUs.Core.Updates;
-using BetterAmongUs.Features.Hud;
-using BetterAmongUs.Infrastructure.Persistence;
+using HoryTweaks.Core.Updates;
+using HoryTweaks.Features.Hud;
+using HoryTweaks.Infrastructure.Persistence;
 
-namespace BetterAmongUs.Remote.Updates;
+namespace HoryTweaks.Remote.Updates;
 
 /// <summary>
 /// Downloads, validates and installs a mod update, reporting an explicit <see cref="UpdateOutcome"/>.

@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Networking.Rpc;
+namespace HoryTweaks.Networking.Rpc;
 
 /// <summary>
 /// Defines handler flags used to control the processing flow of network messages.
@@ -11,7 +11,7 @@ internal enum HandlerFlag
     Handle,
 
     /// <summary>
-    /// Indicates the host is using BetterAmongUs.
+    /// Indicates the host is running BetterAmongUs.
     /// </summary>
     BetterHost,
 

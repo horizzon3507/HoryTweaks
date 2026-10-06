@@ -1,7 +1,7 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 
-namespace BetterAmongUs.Features.GameOptions;
+namespace HoryTweaks.Features.GameOptions;
 
 [HarmonyPatch]
 internal static class LogicOptionsPatch

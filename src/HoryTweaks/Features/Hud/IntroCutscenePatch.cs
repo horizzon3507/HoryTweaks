@@ -1,11 +1,11 @@
 using BepInEx.Unity.IL2CPP.Utils;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using System.Collections;
 using UnityEngine;
-using BetterAmongUs.Game;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.Hud;
+namespace HoryTweaks.Features.Hud;
 
 [HarmonyPatch]
 internal static class IntroCutscenePatch

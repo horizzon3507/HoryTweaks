@@ -1,11 +1,11 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Remote.Updates;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Remote.Updates;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Menu;
+namespace HoryTweaks.Features.Menu;
 
 [HarmonyPatch]
 internal static class MainMenuManagerPatch

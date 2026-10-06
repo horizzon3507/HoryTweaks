@@ -1,8 +1,8 @@
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 using UnityEngine;
-using BetterAmongUs.Game;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Infrastructure.UnityInterop;
+namespace HoryTweaks.Infrastructure.UnityInterop;
 
 /// <summary>
 /// Provides helper methods for working with Unity GameObjects, components, and visual elements.

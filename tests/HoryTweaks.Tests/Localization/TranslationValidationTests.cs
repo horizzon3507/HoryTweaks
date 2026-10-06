@@ -1,7 +1,7 @@
-using BetterAmongUs.Core.Localization;
+using HoryTweaks.Core.Localization;
 using System.Text.Json;
 using Xunit;
-using BetterAmongUs.Core.Localization;
+using HoryTweaks.Core.Localization;
 
 namespace HoryTweaks.Tests.Localization;
 

@@ -1,17 +1,17 @@
 using System.Reflection;
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using Hazel;
 using InnerNet;
 using UnityEngine;
-using BetterAmongUs.Core.HostTransfer;
-using BetterAmongUs.Features.Meeting;
-using BetterAmongUs.Game;
-using BetterAmongUs.Networking.Rpc;
+using HoryTweaks.Core.HostTransfer;
+using HoryTweaks.Features.Meeting;
+using HoryTweaks.Game;
+using HoryTweaks.Networking.Rpc;
 
-namespace BetterAmongUs.Features.HostTransfer;
+namespace HoryTweaks.Features.HostTransfer;
 
 /// <summary>
 /// Executes a voluntary host transfer initiated by the local host. Host migration in InnerNet is

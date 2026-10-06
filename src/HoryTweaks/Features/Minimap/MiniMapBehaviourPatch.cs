@@ -1,16 +1,16 @@
 
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Minimap;
+namespace HoryTweaks.Features.Minimap;
 
 [HarmonyPatch]
 internal static class MiniMapBehaviourPatch
@@ -215,7 +215,7 @@ internal static class MiniMapBehaviourPatch
     // Creates a vent icon with connection arrows to neighboring vents
     private static void CreateVentIcon(Vent vent)
     {
-        var icon = CreateIcon(Utils.LoadSprite("BetterAmongUs.Resources.Images.Icons.Vent.png", 380), "VentIcon");
+        var icon = CreateIcon(Utils.LoadSprite("HoryTweaks.Resources.Images.Icons.Vent.png", 380), "VentIcon");
         var color = VentGroups.GetVentGroupColor(vent);
         icon.color = new Color(color.r, color.g, color.b, 0.7f);
 
@@ -233,7 +233,7 @@ internal static class MiniMapBehaviourPatch
             Vent neighborVent = nearbyVents[i];
             if (neighborVent)
             {
-                var arrowIcon = CreateIcon(Utils.LoadSprite("BetterAmongUs.Resources.Images.Icons.Arrow.png", 600), "VentArrowIcon");
+                var arrowIcon = CreateIcon(Utils.LoadSprite("HoryTweaks.Resources.Images.Icons.Arrow.png", 600), "VentArrowIcon");
                 arrowIcon.color = VentGroups.GetVentGroupColor(neighborVent);
                 arrowIcon.transform.SetParent(icon.transform);
 
@@ -297,7 +297,7 @@ internal static class MiniMapBehaviourPatch
         {
             if (systemConsole.MinigamePrefab.name == "EmergencyMinigame")
             {
-                var icon = CreateIcon(Utils.LoadSprite("BetterAmongUs.Resources.Images.Icons.Meeting.png", 500), "MeetingIcon");
+                var icon = CreateIcon(Utils.LoadSprite("HoryTweaks.Resources.Images.Icons.Meeting.png", 500), "MeetingIcon");
                 icon.color = new Color(1f, 1f, 1f, 0.7f);
                 icon.transform.localScale = Vector3.one * 0.35f;
                 SetPosFromShip(usable.Cast<MonoBehaviour>().transform.position, icon.transform, new Vector3(0f, 0f, UsableLayerOffset));

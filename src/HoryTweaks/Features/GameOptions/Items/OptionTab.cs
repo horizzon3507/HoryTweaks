@@ -1,14 +1,14 @@
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Features.GameOptions.Items.Decor;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Modules.OptionItems;
+using HoryTweaks.Features.GameOptions.Items.Decor;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.GameOptions.Items;
+namespace HoryTweaks.Features.GameOptions.Items;
 
 /// <summary>
 /// Represents a tab in the options menu that groups related option items.

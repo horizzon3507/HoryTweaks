@@ -1,4 +1,4 @@
-using BetterAmongUs.Core.Updates;
+using HoryTweaks.Core.Updates;
 using System.IO.Compression;
 using System.Text;
 using Xunit;

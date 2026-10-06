@@ -1,7 +1,7 @@
 
 using HarmonyLib;
 
-namespace BetterAmongUs.Features.Sound;
+namespace HoryTweaks.Features.Sound;
 
 [HarmonyPatch]
 internal static class AudioOverridePatch

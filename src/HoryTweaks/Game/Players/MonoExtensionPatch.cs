@@ -2,9 +2,9 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 using HarmonyLib;
 using System.Collections;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Game.Players;
+namespace HoryTweaks.Game.Players;
 
 [HarmonyPatch]
 internal static class MonoExtensionPatch

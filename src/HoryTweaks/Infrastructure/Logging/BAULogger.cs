@@ -1,9 +1,9 @@
 using BepInEx;
 using BepInEx.Logging;
-using BetterAmongUs.Utilities;
-using BetterAmongUs.Game;
+using HoryTweaks.Utilities;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Infrastructure.Logging;
+namespace HoryTweaks.Infrastructure.Logging;
 
 /// <summary>
 /// Provides logging for BetterAmongUs with various log levels and destinations.

@@ -1,12 +1,12 @@
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Core.Moderation;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Core.Moderation;
+using HoryTweaks.Utilities;
 using HarmonyLib;
-using BetterAmongUs.Features.GameOptions;
-using BetterAmongUs.Game;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.Moderation;
+namespace HoryTweaks.Features.Moderation;
 
 [HarmonyPatch]
 internal static class CheckPlayerLevelPatch

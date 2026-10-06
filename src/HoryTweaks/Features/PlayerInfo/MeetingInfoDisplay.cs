@@ -1,21 +1,21 @@
 using AmongUs.Data;
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Structs;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Structs;
+using HoryTweaks.Utilities;
 using Il2CppInterop.Runtime.Attributes;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Game;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Game;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.PlayerInfo;
+namespace HoryTweaks.Features.PlayerInfo;
 
 /// <summary>
 /// Displays extended player information during meetings.

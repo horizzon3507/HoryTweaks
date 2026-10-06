@@ -1,11 +1,11 @@
-using BetterAmongUs.Core.Options;
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
-using BetterAmongUs.Features.GameOptions.Items;
-using BetterAmongUs.Localization;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Core.Options;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
+using HoryTweaks.Features.GameOptions.Items;
+using HoryTweaks.Localization;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Modules.OptionItems;
+namespace HoryTweaks.Modules.OptionItems;
 
 /// <summary>
 /// Represents an option item that selects from a list of string values.

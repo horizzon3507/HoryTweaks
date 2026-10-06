@@ -1,8 +1,8 @@
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 using HarmonyLib;
 using UnityEngine;
 
-namespace BetterAmongUs.Features.GameOptions;
+namespace HoryTweaks.Features.GameOptions;
 
 [HarmonyPatch]
 internal static class NumberOptionPatch

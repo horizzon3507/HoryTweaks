@@ -1,9 +1,9 @@
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Game;
+using HoryTweaks.Generated;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class EndGameCommand : BaseCommand

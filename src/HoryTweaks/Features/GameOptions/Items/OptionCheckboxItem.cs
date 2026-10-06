@@ -1,12 +1,12 @@
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 
 using UnityEngine;
-using BetterAmongUs.Features.GameOptions.Items;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Features.GameOptions.Items;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Modules.OptionItems;
+namespace HoryTweaks.Modules.OptionItems;
 
 /// <summary>
 /// Represents a checkbox option item that can be toggled on or off.

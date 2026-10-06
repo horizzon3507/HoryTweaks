@@ -1,11 +1,11 @@
 
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Modules.Support;
-using BetterAmongUs.Utilities;
-using BetterAmongUs.Features.Commands.Arguments;
+using HoryTweaks.Generated;
+using HoryTweaks.Modules.Support;
+using HoryTweaks.Utilities;
+using HoryTweaks.Features.Commands.Arguments;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 /// <summary>
 /// Abstract base class for all commands in BetterAmongUs.

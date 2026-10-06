@@ -1,7 +1,7 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using InnerNet;
 
-namespace BetterAmongUs.Game.Players;
+namespace HoryTweaks.Game.Players;
 
 /// <summary>
 /// Represents temporary client data for caching or snapshot purposes.

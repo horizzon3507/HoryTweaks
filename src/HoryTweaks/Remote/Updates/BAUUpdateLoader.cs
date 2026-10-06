@@ -4,9 +4,9 @@ using Il2CppInterop.Runtime.Attributes;
 using System.Collections;
 using System.Text.Json;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Remote.Updates;
+namespace HoryTweaks.Remote.Updates;
 
 /// <summary>
 /// Handles downloading and processing of update data from a remote repository.

@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace BetterAmongUs.Infrastructure.Persistence;
+namespace HoryTweaks.Infrastructure.Persistence;
 
 /// <summary>
 /// Provides utilities for handling text files, including filtering, parsing, and formatting.

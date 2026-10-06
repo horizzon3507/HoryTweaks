@@ -1,20 +1,20 @@
 using AmongUs.InnerNet.GameDataMessages;
 using BepInEx.Unity.IL2CPP.Utils;
 
-using BetterAmongUs.Structs;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Structs;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using Hazel;
 using InnerNet;
 using System.Collections;
 using UnityEngine;
-using BetterAmongUs.Networking.Rpc;
-using BetterAmongUs.Features.GameOptions;
-using BetterAmongUs.Game;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Networking.Rpc;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Game;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Networking;
+namespace HoryTweaks.Networking;
 
 /// <summary>
 /// Manages network communication and RPC handling for BetterAmongUs.

@@ -1,6 +1,6 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
-namespace BetterAmongUs.Features.Commands.Arguments;
+namespace HoryTweaks.Features.Commands.Arguments;
 
 /// <summary>
 /// Represents a player command argument.
@@ -60,7 +60,7 @@ internal sealed class PlayerInfoArgument(BaseCommand command, string argInfo = "
         }
 
         result = default!;
-        BaseCommand.CommandErrorText(BetterAmongUs.Generated.TranslationStrings.Command_Error_PlayerNotFound.LocalizedString);
+        BaseCommand.CommandErrorText(HoryTweaks.Generated.TranslationStrings.Command_Error_PlayerNotFound.LocalizedString);
         return false;
     }
 

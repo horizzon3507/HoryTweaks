@@ -1,14 +1,14 @@
 using BepInEx.Unity.IL2CPP.Utils;
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using System.Collections;
 using UnityEngine;
-using BetterAmongUs.Features.Chat;
-using BetterAmongUs.Game;
+using HoryTweaks.Features.Chat;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.Hud;
+namespace HoryTweaks.Features.Hud;
 
 [HarmonyPatch]
 internal static class HudManagerPatch

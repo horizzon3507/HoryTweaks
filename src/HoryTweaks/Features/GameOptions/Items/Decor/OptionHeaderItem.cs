@@ -1,8 +1,8 @@
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 using UnityEngine;
-using BetterAmongUs.Modules.OptionItems;
+using HoryTweaks.Modules.OptionItems;
 
-namespace BetterAmongUs.Features.GameOptions.Items.Decor;
+namespace HoryTweaks.Features.GameOptions.Items.Decor;
 
 /// <summary>
 /// Represents a header item used to group options with a title in the UI.

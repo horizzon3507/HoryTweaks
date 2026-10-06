@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Networking.Rpc;
+namespace HoryTweaks.Networking.Rpc;
 
 /// <summary>
 /// Defines custom Remote Procedure Call (RPC) identifiers used by BetterAmongUs.

@@ -1,11 +1,11 @@
 
-using BetterAmongUs.Modules.Support;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Modules.Support;
+using HoryTweaks.Utilities;
 using HarmonyLib;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.PlayerInfo;
+namespace HoryTweaks.Features.PlayerInfo;
 
 [HarmonyPatch]
 internal static class CosmeticsLayerPatch

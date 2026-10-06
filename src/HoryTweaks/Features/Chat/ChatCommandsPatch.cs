@@ -1,18 +1,18 @@
 
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Core.Commands;
+using HoryTweaks.Generated;
+using HoryTweaks.Core.Commands;
 
-using BetterAmongUs.Modules.Support;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Modules.Support;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Features.Commands;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Features.Commands;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Features.Chat;
+namespace HoryTweaks.Features.Chat;
 
 [HarmonyPatch]
 internal static class ChatCommandsPatch

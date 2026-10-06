@@ -2,7 +2,7 @@ using AmongUs.InnerNet.GameDataMessages;
 using Hazel;
 using InnerNet;
 
-namespace BetterAmongUs.Networking.Rpc.Handlers.NetObjectHandlers;
+namespace HoryTweaks.Networking.Rpc.Handlers.NetObjectHandlers;
 
 internal sealed class DespawnNetObjectHandler : RPCHandler
 {

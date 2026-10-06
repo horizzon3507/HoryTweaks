@@ -1,7 +1,7 @@
 using Semver;
 using System.Reflection;
 
-namespace BetterAmongUs;
+namespace HoryTweaks;
 
 internal partial class BAUPlugin
 {
@@ -60,9 +60,9 @@ internal partial class BAUPlugin
         internal const string GITHUB = "https://github.com/horizzon3507/HoryTweaks";
 
         /// <summary>
-        /// The Discord invite URL for BAU.
+        /// The Discord invite URL for the HoryTweaks community.
         /// </summary>
-        internal const string DISCORD = "https://discord.gg/vjYrXpzNAn";
+        internal const string DISCORD = "https://discord.gg/dzuhVMfVXU";
 
         /// <summary>
         /// Indicator rather that BAU is running on Starlight for Android.

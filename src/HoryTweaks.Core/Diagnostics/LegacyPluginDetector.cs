@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Diagnostics;
+namespace HoryTweaks.Core.Diagnostics;
 
 /// <summary>
 /// Finds a legacy BetterAmongUs installation that would load beside HoryTweaks.

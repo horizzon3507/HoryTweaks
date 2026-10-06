@@ -1,18 +1,18 @@
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Modules.OptionItems;
+using HoryTweaks.Modules.OptionItems;
 
-using BetterAmongUs.Modules.Support;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Modules.Support;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Features.GameOptions.Items;
-using BetterAmongUs.Core.Presets;
-using BetterAmongUs.Features.GameOptions.Items.Decor;
-using BetterAmongUs.Game;
+using HoryTweaks.Features.GameOptions.Items;
+using HoryTweaks.Core.Presets;
+using HoryTweaks.Features.GameOptions.Items.Decor;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.GameOptions;
+namespace HoryTweaks.Features.GameOptions;
 
 // Custom game settings definitions
 internal sealed class BetterGameSettings

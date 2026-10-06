@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Moderation;
+namespace HoryTweaks.Core.Moderation;
 
 /// <summary>
 /// Pure host-side predicates for kicking a player, extracted from

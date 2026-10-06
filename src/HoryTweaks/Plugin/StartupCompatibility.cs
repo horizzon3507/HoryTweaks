@@ -1,11 +1,11 @@
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
-using BetterAmongUs.Core.Diagnostics;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
+using HoryTweaks.Core.Diagnostics;
 
-namespace BetterAmongUs.Plugin;
+namespace HoryTweaks.Plugin;
 
 /// <summary>
 /// Checks the installation once at startup for a legacy BetterAmongUs plugin and an unsupported

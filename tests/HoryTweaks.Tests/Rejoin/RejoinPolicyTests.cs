@@ -1,4 +1,4 @@
-using BetterAmongUs.Core.Rejoin;
+using HoryTweaks.Core.Rejoin;
 using Xunit;
 
 namespace HoryTweaks.Tests.Rejoin;

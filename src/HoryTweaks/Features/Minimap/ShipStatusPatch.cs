@@ -1,7 +1,7 @@
 
 using HarmonyLib;
 
-namespace BetterAmongUs.Features.Minimap;
+namespace HoryTweaks.Features.Minimap;
 
 [HarmonyPatch]
 internal static class ShipStatusPatch

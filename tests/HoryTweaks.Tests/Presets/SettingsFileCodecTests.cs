@@ -1,4 +1,4 @@
-using BetterAmongUs.Core.Presets;
+using HoryTweaks.Core.Presets;
 using System.Globalization;
 using System.Text.Json;
 using Xunit;

@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Game;
+namespace HoryTweaks.Game;
 
 /// <summary>
 /// Represents custom platform identifiers.

@@ -1,11 +1,11 @@
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Modules.OptionItems;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.GameOptions.Items.Decor;
+namespace HoryTweaks.Features.GameOptions.Items.Decor;
 
 /// <summary>
 /// A settings row that runs an action when clicked instead of storing a value.

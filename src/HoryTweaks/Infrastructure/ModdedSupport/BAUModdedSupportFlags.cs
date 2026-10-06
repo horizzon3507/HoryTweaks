@@ -1,10 +1,10 @@
 #pragma warning disable CA2211
 
 using BepInEx.Unity.IL2CPP;
-using BetterAmongUs.Infrastructure.ModdedSupport;
-using BetterAmongUs.Core.ModdedSupport;
+using HoryTweaks.Infrastructure.ModdedSupport;
+using HoryTweaks.Core.ModdedSupport;
 
-namespace BetterAmongUs.Modules.Support;
+namespace HoryTweaks.Modules.Support;
 
 /// <summary>
 /// Provides modded support functionality for BetterAmongUs by allowing other mods to declare flags

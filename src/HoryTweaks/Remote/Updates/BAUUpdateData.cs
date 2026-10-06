@@ -1,9 +1,9 @@
 
 using Semver;
 using System.Text.Json.Serialization;
-using BetterAmongUs.Core.Updates;
+using HoryTweaks.Core.Updates;
 
-namespace BetterAmongUs.Remote.Updates;
+namespace HoryTweaks.Remote.Updates;
 
 /// <summary>
 /// Represents update data retrieved from the remote repository.

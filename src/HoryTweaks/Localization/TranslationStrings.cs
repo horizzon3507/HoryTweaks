@@ -1,8 +1,8 @@
 
 
-using BetterAmongUs.Localization;
+using HoryTweaks.Localization;
 
-namespace BetterAmongUs.Generated;
+namespace HoryTweaks.Generated;
 
 /// <summary>
 /// Provides strongly-typed translation keys for BAU.

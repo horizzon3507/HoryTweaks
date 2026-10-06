@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Remote;
+namespace HoryTweaks.Remote;
 
 /// <summary>
 /// Represents a Git URL path for accessing HoryTweaks resources.

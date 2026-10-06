@@ -11,7 +11,7 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 
 </details>
 
-## v0.1.3-alpha · 02/10/2026
+## Unreleased
 
 ### Added
 
@@ -19,16 +19,30 @@ HoryTweaks is a single release surface, so it does not use the mixed-surface `m`
 - Installer tests on Windows and Linux, downloadable installer scripts and SHA-256 manifests for future release assets.
 - "Controls & Gestures" page (page 4) in the HoryTweaks options tab listing the mod's hidden shortcuts: scroll zoom, option value multipliers, chat autocomplete and chat history.
 - "Scroll Zoom" client toggle that enables or disables the scroll-wheel zoom.
+- `/transferhost` (`/th`) command, plus an automatic host transfer to the longest-connected player when the host stays AFK in the lobby.
+- "Auto Rejoin" client option that rejoins the last online lobby after an involuntary disconnect, with a countdown on the disconnect popup.
+- "Extended chat history" client option and a `/copy` (`/copylog`) command that copies the last 50 chat lines to the clipboard.
+- "Hory-User" badge for HoryTweaks players, detected inside the mod handshake; upstream BetterAmongUs players keep the "Better-User" badge.
 
 ### Changed
 
 - The remaining hardcoded English strings are now localized: the loading bar texts, outfit preset descriptions, kick reasons, Info/ID labels, language-update notes, untranslated-key notices, server region names and speed-cap labels.
+- The in-game updater installs the store-specific release package after verifying it against the release's `SHA256SUMS.txt`, and falls back to replacing only `HoryTweaks.dll` for releases without one.
+- Code namespaces moved from `BetterAmongUs.*` to `HoryTweaks.*` and embedded resources from `BetterAmongUs.Resources.*` to `HoryTweaks.Resources.*`. Mods that reference HoryTweaks types, including the modded support examples, must update their `using` directives.
+- The Discord link points to the HoryTweaks community server instead of the upstream BetterAmongUs one.
+
+### Removed
+
+- Old BetterAmongUs news posts no longer appear in the in-game announcements.
 
 ### Fixed
 
 - The config loader now re-applies every client option on boot: BetterMinimapColors, BetterColorblindText and CompressSettingFiles were silently skipped before.
 - Client options read the canonical `HoryTweaks` config file; values stored in the old username-keyed config file are migrated once.
 - "?" help icons on options are anchored right beside the option title and no longer overlap the title text.
+- The logger no longer crashes on Starlight when an error is logged early in startup.
+- Embedded WAV sounds are decoded from their actual chunk layout instead of fixed header offsets.
+- Settings files with a `|` inside a JSON string value are read correctly.
 
 ## v0.1.2-alpha · 30/09/2026
 

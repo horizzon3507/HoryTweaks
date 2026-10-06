@@ -1,6 +1,6 @@
-using BetterAmongUs.Core.Diagnostics;
+using HoryTweaks.Core.Diagnostics;
 using Xunit;
-using BetterAmongUs.Core.Diagnostics;
+using HoryTweaks.Core.Diagnostics;
 
 namespace HoryTweaks.Tests.Diagnostics;
 

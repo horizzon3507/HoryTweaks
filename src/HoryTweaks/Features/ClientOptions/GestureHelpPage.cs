@@ -1,11 +1,11 @@
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.ClientOptions;
+namespace HoryTweaks.Features.ClientOptions;
 
 /// <summary>
 /// Read-only "Controls &amp; Gestures" page inside the Better Options tab. Documents the mod's

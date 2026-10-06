@@ -1,17 +1,17 @@
 using BepInEx.Unity.IL2CPP.Utils;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.OptionItems;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using System.Collections;
 using UnityEngine;
-using BetterAmongUs.Features.Chat;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Features.Chat;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Game.Players;
+namespace HoryTweaks.Game.Players;
 
 [HarmonyPatch]
 internal static class PlayerControlPatch

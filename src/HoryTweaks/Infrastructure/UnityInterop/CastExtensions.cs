@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Infrastructure.UnityInterop;
+namespace HoryTweaks.Infrastructure.UnityInterop;
 
 /// <summary>
 /// Provides extension methods for safe type casting operations.

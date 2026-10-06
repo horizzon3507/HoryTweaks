@@ -1,7 +1,7 @@
 using HarmonyLib;
 using UnityEngine;
 
-namespace BetterAmongUs.Features.Lobby;
+namespace HoryTweaks.Features.Lobby;
 
 [HarmonyPatch]
 internal static class RegionMenuPatch

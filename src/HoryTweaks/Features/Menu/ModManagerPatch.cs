@@ -1,13 +1,13 @@
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Features.Hud;
-using BetterAmongUs.Remote;
+using HoryTweaks.Features.Hud;
+using HoryTweaks.Remote;
 
-namespace BetterAmongUs.Features.Menu;
+namespace HoryTweaks.Features.Menu;
 
 [HarmonyPatch]
 internal static class ModManagerPatch
@@ -23,7 +23,7 @@ internal static class ModManagerPatch
         if (DownloadIcon == null)
         {
             DownloadIcon = UnityEngine.Object.Instantiate(__instance.ModStamp, __instance.transform);
-            DownloadIcon.sprite = Utils.LoadSprite($"BetterAmongUs.Resources.Images.Icons.Downloading.png", 250);
+            DownloadIcon.sprite = Utils.LoadSprite($"HoryTweaks.Resources.Images.Icons.Downloading.png", 250);
             DownloadIcon.name = "DownloadIcon";
         }
         else
@@ -57,7 +57,7 @@ internal static class ModManagerPatch
                 // unless other mods have disabled custom mod stamps
                 if (!BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_CustomModStamp))
                 {
-                    modStamp.sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Mod.png", 1450f);
+                    modStamp.sprite = Utils.LoadSprite("HoryTweaks.Resources.Images.HoryTweaks-Mod.png", 1450f);
                 }
             }
         }

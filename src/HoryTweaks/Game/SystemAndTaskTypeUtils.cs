@@ -1,6 +1,6 @@
 
 
-namespace BetterAmongUs.Game;
+namespace HoryTweaks.Game;
 
 /// <summary>
 /// Provides utility methods and constants for working with system types and task types.

@@ -1,6 +1,6 @@
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 /// <summary>
 /// Owns the list of registered chat commands, built once from <see cref="RegisterCommandAttribute"/> instances.

@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using UnityEngine;
 
-namespace BetterAmongUs.Infrastructure.Logging;
+namespace HoryTweaks.Infrastructure.Logging;
 
 /// <summary>
 /// Provides AES encryption and decryption utilities for sensitive data.

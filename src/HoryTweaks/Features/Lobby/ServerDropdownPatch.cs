@@ -1,12 +1,12 @@
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
 using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Lobby;
+namespace HoryTweaks.Features.Lobby;
 
 [HarmonyPatch]
 internal static class ServerDropdownPatch

@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BetterAmongUs.Infrastructure.Persistence.Json;
+namespace HoryTweaks.Infrastructure.Persistence.Json;
 
 /// <summary>
 /// Provides a base class for JSON-backed data files with automatic

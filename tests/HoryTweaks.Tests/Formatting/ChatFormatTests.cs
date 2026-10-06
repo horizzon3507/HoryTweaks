@@ -1,4 +1,4 @@
-using BetterAmongUs.Core.Formatting;
+using HoryTweaks.Core.Formatting;
 using Xunit;
 
 namespace HoryTweaks.Tests.Formatting;

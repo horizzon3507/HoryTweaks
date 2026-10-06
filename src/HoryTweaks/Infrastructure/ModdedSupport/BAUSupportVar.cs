@@ -2,7 +2,7 @@ using BepInEx;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace BetterAmongUs.Infrastructure.ModdedSupport;
+namespace HoryTweaks.Infrastructure.ModdedSupport;
 
 /// <summary>
 /// Provides a mechanism to retrieve values from plugins through reflection-based property/field access.

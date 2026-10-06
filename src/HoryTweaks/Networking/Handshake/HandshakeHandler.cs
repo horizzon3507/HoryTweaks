@@ -1,19 +1,19 @@
 using BepInEx.Unity.IL2CPP.Utils;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using Hazel;
 using Il2CppInterop.Runtime.Attributes;
 using System.Collections;
 using UnityEngine;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Core.ModdedSupport;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Networking.Rpc;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Core.ModdedSupport;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Networking.Rpc;
 
-namespace BetterAmongUs.Networking.Handshake;
+namespace HoryTweaks.Networking.Handshake;
 
 /// <summary>
 /// Handles the secure handshake process between BetterAmongUs clients using Diffie-Hellman key exchange.

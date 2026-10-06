@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Features.Commands.Arguments;
+namespace HoryTweaks.Features.Commands.Arguments;
 
 /// <summary>
 /// Represents a boolean command argument.
@@ -31,7 +31,7 @@ internal sealed class BoolArgument(BaseCommand command, string argInfo = "{bool}
         }
         else
         {
-            BaseCommand.CommandErrorText(BetterAmongUs.Generated.TranslationStrings.Command_Error_InvalidSyntax.LocalizedString);
+            BaseCommand.CommandErrorText(HoryTweaks.Generated.TranslationStrings.Command_Error_InvalidSyntax.LocalizedString);
             result = default;
             return false;
         }

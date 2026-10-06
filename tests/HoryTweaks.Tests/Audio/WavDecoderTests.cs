@@ -1,5 +1,5 @@
 using System.Buffers.Binary;
-using BetterAmongUs.Core.Audio;
+using HoryTweaks.Core.Audio;
 using Xunit;
 
 namespace HoryTweaks.Tests.Audio;

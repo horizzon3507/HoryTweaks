@@ -3,7 +3,7 @@ using Il2CppInterop.Runtime;
 using System.Collections;
 using UnityEngine;
 
-namespace BetterAmongUs.Infrastructure.UnityInterop;
+namespace HoryTweaks.Infrastructure.UnityInterop;
 
 /// <summary>
 /// Interface for MonoBehavior extensions.

@@ -1,4 +1,4 @@
-using BetterAmongUs.Core.Validation;
+using HoryTweaks.Core.Validation;
 using Xunit;
 
 namespace HoryTweaks.Tests.Validation;

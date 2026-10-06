@@ -1,9 +1,9 @@
 ﻿using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
-using BetterAmongUs.Helpers;
+using HoryTweaks.Modules.Support;
 using System.ComponentModel;
 
-namespace BetterAmongUs.Examples;
+namespace HoryTweaks.Examples;
 
 /// <summary>
 /// Example class demonstrating how to create modded support for BetterAmongUs.

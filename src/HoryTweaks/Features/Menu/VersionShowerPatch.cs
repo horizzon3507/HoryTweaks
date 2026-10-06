@@ -1,8 +1,8 @@
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 
-namespace BetterAmongUs.Features.Menu;
+namespace HoryTweaks.Features.Menu;
 
 [HarmonyPatch]
 internal static class VersionShowerPatch

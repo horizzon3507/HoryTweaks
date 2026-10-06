@@ -1,4 +1,4 @@
-using BetterAmongUs.Core.Updates;
+using HoryTweaks.Core.Updates;
 using Semver;
 using System.Text.Json;
 using System.Xml.Linq;

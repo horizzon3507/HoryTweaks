@@ -1,6 +1,6 @@
-using BetterAmongUs.Core.HostTransfer;
+using HoryTweaks.Core.HostTransfer;
 using Xunit;
-using BetterAmongUs.Core.HostTransfer;
+using HoryTweaks.Core.HostTransfer;
 
 namespace HoryTweaks.Tests.HostTransfer;
 

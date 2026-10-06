@@ -1,13 +1,13 @@
 using AmongUs.GameOptions;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using System.Text;
 using UnityEngine;
-using BetterAmongUs.Localization;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Localization;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Lobby;
+namespace HoryTweaks.Features.Lobby;
 
 [HarmonyPatch]
 internal static class FindGameMoreInfoPopupPatch

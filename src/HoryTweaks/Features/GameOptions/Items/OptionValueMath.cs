@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Modules.OptionItems;
+namespace HoryTweaks.Modules.OptionItems;
 
 /// <summary>
 /// Conversion and numeric helpers shared by option items.

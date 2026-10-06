@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace BetterAmongUs.Localization;
+namespace HoryTweaks.Localization;
 
 /// <summary>
 /// Owns the loaded translation catalogs: the language-name-to-ID lookup and the per-key
@@ -8,7 +8,7 @@ namespace BetterAmongUs.Localization;
 /// </summary>
 internal static class TranslationCatalog
 {
-    internal const string ResourcePath = "BetterAmongUs.Resources.Lang";
+    internal const string ResourcePath = "HoryTweaks.Resources.Lang";
     internal const string EnglishCatalogName = "en_US";
 
     internal static Dictionary<string, int> TranslateIdLookup = [];

@@ -1,9 +1,9 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using UnityEngine;
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Modules.OptionItems;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.GameOptions.Items.Decor;
+namespace HoryTweaks.Features.GameOptions.Items.Decor;
 
 /// <summary>
 /// Represents a visual divider item used to separate option groups in the UI.

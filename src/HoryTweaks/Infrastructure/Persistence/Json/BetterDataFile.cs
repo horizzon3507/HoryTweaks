@@ -1,7 +1,7 @@
-using BetterAmongUs.Structs;
+using HoryTweaks.Structs;
 using System.Text.Json.Serialization;
 
-namespace BetterAmongUs.Infrastructure.Persistence.Json;
+namespace HoryTweaks.Infrastructure.Persistence.Json;
 
 /// <summary>
 /// Represents the main data file for BetterAmongUs, containing outfit presets.

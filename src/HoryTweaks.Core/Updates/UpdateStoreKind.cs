@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Store variant of the current install, deciding which full release package applies.

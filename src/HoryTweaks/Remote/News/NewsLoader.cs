@@ -4,9 +4,9 @@ using Il2CppInterop.Runtime.Attributes;
 using System.Collections;
 using System.Text.Json;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Remote.News;
+namespace HoryTweaks.Remote.News;
 
 /// <summary>
 /// Handles downloading and processing of news data from a remote repository.
@@ -109,7 +109,7 @@ internal sealed class NewsLoader : MonoBehaviour
     [HideFromIl2Cpp]
     private IEnumerator CoLoadNewsTest()
     {
-        string yamlDirectory = "BetterAmongUs.Resources.NewsTest";
+        string yamlDirectory = "HoryTweaks.Resources.NewsTest";
         var assembly = BAUPlugin.ModInfo.Assembly;
         using Stream? resourceStream = assembly.GetManifestResourceStream(yamlDirectory);
         if (resourceStream != null)

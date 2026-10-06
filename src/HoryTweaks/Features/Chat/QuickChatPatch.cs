@@ -1,9 +1,9 @@
 using AmongUs.QuickChat;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Chat;
+namespace HoryTweaks.Features.Chat;
 
 [HarmonyPatch]
 internal static class QuickChatPatch

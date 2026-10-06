@@ -1,7 +1,7 @@
-using BetterAmongUs.Networking.Rpc.Handlers.NetObjectHandlers;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Networking.Rpc.Handlers.NetObjectHandlers;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Networking.Rpc;
+namespace HoryTweaks.Networking.Rpc;
 
 /// <summary>
 /// Owns the list of registered RPC handlers, built once from <see cref="RegisterRPCHandlerAttribute"/> instances.

@@ -1,7 +1,7 @@
 
 using System.Security.Cryptography;
 
-namespace BetterAmongUs.Networking.Handshake;
+namespace HoryTweaks.Networking.Handshake;
 
 /// <summary>
 /// Handles secure key exchange using Elliptic Curve Diffie-Hellman (ECDH) for establishing shared secrets.

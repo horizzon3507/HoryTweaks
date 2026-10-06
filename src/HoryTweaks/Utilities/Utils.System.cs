@@ -1,8 +1,8 @@
 ﻿using BepInEx.Unity.IL2CPP.Utils;
-using BetterAmongUs.Generated;
-using BetterAmongUs.Game;
-using BetterAmongUs.Features.Chat;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Generated;
+using HoryTweaks.Game;
+using HoryTweaks.Features.Chat;
+using HoryTweaks.Infrastructure.UnityInterop;
 using InnerNet;
 using System.Collections;
 using System.Security.Cryptography;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace BetterAmongUs.Utilities;
+namespace HoryTweaks.Utilities;
 
 /// <summary>
 /// Provides utility methods for string manipulation, network operations, player lookups, and game utilities.

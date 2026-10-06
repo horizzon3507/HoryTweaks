@@ -1,11 +1,11 @@
 
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using Hazel;
-using BetterAmongUs.Features.HostTransfer;
-using BetterAmongUs.Game.Players;
+using HoryTweaks.Features.HostTransfer;
+using HoryTweaks.Game.Players;
 
-namespace BetterAmongUs.Networking.Rpc;
+namespace HoryTweaks.Networking.Rpc;
 
 /// <summary>
 /// Handles custom RPC (Remote Procedure Call) messages for BetterAmongUs.

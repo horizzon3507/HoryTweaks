@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Terminal states of an in-game update attempt.

@@ -1,7 +1,7 @@
-using BetterAmongUs.Modules.Support;
-using BetterAmongUs.Features.ClientOptions;
+using HoryTweaks.Modules.Support;
+using HoryTweaks.Features.ClientOptions;
 
-namespace BetterAmongUs.Infrastructure.Configuration;
+namespace HoryTweaks.Infrastructure.Configuration;
 
 /// <summary>
 /// Manages configuration entries for the Better Among Us.

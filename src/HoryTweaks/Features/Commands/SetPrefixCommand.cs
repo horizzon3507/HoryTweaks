@@ -1,12 +1,12 @@
 
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Modules.Support;
-using BetterAmongUs.Features.Commands.Arguments;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Generated;
+using HoryTweaks.Modules.Support;
+using HoryTweaks.Features.Commands.Arguments;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class SetPrefixCommand : BaseCommand

@@ -2,10 +2,10 @@ using AmongUs.InnerNet.GameDataMessages;
 
 using Hazel;
 using InnerNet;
-using BetterAmongUs.Features.Meeting;
-using BetterAmongUs.Game;
+using HoryTweaks.Features.Meeting;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Networking.Rpc.Handlers.NetObjectHandlers;
+namespace HoryTweaks.Networking.Rpc.Handlers.NetObjectHandlers;
 
 internal sealed class DeserializeNetObjectHandler : RPCHandler
 {

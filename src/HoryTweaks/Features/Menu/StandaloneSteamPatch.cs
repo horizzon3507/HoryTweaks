@@ -1,7 +1,7 @@
 using HarmonyLib;
 using System.Reflection;
 
-namespace BetterAmongUs.Features.Menu;
+namespace HoryTweaks.Features.Menu;
 
 [HarmonyPatch]
 internal static class StandaloneSteamPatch

@@ -1,20 +1,20 @@
 using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils;
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using InnerNet;
-using BetterAmongUs.Features.GameOptions;
-using BetterAmongUs.Features.Meeting;
-using BetterAmongUs.Features.Moderation;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.Persistence;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Features.Meeting;
+using HoryTweaks.Features.Moderation;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Persistence;
 
-namespace BetterAmongUs.Game.Players;
+namespace HoryTweaks.Game.Players;
 
 [HarmonyPatch]
 internal static class PlayerJoinAndLeftPatch

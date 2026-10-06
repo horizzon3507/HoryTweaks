@@ -1,4 +1,4 @@
-﻿using BetterAmongUs.Core.Updates;
+﻿using HoryTweaks.Core.Updates;
 using Xunit;
 
 namespace HoryTweaks.Tests.Updates;

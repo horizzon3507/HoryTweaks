@@ -1,10 +1,10 @@
-using BetterAmongUs.Utilities;
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Utilities;
+using HoryTweaks.Modules.Support;
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Menu;
+namespace HoryTweaks.Features.Menu;
 
 [HarmonyPatch]
 internal static class SplashIntroPatch
@@ -124,7 +124,7 @@ internal static class SplashIntroPatch
 
         _betterLogo.name = "BetterLogo";
         _betterLogo.GetComponent<SpriteRenderer>().sprite =
-            Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Logo.png", 289f);
+            Utils.LoadSprite("HoryTweaks.Resources.Images.HoryTweaks-Logo.png", 289f);
     }
 
     private static bool CheckIfDone(SplashManager __instance, bool isSkip = false)

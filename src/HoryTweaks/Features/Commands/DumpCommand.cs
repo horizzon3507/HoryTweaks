@@ -1,20 +1,20 @@
 using BepInEx;
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using BepInEx.Unity.IL2CPP;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Core.Diagnostics;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.Logging;
-using BetterAmongUs.Infrastructure.Persistence;
-using BetterAmongUs.Plugin;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Core.Diagnostics;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Logging;
+using HoryTweaks.Infrastructure.Persistence;
+using HoryTweaks.Plugin;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class DumpCommand : BaseCommand

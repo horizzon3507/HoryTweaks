@@ -1,22 +1,22 @@
 using BepInEx.Unity.IL2CPP.Utils;
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using InnerNet;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using BetterAmongUs.Features.Chat;
-using BetterAmongUs.Features.Hud;
-using BetterAmongUs.Game;
-using BetterAmongUs.Plugin;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Features.Chat;
+using HoryTweaks.Features.Hud;
+using HoryTweaks.Game;
+using HoryTweaks.Plugin;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Menu;
+namespace HoryTweaks.Features.Menu;
 
 [HarmonyPatch]
 internal static class ClientPatch

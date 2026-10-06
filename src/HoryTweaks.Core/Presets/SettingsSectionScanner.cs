@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Presets;
+namespace HoryTweaks.Core.Presets;
 
 /// <summary>
 /// Scans the flattened <c>key/value|key/value</c> settings representation.

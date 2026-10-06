@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.HostTransfer;
+namespace HoryTweaks.Core.HostTransfer;
 
 /// <summary>
 /// Reasons a host transfer is refused.

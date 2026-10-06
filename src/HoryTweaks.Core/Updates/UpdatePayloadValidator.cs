@@ -2,7 +2,7 @@ using Semver;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Validates update feed links and downloaded assemblies before anything on disk is touched.

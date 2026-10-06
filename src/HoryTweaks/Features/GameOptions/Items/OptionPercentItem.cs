@@ -1,7 +1,7 @@
-using BetterAmongUs.Generated;
-using BetterAmongUs.Features.GameOptions.Items;
+using HoryTweaks.Generated;
+using HoryTweaks.Features.GameOptions.Items;
 
-namespace BetterAmongUs.Modules.OptionItems;
+namespace HoryTweaks.Modules.OptionItems;
 
 /// <summary>
 /// Represents a percentage option item that displays values from 0% to 100% with color coding.

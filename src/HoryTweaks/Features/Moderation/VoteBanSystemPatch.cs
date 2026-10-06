@@ -1,12 +1,12 @@
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Structs;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Structs;
+using HoryTweaks.Utilities;
 using HarmonyLib;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Game;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.Moderation;
+namespace HoryTweaks.Features.Moderation;
 
 [HarmonyPatch]
 internal static class VoteBanSystemPatch

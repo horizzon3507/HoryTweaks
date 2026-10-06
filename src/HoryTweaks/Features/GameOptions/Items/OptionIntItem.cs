@@ -1,12 +1,12 @@
-using BetterAmongUs.Core.Options;
-using BetterAmongUs.Generated;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Core.Options;
+using HoryTweaks.Generated;
+using HoryTweaks.Utilities;
 
 using UnityEngine;
-using BetterAmongUs.Features.GameOptions.Items;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Features.GameOptions.Items;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Modules.OptionItems;
+namespace HoryTweaks.Modules.OptionItems;
 
 /// <summary>
 /// Represents an integer option item with adjustable value range.

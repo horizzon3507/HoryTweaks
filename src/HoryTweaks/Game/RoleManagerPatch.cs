@@ -1,10 +1,10 @@
 using AmongUs.GameOptions;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
-using BetterAmongUs.Game.Players;
+using HoryTweaks.Game.Players;
 
-namespace BetterAmongUs.Game;
+namespace HoryTweaks.Game;
 
 [HarmonyPatch]
 internal static class RoleManagerPatch

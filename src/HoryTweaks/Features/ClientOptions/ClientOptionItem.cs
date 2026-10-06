@@ -1,13 +1,13 @@
 using BepInEx.Configuration;
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.ClientOptions;
+namespace HoryTweaks.Features.ClientOptions;
 
 /// <summary>
 /// Represents a customizable client option item that can be toggled in the options menu.

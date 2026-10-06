@@ -1,6 +1,6 @@
 using UnityEngine.Events;
 
-namespace BetterAmongUs.Infrastructure.UnityInterop;
+namespace HoryTweaks.Infrastructure.UnityInterop;
 
 /// <summary>
 /// Provides extension methods for UnityEvent classes to simplify adding listeners with Action delegates.

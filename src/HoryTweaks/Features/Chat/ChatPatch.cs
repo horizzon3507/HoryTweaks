@@ -1,19 +1,19 @@
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Structs;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Structs;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Chat;
+namespace HoryTweaks.Features.Chat;
 
 [HarmonyPatch]
 internal static class ChatPatch

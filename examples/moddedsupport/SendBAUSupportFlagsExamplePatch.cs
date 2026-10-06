@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Hazel;
 
-namespace BetterAmongUs.Examples;
+namespace HoryTweaks.Examples;
 
 /// <summary>
 /// Example patch that demonstrates how to send BetterAmongUs modded support flags to BAU users.

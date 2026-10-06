@@ -1,15 +1,15 @@
 using AmongUs.Data.Player;
 using Assets.InnerNet;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System.Globalization;
 using UnityEngine;
-using BetterAmongUs.Remote.News;
+using HoryTweaks.Remote.News;
 
-namespace BetterAmongUs.Features.Menu;
+namespace HoryTweaks.Features.Menu;
 
 [HarmonyPatch]
 internal static class AnnouncementPanelPatch
@@ -75,7 +75,7 @@ internal static class AnnouncementPanelPatch
                 switch (modNews.NewsType)
                 {
                     case NewsTypes.BAU:
-                        renderer.sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.HoryTweaks-Icon.png", 5037f);
+                        renderer.sprite = Utils.LoadSprite("HoryTweaks.Resources.Images.HoryTweaks-Icon.png", 5037f);
                         break;
                 }
 

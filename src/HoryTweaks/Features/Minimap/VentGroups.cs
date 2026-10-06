@@ -1,8 +1,8 @@
 
 using UnityEngine;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Features.Minimap;
+namespace HoryTweaks.Features.Minimap;
 
 /// <summary>
 /// Provides functionality for grouping vents and assigning colors to vent groups.

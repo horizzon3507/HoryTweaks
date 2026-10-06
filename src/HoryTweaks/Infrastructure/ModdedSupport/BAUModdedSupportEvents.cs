@@ -1,8 +1,8 @@
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
-using BetterAmongUs.Infrastructure.ModdedSupport;
+using HoryTweaks.Infrastructure.ModdedSupport;
 
-namespace BetterAmongUs.Modules.Support;
+namespace HoryTweaks.Modules.Support;
 
 /// <summary>
 /// Provides a system for modded plugins to interact with BetterAmongUs through reflection-based events.

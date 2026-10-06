@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Parses a GNU <c>sha256sum</c> manifest and verifies payloads against it.

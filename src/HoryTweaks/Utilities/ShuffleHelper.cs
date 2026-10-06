@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Utilities;
+namespace HoryTweaks.Utilities;
 
 /// <summary>
 /// Provides extension methods for shuffling collections.

@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Moderation;
+namespace HoryTweaks.Core.Moderation;
 
 /// <summary>
 /// Moderation actions a host can take against another player.

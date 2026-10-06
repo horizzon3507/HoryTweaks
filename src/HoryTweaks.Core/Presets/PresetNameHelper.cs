@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace BetterAmongUs.Core.Presets;
+namespace HoryTweaks.Core.Presets;
 
 /// <summary>
 /// Normalizes user supplied preset names before they are stored in a settings file.

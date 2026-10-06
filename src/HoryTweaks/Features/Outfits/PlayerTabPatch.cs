@@ -1,20 +1,20 @@
 using AmongUs.Data;
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Infrastructure.Persistence.Json;
-using BetterAmongUs.Features.Menu;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.Persistence;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Infrastructure.Persistence.Json;
+using HoryTweaks.Features.Menu;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Persistence;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Outfits;
+namespace HoryTweaks.Features.Outfits;
 
 [HarmonyPatch]
 internal static class PlayerTabPatch

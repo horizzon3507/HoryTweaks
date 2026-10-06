@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BetterAmongUs.Game;
+namespace HoryTweaks.Game;
 
 /// <summary>
 /// Provides extension methods and utilities for working with colors in Unity.

@@ -1,15 +1,15 @@
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Core.Moderation;
-using BetterAmongUs.Features.ClientOptions;
-using BetterAmongUs.Features.Hud;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Core.Moderation;
+using HoryTweaks.Features.ClientOptions;
+using HoryTweaks.Features.Hud;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Moderation;
+namespace HoryTweaks.Features.Moderation;
 
 /// <summary>
 /// Host moderation page inside the Tweaks options tab: current players, kick/ban with confirmation,

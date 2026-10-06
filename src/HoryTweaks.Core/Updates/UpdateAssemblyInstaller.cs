@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Swaps the installed mod assembly for a staged one, keeping the previous file as a rollback copy.

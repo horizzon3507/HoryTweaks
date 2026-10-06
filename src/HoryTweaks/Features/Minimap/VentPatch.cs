@@ -1,11 +1,11 @@
 
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Features.Minimap;
+namespace HoryTweaks.Features.Minimap;
 
 [HarmonyPatch]
 internal static class VentPatch

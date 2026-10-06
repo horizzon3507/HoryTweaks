@@ -1,15 +1,15 @@
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using Hazel;
 using InnerNet;
-using BetterAmongUs.Core.Moderation;
-using BetterAmongUs.Features.GameOptions;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Persistence;
+using HoryTweaks.Core.Moderation;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Persistence;
 
-namespace BetterAmongUs.Networking;
+namespace HoryTweaks.Networking;
 
 [HarmonyPatch]
 internal static class InnerNetClientPatch

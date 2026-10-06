@@ -1,12 +1,12 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using InnerNet;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.Lobby;
+namespace HoryTweaks.Features.Lobby;
 
 [HarmonyPatch]
 internal static class FindAGameManagerPatch

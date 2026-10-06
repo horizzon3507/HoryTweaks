@@ -1,22 +1,22 @@
 using AmongUs.Data;
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Core.Validation;
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Core.Validation;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Structs;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Structs;
+using HoryTweaks.Utilities;
 using Il2CppInterop.Runtime.Attributes;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Features.GameOptions;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Features.PlayerInfo;
+namespace HoryTweaks.Features.PlayerInfo;
 
 /// <summary>
 /// Displays extended player information during gameplay.

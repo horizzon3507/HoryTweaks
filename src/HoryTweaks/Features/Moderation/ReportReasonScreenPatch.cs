@@ -1,7 +1,7 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 
-namespace BetterAmongUs.Features.Moderation;
+namespace HoryTweaks.Features.Moderation;
 
 [HarmonyPatch]
 internal static class ReportReasonScreenPatch

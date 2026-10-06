@@ -1,8 +1,8 @@
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Generated;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class HelpCommand : BaseCommand

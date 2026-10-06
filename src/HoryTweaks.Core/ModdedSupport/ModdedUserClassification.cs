@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.ModdedSupport;
+namespace HoryTweaks.Core.ModdedSupport;
 
 /// <summary>
 /// Identifies which BAU-family mod a remote player is running.

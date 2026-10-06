@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace BetterAmongUs.Core.Diagnostics;
+namespace HoryTweaks.Core.Diagnostics;
 
 /// <summary>
 /// Describes how the running Among Us version relates to the versions the mod was built for.

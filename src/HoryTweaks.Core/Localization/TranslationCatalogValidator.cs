@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace BetterAmongUs.Core.Localization;
+namespace HoryTweaks.Core.Localization;
 
 /// <summary>
 /// Validates translation catalogs against the English reference catalog.

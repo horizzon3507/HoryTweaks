@@ -1,6 +1,6 @@
 using HarmonyLib;
 
-namespace BetterAmongUs.Infrastructure.UnityInterop;
+namespace HoryTweaks.Infrastructure.UnityInterop;
 
 // This fixes crashing issue when pressing UI buttons, W Innerslop!!!
 // Fix by https://github.com/TouseefX

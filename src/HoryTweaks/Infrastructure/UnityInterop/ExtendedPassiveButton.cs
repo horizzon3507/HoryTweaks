@@ -2,9 +2,9 @@
 
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Infrastructure.UnityInterop;
+namespace HoryTweaks.Infrastructure.UnityInterop;
 
 /// <summary>
 /// Extends PassiveButton with hold and shift-click functionality.

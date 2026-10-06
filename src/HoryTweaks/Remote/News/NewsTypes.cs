@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Remote.News;
+namespace HoryTweaks.Remote.News;
 
 /// <summary>
 /// Defines the types of news items displayed in BetterAmongUs.

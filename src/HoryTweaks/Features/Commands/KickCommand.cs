@@ -1,13 +1,13 @@
 
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
-using BetterAmongUs.Features.Commands.Arguments;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Game;
+using HoryTweaks.Utilities;
+using HoryTweaks.Features.Commands.Arguments;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class KickCommand : BaseCommand

@@ -1,10 +1,10 @@
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using System.Reflection;
 using UnityEngine;
-using BetterAmongUs.Infrastructure.Persistence;
+using HoryTweaks.Infrastructure.Persistence;
 
-namespace BetterAmongUs.Features.Sound;
+namespace HoryTweaks.Features.Sound;
 
 /// <summary>
 /// Manages audio override files and their corresponding AudioClip data.

@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Options;
+namespace HoryTweaks.Core.Options;
 
 /// <summary>
 /// Pure numeric rules shared by int/float option items: modifier-key step

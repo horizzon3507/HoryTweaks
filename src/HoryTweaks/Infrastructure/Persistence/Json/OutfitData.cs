@@ -1,7 +1,7 @@
 using AmongUs.Data;
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-namespace BetterAmongUs.Infrastructure.Persistence.Json;
+namespace HoryTweaks.Infrastructure.Persistence.Json;
 
 /// <summary>
 /// Represents outfit data including hat, pet, skin, visor, and nameplate information.

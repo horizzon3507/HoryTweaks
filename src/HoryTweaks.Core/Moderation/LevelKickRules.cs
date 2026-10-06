@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Moderation;
+namespace HoryTweaks.Core.Moderation;
 
 /// <summary>
 /// Pure decision for the host's "kick players below minimum level" lobby rule,

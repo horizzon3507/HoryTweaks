@@ -3,7 +3,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
 
-namespace BetterAmongUs.Core.Presets;
+namespace HoryTweaks.Core.Presets;
 
 /// <summary>
 /// Pure helpers for the settings file format: value conversion, version migration,

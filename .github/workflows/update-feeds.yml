@@ -4,9 +4,9 @@ name: Update feeds
 # replacing the old hand-edited "point feeds at vX.Y.Z" pull request per release:
 #   - api/update.json + api/update-V2.json: version and HoryTweaks.dll download
 #     link read from the published release (consumed by
-#     src/Network/Loaders/BAUUpdateLoader.cs in the mod).
+#     src/HoryTweaks/Remote/Updates/BAUUpdateLoader.cs in the mod).
 #   - api/manifest.json: News index rebuilt from the files under api/news/
-#     (consumed by src/Network/Loaders/NewsLoader.cs).
+#     (consumed by src/HoryTweaks/Remote/News/NewsLoader.cs).
 # The result is committed straight back to main as github-actions[bot] because
 # the feeds only take effect from the default branch. The run fails before
 # regenerating when api/news/ has no entry for the tagged version, so a release

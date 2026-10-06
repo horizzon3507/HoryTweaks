@@ -1,6 +1,6 @@
 using AmongUs.GameOptions;
 
-namespace BetterAmongUs.Game;
+namespace HoryTweaks.Game;
 
 /// <summary>
 /// Provides static properties to check various game states and conditions.

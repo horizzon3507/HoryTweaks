@@ -1,21 +1,21 @@
 using BepInEx.Unity.IL2CPP.Utils;
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Generated;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using Il2CppInterop.Runtime.Attributes;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Core.Updates;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Features.Hud;
-using BetterAmongUs.Infrastructure.Persistence;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Core.Updates;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Features.Hud;
+using HoryTweaks.Infrastructure.Persistence;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Remote.Updates;
+namespace HoryTweaks.Remote.Updates;
 
 /// <summary>
 /// Manages update functionality for HoryTweaks, including download and installation.

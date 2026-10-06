@@ -1,12 +1,12 @@
 
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Features.Hud;
+namespace HoryTweaks.Features.Hud;
 
 [HarmonyPatch]
 internal class ZoomPatch

@@ -1,13 +1,13 @@
 
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
 using Hazel;
 using InnerNet;
 using UnityEngine;
-using BetterAmongUs.Game.Players;
+using HoryTweaks.Game.Players;
 
-namespace BetterAmongUs.Networking.Rpc;
+namespace HoryTweaks.Networking.Rpc;
 
 /// <summary>
 /// Abstract base class for handling RPC (Remote Procedure Call) messages.

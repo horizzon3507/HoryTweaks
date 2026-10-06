@@ -1,6 +1,6 @@
 using Il2CppInterop.Runtime.InteropTypes;
 
-namespace BetterAmongUs.Infrastructure.UnityInterop;
+namespace HoryTweaks.Infrastructure.UnityInterop;
 
 /// <summary>
 /// Provides extension methods for working with Il2Cpp collections in a LINQ-like manner.

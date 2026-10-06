@@ -1,12 +1,12 @@
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using UnityEngine;
-using BetterAmongUs.Core.HostTransfer;
-using BetterAmongUs.Features.GameOptions;
-using BetterAmongUs.Game;
+using HoryTweaks.Core.HostTransfer;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.HostTransfer;
+namespace HoryTweaks.Features.HostTransfer;
 
 /// <summary>
 /// Tracks local input activity and hands the host crown to the longest-tenured connected player

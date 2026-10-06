@@ -1,8 +1,8 @@
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 using HarmonyLib;
 using UnityEngine;
 
-namespace BetterAmongUs.Features.Chat;
+namespace HoryTweaks.Features.Chat;
 
 [HarmonyPatch]
 internal static class ChatNotificationPatch

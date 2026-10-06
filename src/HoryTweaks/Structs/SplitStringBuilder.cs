@@ -1,7 +1,7 @@
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using System.Text;
 
-namespace BetterAmongUs.Structs;
+namespace HoryTweaks.Structs;
 
 /// <summary>
 /// Represents a mutable string builder that concatenates text with a specified separator.

@@ -1,16 +1,16 @@
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Modules.Support;
-using BetterAmongUs.Utilities;
+using HoryTweaks.Generated;
+using HoryTweaks.Modules.Support;
+using HoryTweaks.Utilities;
 
 using System.Text;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Features.GameOptions.Items;
-using BetterAmongUs.Infrastructure.Persistence;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Features.GameOptions.Items;
+using HoryTweaks.Infrastructure.Persistence;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Modules.OptionItems;
+namespace HoryTweaks.Modules.OptionItems;
 
 /// <summary>
 /// Base abstract class for configuration option items in BetterAmongUs.
@@ -424,7 +424,7 @@ public abstract class OptionItem
         button.ReceiveMouseOut();
         button.interactableHoveredColor = Color.gray;
         button.interactableClickColor = Color.white;
-        button.buttonSprite.sprite = Utils.LoadSprite("BetterAmongUs.Resources.Images.QuestionMark.png", 50);
+        button.buttonSprite.sprite = Utils.LoadSprite("HoryTweaks.Resources.Images.QuestionMark.png", 50);
         button.OnClick = new();
         button.OnClick.AddListener(() =>
         {

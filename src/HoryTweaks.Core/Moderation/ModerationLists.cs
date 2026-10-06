@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Core.Moderation;
+namespace HoryTweaks.Core.Moderation;
 
 /// <summary>
 /// The plain-text ban lists kept under Better_Data.

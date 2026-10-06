@@ -1,7 +1,7 @@
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 using HarmonyLib;
 
-namespace BetterAmongUs.Features.Hud;
+namespace HoryTweaks.Features.Hud;
 
 [HarmonyPatch]
 internal static class LoadingBarManagerPatch

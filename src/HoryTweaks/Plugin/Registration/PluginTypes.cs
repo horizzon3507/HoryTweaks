@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Plugin.Registration;
+namespace HoryTweaks.Plugin.Registration;
 
 /// <summary>
 /// Caches the plugin assembly's type list so reflection-driven registration scans it once per initialize pass.

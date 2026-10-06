@@ -1,13 +1,13 @@
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Core.Formatting;
-using BetterAmongUs.Features.Chat;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Core.Formatting;
+using HoryTweaks.Features.Chat;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class CopyLogCommand : BaseCommand

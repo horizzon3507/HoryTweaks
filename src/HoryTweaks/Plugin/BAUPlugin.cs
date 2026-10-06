@@ -4,29 +4,29 @@ using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 
-using BetterAmongUs.Modules.OptionItems;
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.OptionItems;
+using HoryTweaks.Modules.Support;
 
 using HarmonyLib;
-using BetterAmongUs.Utilities;
-using BetterAmongUs.Features.Commands;
-using BetterAmongUs.Networking.Rpc;
+using HoryTweaks.Utilities;
+using HoryTweaks.Features.Commands;
+using HoryTweaks.Networking.Rpc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using BetterAmongUs.Infrastructure.Logging;
-using BetterAmongUs.Features.GameOptions;
-using BetterAmongUs.Features.Hud;
-using BetterAmongUs.Features.Menu;
-using BetterAmongUs.Features.Sound;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.Persistence;
-using BetterAmongUs.Infrastructure.Persistence.Json;
-using BetterAmongUs.Localization;
-using BetterAmongUs.Plugin;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Remote;
+using HoryTweaks.Infrastructure.Logging;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Features.Hud;
+using HoryTweaks.Features.Menu;
+using HoryTweaks.Features.Sound;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Persistence;
+using HoryTweaks.Infrastructure.Persistence.Json;
+using HoryTweaks.Localization;
+using HoryTweaks.Plugin;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Remote;
 
-namespace BetterAmongUs;
+namespace HoryTweaks;
 
 [BepInPlugin(ModInfo.PLUGIN_GUID, ModInfo.PLUGIN_NAME, ModInfo.VERSION)]
 [BepInProcess(ModInfo.AmongUs.PROCESS_NAME)]

@@ -1,8 +1,8 @@
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using BetterAmongUs.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Configuration;
 
-namespace BetterAmongUs.Localization;
+namespace HoryTweaks.Localization;
 
 /// <summary>
 /// Provides translation services for BetterAmongUs, supporting multiple languages and fallback mechanisms.

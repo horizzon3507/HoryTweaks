@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 
-namespace BetterAmongUs.Core.Audio;
+namespace HoryTweaks.Core.Audio;
 
 /// <summary>
 /// Pure decoder for RIFF/WAVE audio. Only uncompressed little-endian PCM16 is supported.

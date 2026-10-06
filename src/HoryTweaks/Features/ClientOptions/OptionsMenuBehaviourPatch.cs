@@ -1,27 +1,27 @@
 
 
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using HarmonyLib;
 using System.Diagnostics;
 using TMPro;
 using UnityEngine;
-using BetterAmongUs.Features.Chat;
-using BetterAmongUs.Features.Hud;
-using BetterAmongUs.Features.Meeting;
-using BetterAmongUs.Features.Minimap;
-using BetterAmongUs.Features.Moderation;
-using BetterAmongUs.Features.PlayerInfo;
-using BetterAmongUs.Game;
-using BetterAmongUs.Infrastructure.Configuration;
-using BetterAmongUs.Infrastructure.Persistence;
-using BetterAmongUs.Infrastructure.Persistence.Json;
-using BetterAmongUs.Game.Players;
-using BetterAmongUs.Infrastructure.UnityInterop;
+using HoryTweaks.Features.Chat;
+using HoryTweaks.Features.Hud;
+using HoryTweaks.Features.Meeting;
+using HoryTweaks.Features.Minimap;
+using HoryTweaks.Features.Moderation;
+using HoryTweaks.Features.PlayerInfo;
+using HoryTweaks.Game;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.Persistence;
+using HoryTweaks.Infrastructure.Persistence.Json;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Infrastructure.UnityInterop;
 
-namespace BetterAmongUs.Features.ClientOptions;
+namespace HoryTweaks.Features.ClientOptions;
 
 [HarmonyPatch]
 internal static class OptionsMenuBehaviourPatch

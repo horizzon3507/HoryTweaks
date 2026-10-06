@@ -1,9 +1,9 @@
 
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using Hazel;
 
-namespace BetterAmongUs.Networking.Rpc;
+namespace HoryTweaks.Networking.Rpc;
 
 /// <summary>
 /// Provides the RPC routing used by BetterAmongUs handlers.

@@ -1,6 +1,6 @@
 using Semver;
 
-namespace BetterAmongUs.Core.Updates;
+namespace HoryTweaks.Core.Updates;
 
 /// <summary>
 /// Pure decision logic for update manifests.

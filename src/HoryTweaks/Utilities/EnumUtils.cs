@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Utilities;
+namespace HoryTweaks.Utilities;
 
 /// <summary>
 /// Provides utility methods for working with enumerations.

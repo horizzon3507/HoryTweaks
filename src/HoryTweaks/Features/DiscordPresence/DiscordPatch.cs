@@ -1,11 +1,11 @@
 using AmongUs.Data;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 using Discord;
 using HarmonyLib;
-using BetterAmongUs.Game;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.DiscordPresence;
+namespace HoryTweaks.Features.DiscordPresence;
 
 [HarmonyPatch]
 internal static class DiscordPatch

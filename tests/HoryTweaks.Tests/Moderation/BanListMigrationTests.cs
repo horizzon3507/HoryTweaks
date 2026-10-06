@@ -1,7 +1,7 @@
-using BetterAmongUs.Core.Presets;
+using HoryTweaks.Core.Presets;
 using System.Text.RegularExpressions;
 using Xunit;
-using BetterAmongUs.Core.Moderation;
+using HoryTweaks.Core.Moderation;
 
 namespace HoryTweaks.Tests.Moderation;
 

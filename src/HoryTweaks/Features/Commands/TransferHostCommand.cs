@@ -1,11 +1,11 @@
 
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Features.Commands.Arguments;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Game;
+using HoryTweaks.Generated;
+using HoryTweaks.Features.Commands.Arguments;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class TransferHostCommand : BaseCommand

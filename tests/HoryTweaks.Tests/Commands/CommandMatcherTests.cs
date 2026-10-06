@@ -1,4 +1,4 @@
-using BetterAmongUs.Core.Commands;
+using HoryTweaks.Core.Commands;
 using Xunit;
 
 namespace HoryTweaks.Tests.Commands;

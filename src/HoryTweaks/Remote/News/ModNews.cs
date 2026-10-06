@@ -1,13 +1,13 @@
 using AmongUs.Data;
 using Assets.InnerNet;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 
 using UnityEngine;
-using BetterAmongUs.Localization;
-using BetterAmongUs.Game;
+using HoryTweaks.Localization;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Remote.News;
+namespace HoryTweaks.Remote.News;
 
 /// <summary>
 /// Represents a mod-specific news item with localization support.

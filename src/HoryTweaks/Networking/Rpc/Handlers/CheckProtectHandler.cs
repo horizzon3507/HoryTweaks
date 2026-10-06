@@ -1,12 +1,12 @@
 using AmongUs.GameOptions;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using Hazel;
 using InnerNet;
 using UnityEngine;
-using BetterAmongUs.Plugin.Registration;
+using HoryTweaks.Plugin.Registration;
 
-namespace BetterAmongUs.Networking.Rpc.Handlers;
+namespace HoryTweaks.Networking.Rpc.Handlers;
 
 [RegisterRPCHandler]
 internal sealed class CheckProtectHandler : RPCHandler

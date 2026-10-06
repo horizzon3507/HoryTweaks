@@ -1,12 +1,12 @@
 using BepInEx.Unity.IL2CPP.Utils.Collections;
-using BetterAmongUs.Generated;
+using HoryTweaks.Generated;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using System.Collections;
-using BetterAmongUs.Game;
+using HoryTweaks.Game;
 
-namespace BetterAmongUs.Features.Moderation;
+namespace HoryTweaks.Features.Moderation;
 
 [HarmonyPatch]
 internal static class InitializePlayerTimeoutPatch

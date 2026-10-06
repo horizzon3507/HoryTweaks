@@ -1,4 +1,4 @@
-namespace BetterAmongUs.Features.Commands.Arguments;
+namespace HoryTweaks.Features.Commands.Arguments;
 
 /// <summary>
 /// Abstract base class for command arguments.

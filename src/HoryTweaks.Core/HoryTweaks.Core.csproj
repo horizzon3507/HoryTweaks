@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<AssemblyName>HoryTweaks.Core</AssemblyName>
-		<RootNamespace>BetterAmongUs.Core</RootNamespace>
+		<RootNamespace>HoryTweaks.Core</RootNamespace>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 	<ItemGroup>

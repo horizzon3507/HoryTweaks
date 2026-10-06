@@ -3,7 +3,7 @@ using BepInEx.Unity.IL2CPP;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace BetterAmongUs.Infrastructure.ModdedSupport;
+namespace HoryTweaks.Infrastructure.ModdedSupport;
 
 /// <summary>
 /// Base class for reflection-based event systems that allow plugins to interact with BetterAmongUs.

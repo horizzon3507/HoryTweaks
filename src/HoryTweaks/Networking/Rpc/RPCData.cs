@@ -1,7 +1,7 @@
 using Hazel;
 using InnerNet;
 
-namespace BetterAmongUs.Networking.Rpc;
+namespace HoryTweaks.Networking.Rpc;
 
 /// <summary>
 /// Represents data for an RPC (Remote Procedure Call) message.

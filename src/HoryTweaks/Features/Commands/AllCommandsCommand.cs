@@ -1,9 +1,9 @@
 
-using BetterAmongUs.Generated;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Features.Chat;
+using HoryTweaks.Generated;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Features.Chat;
 
-namespace BetterAmongUs.Features.Commands;
+namespace HoryTweaks.Features.Commands;
 
 [RegisterCommand]
 internal sealed class AllCommandsCommand : BaseCommand

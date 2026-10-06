@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace BetterAmongUs.Core.Validation;
+namespace HoryTweaks.Core.Validation;
 
 /// <summary>
 /// Reasons a friend code fails validation.

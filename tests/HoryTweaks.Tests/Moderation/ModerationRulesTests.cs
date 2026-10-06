@@ -1,6 +1,6 @@
-using BetterAmongUs.Core.Moderation;
+using HoryTweaks.Core.Moderation;
 using Xunit;
-using BetterAmongUs.Core.Moderation;
+using HoryTweaks.Core.Moderation;
 
 namespace HoryTweaks.Tests.Moderation;
 

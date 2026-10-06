@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace BetterAmongUs.Core.Moderation;
+namespace HoryTweaks.Core.Moderation;
 
 /// <summary>
 /// One kick or ban issued by the local host during this session.

@@ -1,6 +1,6 @@
 using BepInEx.Configuration;
 
-namespace BetterAmongUs.Infrastructure.Configuration;
+namespace HoryTweaks.Infrastructure.Configuration;
 
 /// <summary>
 /// Represents a configuration entry wrapper for Better Among Us.

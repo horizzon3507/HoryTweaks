@@ -2,7 +2,7 @@
 using HarmonyLib;
 using InnerNet;
 
-namespace BetterAmongUs.Features.Rejoin;
+namespace HoryTweaks.Features.Rejoin;
 
 [HarmonyPatch]
 internal static class RejoinPatch

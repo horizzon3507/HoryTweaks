@@ -1,20 +1,20 @@
 using AmongUs.GameOptions;
 
-using BetterAmongUs.Modules.Support;
+using HoryTweaks.Modules.Support;
 
-using BetterAmongUs.Utilities;
+using HoryTweaks.Utilities;
 using HarmonyLib;
 using Hazel;
 using Il2CppInterop.Runtime.Attributes;
 using InnerNet;
 using UnityEngine;
-using BetterAmongUs.Core.ModdedSupport;
-using BetterAmongUs.Infrastructure.UnityInterop;
-using BetterAmongUs.Networking.Handshake;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Features.GameOptions;
+using HoryTweaks.Core.ModdedSupport;
+using HoryTweaks.Infrastructure.UnityInterop;
+using HoryTweaks.Networking.Handshake;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Features.GameOptions;
 
-namespace BetterAmongUs.Game.Players;
+namespace HoryTweaks.Game.Players;
 
 /// <summary>
 /// Extended player information with additional activity data.

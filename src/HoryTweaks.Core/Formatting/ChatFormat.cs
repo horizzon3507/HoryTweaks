@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace BetterAmongUs.Core.Formatting;
+namespace HoryTweaks.Core.Formatting;
 
 /// <summary>
 /// Unity-independent helpers for formatting chat text (plain-text export).

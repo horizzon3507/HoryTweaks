@@ -1,4 +1,4 @@
-using BetterAmongUs.Core.ModdedSupport;
+using HoryTweaks.Core.ModdedSupport;
 using Xunit;
 
 namespace HoryTweaks.Tests.ModdedSupport;

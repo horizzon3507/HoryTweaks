@@ -2,11 +2,11 @@
 
 using HarmonyLib;
 using UnityEngine;
-using BetterAmongUs.Infrastructure.UnityInterop;
-using BetterAmongUs.Plugin.Registration;
-using BetterAmongUs.Features.PlayerInfo;
+using HoryTweaks.Infrastructure.UnityInterop;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Features.PlayerInfo;
 
-namespace BetterAmongUs.Game.Players;
+namespace HoryTweaks.Game.Players;
 
 /// <summary>
 /// Extends PlayerControl with additional functionality.

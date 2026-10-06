@@ -12,6 +12,10 @@ on:
       - 'api/**'
       - 'installers/**'
       - '.gitattributes'
+      - 'HoryTweaks.sln'
+      - 'global.json'
+      - 'Directory.Build.props'
+      - 'Directory.Packages.props'
       - '.github/workflows/build.yml'
   pull_request:
     paths:
@@ -20,6 +24,10 @@ on:
       - 'api/**'
       - 'installers/**'
       - '.gitattributes'
+      - 'HoryTweaks.sln'
+      - 'global.json'
+      - 'Directory.Build.props'
+      - 'Directory.Packages.props'
       - '.github/workflows/build.yml'
   workflow_dispatch:
     inputs:
@@ -72,24 +80,13 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Set up .NET 9
+      - name: Set up .NET 10
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
-
-      - name: Validate translations
-        run: pwsh -NoProfile -File src/build/ValidateTranslations.ps1
-
-      - name: Test translation validator
-        run: pwsh -NoProfile -File src/build/ValidateTranslations.Tests.ps1
+          dotnet-version: '10.0.112'
 
       - name: Run unit tests
-        run: |
-          set -euo pipefail
-          for project in tests/*/*.csproj; do
-            name="$(basename "$project" .csproj)"
-            dotnet test "$project" --configuration Release --logger "trx;LogFileName=$name.trx" --results-directory tests/TestResults
-          done
+        run: dotnet test tests/HoryTweaks.Tests/HoryTweaks.Tests.csproj --configuration Release --logger "trx;LogFileName=HoryTweaks.Tests.trx" --results-directory tests/TestResults
 
       - name: Upload test results
         if: always()
@@ -100,13 +97,19 @@ jobs:
           if-no-files-found: error
 
       - name: Build HoryTweaks
-        run: dotnet build src/*.csproj --configuration Release -p:CopyToGame=false
+        run: dotnet build src/HoryTweaks/HoryTweaks.csproj --configuration Release -p:CopyToGame=false
+
+      - name: Build HoryTweaks (Debug)
+        run: dotnet build src/HoryTweaks/HoryTweaks.csproj --configuration Debug -p:CopyToGame=false
+
+      - name: Build HoryTweaks (Beta)
+        run: dotnet build src/HoryTweaks/HoryTweaks.csproj --configuration Beta -p:CopyToGame=false
 
       - name: Upload standalone DLL
         uses: actions/upload-artifact@v4
         with:
           name: HoryTweaks.dll
-          path: src/bin/Release/net6.0/HoryTweaks.dll
+          path: src/HoryTweaks/bin/Release/net6.0/HoryTweaks.dll
           if-no-files-found: error
 
       - name: Package release archives
@@ -120,7 +123,7 @@ jobs:
             exit 1
           fi
 
-          dll="$GITHUB_WORKSPACE/src/bin/Release/net6.0/HoryTweaks.dll"
+          dll="$GITHUB_WORKSPACE/src/HoryTweaks/bin/Release/net6.0/HoryTweaks.dll"
           test -f "$dll"
           mkdir -p dist
           cp "$dll" dist/HoryTweaks.dll

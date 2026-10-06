@@ -1,37 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <!--
-    Unity-independent quality gates. The production plugin targets IL2CPP and cannot be loaded here,
-    so the pure helpers under test are compiled from source into this assembly.
+    Unity-independent quality gates. The production plugin targets IL2CPP and cannot be loaded here;
+    testable rules live in HoryTweaks.Core (InternalsVisibleTo this assembly).
   -->
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>HoryTweaks.Tests</RootNamespace>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>preview</LangVersion>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\src\Data\BanListMigration.cs" Link="Linked\BanListMigration.cs" />
-    <Compile Include="..\..\src\Data\Json\SettingsFileCodec.cs" Link="Linked\SettingsFileCodec.cs" />
-    <Compile Include="..\..\src\Network\Configs\UpdateVersionCheck.cs" Link="Linked\UpdateVersionCheck.cs" />
-    <Compile Include="..\..\src\Modules\HostTransfer\HostTransferPolicy.cs" Link="Linked\HostTransferPolicy.cs" />
-    <Compile Include="..\..\src\Modules\Moderation\ModerationRules.cs" Link="Linked\ModerationRules.cs" />
-    <Compile Include="..\..\src\Modules\Moderation\ModerationHistory.cs" Link="Linked\ModerationHistory.cs" />
-    <Compile Include="..\..\src\Modules\Moderation\ModerationLists.cs" Link="Linked\ModerationLists.cs" />
-    <Compile Include="..\..\src\Modules\RejoinPolicy.cs" Link="Linked\RejoinPolicy.cs" />
-    <Compile Include="..\..\src\Modules\Support\ModdedUserClassification.cs" Link="Linked\ModdedUserClassification.cs" />
-    <Compile Include="..\..\src\Utilities\ChatFormat.cs" Link="Linked\ChatFormat.cs" />
+    <ProjectReference Include="..\..\src\HoryTweaks.Core\HoryTweaks.Core.csproj" />
+    <ProjectReference Include="..\..\src\HoryTweaks.Generators\HoryTweaks.Generators.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="Semver" Version="3.0.0" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Semver" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

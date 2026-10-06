@@ -82,7 +82,7 @@ jobs:
 
       - name: Regenerate feeds
         run: |
-          pwsh -NoProfile -File src/build/UpdateFeeds.ps1 \
+          pwsh -NoProfile -File src/HoryTweaks/build/UpdateFeeds.ps1 \
             -Tag "${{ steps.release.outputs.tag }}" \
             -DllUrl "${{ steps.release.outputs.dll_url }}" \
             -SteamEpicMsStorePackageUrl "${{ steps.release.outputs.steam_epic_msstore_package_url }}" \

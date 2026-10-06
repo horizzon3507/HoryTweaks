@@ -1,12 +1,6 @@
-﻿.vs
-src/.vs
-src/bin
-src/obj
-tests/**/bin
-tests/**/obj
-src/.editorconfig
-src/.vscode
-tests/**/bin
-tests/**/obj
+.vs
+.vscode
+**/bin
+**/obj
 tests/TestResults
 tests/installers/__pycache__/

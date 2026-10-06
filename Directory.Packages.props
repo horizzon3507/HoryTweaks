@@ -1,0 +1,18 @@
+<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageVersion Include="AmongUs.GameLibs.Steam" Version="2026.9.29" />
+		<PackageVersion Include="BepInEx.IL2CPP.MSBuild" Version="2.0.1" />
+		<PackageVersion Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" />
+		<PackageVersion Include="Costura.Fody" Version="5.8.0-alpha0098" />
+		<PackageVersion Include="Semver" Version="3.0.0" />
+		<PackageVersion Include="GitInfo" Version="3.3.3" />
+		<PackageVersion Include="ThisAssembly.Metadata" Version="2.1.2" />
+		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+		<PackageVersion Include="xunit" Version="2.9.3" />
+		<PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2" />
+	</ItemGroup>
+</Project>

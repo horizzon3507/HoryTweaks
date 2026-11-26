@@ -150,12 +150,25 @@ internal static class MatchHistoryStore
     /// </summary>
     internal static void DeleteAll()
     {
+        MatchVideoRecorder.InvalidateAndDiscardAll();
+
         if (!Directory.Exists(Folder))
             return;
 
-        try
+        lock (MatchVideoRecorder.PublicationSyncRoot)
         {
-            foreach (string path in Directory.GetFiles(Folder))
+            string[] files;
+            try
+            {
+                files = Directory.GetFiles(Folder);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                BAUPlugin.Logger.Error(ex, LogTag);
+                return;
+            }
+
+            foreach (string path in files)
             {
                 string fileName = Path.GetFileName(path);
                 if (MatchHistoryRetention.IsMatchFile(fileName)
@@ -163,13 +176,16 @@ internal static class MatchHistoryStore
                     || fileName.EndsWith(TempExtension, StringComparison.Ordinal)
                     || fileName.EndsWith(MatchVideoRecorder.TempSuffix, StringComparison.Ordinal))
                 {
-                    File.Delete(path);
+                    try
+                    {
+                        File.Delete(path);
+                    }
+                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                    {
+                        BAUPlugin.Logger.Error(ex, LogTag);
+                    }
                 }
             }
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            BAUPlugin.Logger.Error(ex, LogTag);
         }
     }
 

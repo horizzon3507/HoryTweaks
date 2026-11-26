@@ -16,7 +16,9 @@ internal static class MatchVideoRecorder
     internal const string TempSuffix = ".tmp.mp4";
 
     private static readonly object StateLock = new();
+    private static readonly object PublishLock = new();
     private static RecordingSession? _activeSession;
+    private static int _clearGeneration;
     private static bool _loggedMissingEncoder;
 
     internal static bool IsCapturing
@@ -63,14 +65,17 @@ internal static class MatchVideoRecorder
             string finalPath = Path.Combine(folder, finalName);
             string tempPath = Path.Combine(folder, finalName[..^".mp4".Length] + TempSuffix);
 
+            int generation = Volatile.Read(ref _clearGeneration);
+            // Texture2D.ReadPixels always supplies bottom-up CPU rows regardless of graphicsUVStartsAtTop.
             var session = new RecordingSession(
                 width,
                 height,
                 MatchVideoRules.TargetFps,
                 MatchVideoRules.TargetBitrateBps,
-                !SystemInfo.graphicsUVStartsAtTop,
+                flipVertical: true,
                 tempPath,
-                finalPath);
+                finalPath,
+                generation);
 
             lock (StateLock)
             {
@@ -147,6 +152,18 @@ internal static class MatchVideoRecorder
         session?.RequestStop(finalizeVideo: false);
     }
 
+    /// <summary>
+    /// Invalidates any finalizing or active video session so Delete All cannot be raced by a
+    /// background encoder renaming a temp file after the directory snapshot was taken.
+    /// </summary>
+    internal static void InvalidateAndDiscardAll()
+    {
+        Interlocked.Increment(ref _clearGeneration);
+        Discard();
+    }
+
+    internal static object PublicationSyncRoot => PublishLock;
+
     internal static void OnConfigToggled()
     {
         if (!BAUConfigs.MatchHistory.Value || !BAUConfigs.MatchVideoReplay.Value)
@@ -218,6 +235,7 @@ internal static class MatchVideoRecorder
         private readonly bool _flipVertical;
         private readonly string _tempPath;
         private readonly string _finalPath;
+        private readonly int _generation;
         private readonly int _rgbaLength;
         private readonly ConcurrentBag<byte[]> _bufferPool = [];
         private readonly ConcurrentQueue<QueuedFrame> _pendingFrames = new();
@@ -233,7 +251,7 @@ internal static class MatchVideoRecorder
         internal int Height { get; }
         internal bool IsCapturing => Volatile.Read(ref _capturing) != 0;
 
-        internal RecordingSession(int width, int height, int fps, int bitrateBps, bool flipVertical, string tempPath, string finalPath)
+        internal RecordingSession(int width, int height, int fps, int bitrateBps, bool flipVertical, string tempPath, string finalPath, int generation)
         {
             Width = width;
             Height = height;
@@ -242,6 +260,7 @@ internal static class MatchVideoRecorder
             _flipVertical = flipVertical;
             _tempPath = tempPath;
             _finalPath = finalPath;
+            _generation = generation;
             _rgbaLength = width * height * 4;
 
             // Pre-allocate bounded pool so per-frame capture allocates zero managed heap memory.
@@ -394,13 +413,31 @@ internal static class MatchVideoRecorder
                     _signal.WaitOne(100);
                 }
 
-                bool shouldFinalize = Volatile.Read(ref _finalizeVideo) != 0 && framesEncoded > 0;
+                bool shouldFinalize = Volatile.Read(ref _finalizeVideo) != 0
+                    && framesEncoded > 0
+                    && Volatile.Read(ref _clearGeneration) == _generation;
                 if (shouldFinalize && encoder.Finish())
                 {
-                    File.Move(_tempPath, _finalPath, overwrite: true);
-                    MatchHistoryStore.PruneVideos();
-                    long sizeKb = new FileInfo(_finalPath).Length / 1024;
-                    BAUPlugin.Logger.Log($"Saved POV replay video ({framesEncoded} frames, {sizeKb} KB via {encoder.BackendName})", LogTag);
+                    bool published = false;
+                    lock (PublishLock)
+                    {
+                        if (Volatile.Read(ref _clearGeneration) == _generation)
+                        {
+                            File.Move(_tempPath, _finalPath, overwrite: true);
+                            MatchHistoryStore.PruneVideos();
+                            published = true;
+                        }
+                        else
+                        {
+                            try { if (File.Exists(_tempPath)) File.Delete(_tempPath); } catch { }
+                        }
+                    }
+
+                    if (published)
+                    {
+                        long sizeKb = new FileInfo(_finalPath).Length / 1024;
+                        BAUPlugin.Logger.Log($"Saved POV replay video ({framesEncoded} frames, {sizeKb} KB via {encoder.BackendName})", LogTag);
+                    }
                 }
                 else
                 {

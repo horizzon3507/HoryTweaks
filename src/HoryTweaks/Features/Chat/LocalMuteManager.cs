@@ -48,6 +48,16 @@ internal static class LocalMuteManager
         return !IsMuted(sender);
     }
 
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
+    [HarmonyPostfix]
+    private static void AmongUsClient_OnPlayerLeft_Postfix(ClientData data)
+    {
+        if (data != null && data.Character != null)
+        {
+            Muted.Unmute(data.Character.PlayerId);
+        }
+    }
+
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.ExitGame))]
     [HarmonyPostfix]
     private static void AmongUsClient_ExitGame_Postfix() => Muted.Clear();

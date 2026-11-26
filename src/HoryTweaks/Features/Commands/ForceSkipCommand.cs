@@ -42,30 +42,35 @@ internal sealed class ForceSkipCommand : BaseCommand
         if (!_boolArgument.TryParse(out var countVotes))
             return;
 
-        if (GameState.IsHost)
+        if (!GameState.IsHost || MeetingHud.Instance == null)
+            return;
+
+        // Avoid closing mid-intro animation, which can leave overlays stuck on vanilla clients.
+        if (MeetingHud.Instance.state == MeetingHud.MeetingStates.Animating)
+            return;
+
+        if (!countVotes)
         {
-            if (!countVotes)
-            {
-                var states = Array.Empty<MeetingHud.VoterState>();
-                MeetingHud.Instance.RpcVotingComplete(states, null, false, false, 0);
-            }
-            else
-            {
-                var dictionary = MeetingHud.Instance.CalculateVotes();
-                var max = dictionary.MaxPair(out bool tie);
-                NetworkedPlayerInfo? networkedPlayerInfo = GameData.Instance.AllPlayers.FirstOrDefaultIl2Cpp((NetworkedPlayerInfo v) => !tie && v.PlayerId == max.Key);
-                MeetingHud.VoterState[] array = new MeetingHud.VoterState[MeetingHud.Instance.playerStates.Length];
-                for (int i = 0; i < MeetingHud.Instance.playerStates.Length; i++)
-                {
-                    PlayerVoteArea playerVoteArea = MeetingHud.Instance.playerStates[i];
-                    array[i] = new MeetingHud.VoterState
-                    {
-                        VoterId = playerVoteArea.PlayerId,
-                        VotedForId = playerVoteArea.VotedForId
-                    };
-                }
-                MeetingHud.Instance.RpcVotingComplete(array, networkedPlayerInfo, tie, false, 0);
-            }
+            MeetingHud.Instance.RpcClose();
+            return;
         }
+
+        if (MeetingHud.Instance.state is MeetingHud.MeetingStates.Results or MeetingHud.MeetingStates.Proceeding)
+            return;
+
+        var dictionary = MeetingHud.Instance.CalculateVotes();
+        var max = dictionary.MaxPair(out bool tie);
+        NetworkedPlayerInfo? networkedPlayerInfo = GameData.Instance.AllPlayers.FirstOrDefaultIl2Cpp((NetworkedPlayerInfo v) => !tie && v.PlayerId == max.Key);
+        MeetingHud.VoterState[] array = new MeetingHud.VoterState[MeetingHud.Instance.playerStates.Length];
+        for (int i = 0; i < MeetingHud.Instance.playerStates.Length; i++)
+        {
+            PlayerVoteArea playerVoteArea = MeetingHud.Instance.playerStates[i];
+            array[i] = new MeetingHud.VoterState
+            {
+                VoterId = playerVoteArea.PlayerId,
+                VotedForId = playerVoteArea.VotedForId
+            };
+        }
+        MeetingHud.Instance.RpcVotingComplete(array, networkedPlayerInfo, tie, false, 0);
     }
 }

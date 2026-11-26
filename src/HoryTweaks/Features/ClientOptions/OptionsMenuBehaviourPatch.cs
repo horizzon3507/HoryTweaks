@@ -22,6 +22,7 @@ using HoryTweaks.Infrastructure.Persistence;
 using HoryTweaks.Infrastructure.Persistence.Json;
 using HoryTweaks.Game.Players;
 using HoryTweaks.Infrastructure.UnityInterop;
+using HoryTweaks.Networking;
 
 namespace HoryTweaks.Features.ClientOptions;
 
@@ -75,6 +76,7 @@ internal static class OptionsMenuBehaviourPatch
 
         // Page 3: performance, connection and files
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 3, __instance, UpdateFrameRate);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_NetworkOptimization, BAUConfigs.NetworkOptimization, 3, __instance, ConnectionResiliencePatch.ApplyToActiveClient);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_SendBetterRpc, BAUConfigs.SendBetterRpc, 3, __instance, SendBetterRpcAction);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 3, __instance, ConvertAllSettingFiles);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_HideConsole, BAUConfigs.HideConsole, 3, __instance);

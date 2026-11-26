@@ -17,9 +17,9 @@ A major stability, networking, and performance refactor that targets premature d
 
 ### Added
 
-- **Network Optimization** client toggle (page 3, enabled by default): tunes client-side Hazel UDP tolerances (`KeepAliveInterval`, `DisconnectTimeoutMs`, `ResendLimit`, `ResendPingMultiplier`, `ReceiveBufferSize`) and `SecondsSuspendedBeforeDisconnect` to prevent premature disconnects from Wi-Fi jitter, map loads, or brief Alt+Tab switches while staying compatible with official Innersloth servers.
-- Live connection health and frame-pacing diagnostics: tracks smoothed ping, jitter, reliable resend spikes, severe main-thread hitches (`>= 100ms`), and sustained low FPS (`< 30 FPS`), surfacing non-spammy warnings on `BetterPingTracker`, in logs, and in `/dump`.
-- Smart `UnlockFPS` target policy (120–240 FPS based on monitor refresh rate) with interactive and logged warnings for Among Us VSync conflicts, >240 Hz safety clamping, and unknown display refresh rates.
+- **Network Optimization** client toggle (page 3, enabled by default): tunes client-side Hazel UDP tolerances (`KeepAliveInterval`, `DisconnectTimeoutMs`, finite `ResendLimit` while preserving `0` unlimited retries, `ResendPingMultiplier`) and `SecondsSuspendedBeforeDisconnect`, restoring original baselines on toggle-off or switch-to-vanilla, while staying compatible with official Innersloth servers.
+- Live connection health and frame-pacing diagnostics: tracks smoothed ping, jitter, reliable resend spikes, severe main-thread hitches (`>= 100ms`), and sustained low FPS (`< 30 FPS`), surfacing localized warnings on `BetterPingTracker` and English diagnostic summaries (including the last ended session after a disconnect) in logs and `/dump`.
+- Smart `UnlockFPS` target policy (120–240 FPS based on monitor refresh rate) with interactive Page 3 advisories, HUD notifications, and logged warnings for Among Us VSync conflicts, >240 Hz safety clamping, and unknown display refresh rates.
 - Guided Windows and Linux/Steam Deck installers with game discovery, store and release selection, offline packages, dry runs, backups and rollback on installation errors.
 - Installer tests on Windows and Linux, downloadable installer scripts and SHA-256 manifests for future release assets.
 - "Controls & Gestures" page (page 4) in the HoryTweaks options tab listing the mod's hidden shortcuts: scroll zoom, option value multipliers, chat autocomplete and chat history.
@@ -44,7 +44,7 @@ A major stability, networking, and performance refactor that targets premature d
 - Optimized `IMonoExtension.TryRemoveExtension` to O(1), replaced closure-allocating LINQ lookups in `Utils.PlayerLookup` with indexed loops, dispatched `PlayerControl.SetName` synchronously on the fast path, and cached the `BAU-Mod` header in `UnityWebRequestPatch`.
 - `/forceskip` (without `true`) now closes the meeting immediately via `MeetingHud.RpcClose()` instead of waiting for the results countdown; `/forceskip true` continues to tally votes normally.
 - Console logging now uses a bounded single-consumer background writer for atomic color/line output without stalling Unity's main thread, and disables Windows Console QuickEdit mode so clicking the console cannot freeze the game.
-- The remaining hardcoded English strings are now localized across all 16 languages, including the new v0.2.0 options and diagnostic warnings.
+- The remaining hardcoded English strings are now localized across all 16 languages, including the new v0.2.0 options and in-game HUD/settings warning banners.
 - The in-game updater installs the store-specific release package after verifying it against the release's `SHA256SUMS.txt`, and falls back to replacing only `HoryTweaks.dll` for releases without one.
 - Code namespaces moved from `BetterAmongUs.*` to `HoryTweaks.*` and embedded resources from `BetterAmongUs.Resources.*` to `HoryTweaks.Resources.*`. Mods that reference HoryTweaks types, including the modded support examples, must update their `using` directives.
 - The Discord link points to the HoryTweaks community server instead of the upstream BetterAmongUs one.

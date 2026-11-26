@@ -1,4 +1,4 @@
-^show: true
+^show: false
 ^type: 1
 ^title: Stability, Speed & Replays
 ^subtitle: Network anti-disconnect refactor, FPS/GC overhaul, and POV MP4 replays!
@@ -14,10 +14,10 @@
  ## Highlights
 
  #### Network Resilience & Anti-Disconnect
- - **Fast-Path Packet Dispatch**: Incoming GameData and RPC packets now dispatch synchronously without per-packet coroutine storms or buffer copies, cutting GC pauses and packet delay.
- - **Hazel UDP & Suspend Tuning**: New **Network Optimization** toggle (Page 3, enabled by default) raises client-side disconnect timeouts, resend limits, UDP receive buffer size, and Alt+Tab suspend tolerance while staying 100% compatible with official Innersloth servers.
+ - **Fast-Path Packet Dispatch**: Already-spawned GameData and RPC packets now dispatch synchronously on a zero-coroutine fast path, deferring asynchronously only for spawns or packets that arrive before their target spawns.
+ - **Hazel UDP & Suspend Tuning**: New **Network Optimization** toggle (Page 3, enabled by default) raises client-side disconnect timeouts, finite resend limits, resend pacing, and Alt+Tab suspend tolerance while preserving original baselines and 100% compatibility with official Innersloth servers.
  - **Transient Send-Error Protection**: Isolated unreliable send errors no longer kick you out of a lobby immediately.
- - **Live Ping & Packet-Loss Warnings**: High ping, unstable jitter, and packet resend spikes now surface clear warnings on the HUD, in logs, and in `/dump`.
+ - **Live Ping & Packet-Loss Warnings**: High ping, unstable jitter, and packet resend spikes surface localized warnings on the HUD plus detailed diagnostics in logs and `/dump`.
  ---
  #### Performance, Smart FPS & Warnings
  - **Smart Unlock FPS (120–240 FPS)**: Replaces the runaway 999 FPS cap with a display-aware 120–240 FPS target and warns about VSync conflicts, safety clamping, frame hitches, and sustained low FPS.
@@ -38,10 +38,10 @@
  ## Destaques
 
  #### Estabilidade de Rede e Anti-Desconexão
- - **Despacho Rápido de Pacotes**: Pacotes GameData e RPC agora são processados de forma síncrona sem tempestade de coroutines nem cópias desnecessárias de buffer, reduzindo travamentos de GC e atraso.
- - **Ajuste Hazel UDP e Alt+Tab**: A nova opção **Otimização de Rede** (Página 3, ligada por padrão) aumenta tolerância de desconexão, limite de reenvios, buffer UDP e tempo em segundo plano mantendo 100% de compatibilidade com os servidores oficiais da Innersloth.
+ - **Despacho Rápido de Pacotes**: Pacotes GameData e RPC para objetos já spawnados agora rodam de forma síncrona sem coroutines, adiando de forma assíncrona apenas spawns ou pacotes que chegam antes do objeto existir.
+ - **Ajuste Hazel UDP e Alt+Tab**: A nova opção **Otimização de Rede** (Página 3, ligada por padrão) aumenta tolerância de desconexão, limite finito de reenvios, espaçamento de reenvio e tempo em segundo plano preservando os valores originais e 100% de compatibilidade com os servidores oficiais da Innersloth.
  - **Proteção contra Erros Transitórios**: Falhas isoladas de envio em pacotes não confiáveis não derrubam mais sua partida imediatamente.
- - **Avisos de Ping e Perda de Pacotes**: Ping alto, instabilidade (jitter) e picos de reenvio exibem avisos claros no HUD, nos logs e no `/dump`.
+ - **Avisos de Ping e Perda de Pacotes**: Ping alto, instabilidade (jitter) e picos de reenvio exibem avisos traduzidos no HUD e diagnósticos detalhados nos logs e no `/dump`.
  ---
  #### Desempenho, FPS Inteligente e Avisos
  - **Destravar FPS Inteligente (120–240 FPS)**: Substitui o teto descontrolado de 999 FPS por um alvo inteligente de 120–240 FPS baseado no monitor, com avisos de conflito de VSync, travamentos de frame e FPS baixo.

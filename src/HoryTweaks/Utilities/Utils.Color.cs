@@ -73,7 +73,7 @@ internal static partial class Utils
 
         if (reverse)
         {
-            Array.Reverse(colors);
+            normalizedT = 1f - normalizedT;
         }
 
         if (normalizedT <= 0f)
@@ -82,7 +82,7 @@ internal static partial class Utils
             return colors[^1];
 
         float segmentSize = 1f / (colors.Length - 1);
-        int segmentIndex = (int)(normalizedT / segmentSize);
+        int segmentIndex = Math.Min((int)(normalizedT / segmentSize), colors.Length - 2);
         float segmentT = (normalizedT - segmentIndex * segmentSize) / segmentSize;
 
         return Color.Lerp(colors[segmentIndex], colors[segmentIndex + 1], segmentT);

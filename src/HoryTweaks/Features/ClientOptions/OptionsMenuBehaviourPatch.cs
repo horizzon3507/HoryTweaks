@@ -1,5 +1,7 @@
 
 
+using AmongUs.Data;
+using HoryTweaks.Core.Performance;
 using HoryTweaks.Generated;
 
 using HoryTweaks.Utilities;
@@ -75,7 +77,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyTheme, BAUConfigs.DisableLobbyTheme, 2, __instance, ToggleLobbyTheme);
 
         // Page 3: performance, connection and files
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 3, __instance, UpdateFrameRate);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 3, __instance, () => UpdateFrameRate(notifyPlayer: true));
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_NetworkOptimization, BAUConfigs.NetworkOptimization, 3, __instance, ConnectionResiliencePatch.ApplyToActiveClient);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_SendBetterRpc, BAUConfigs.SendBetterRpc, 3, __instance, SendBetterRpcAction);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 3, __instance, ConvertAllSettingFiles);
@@ -139,10 +141,106 @@ internal static class OptionsMenuBehaviourPatch
         }
     }
 
-    internal static void UpdateFrameRate()
+    internal static FrameRateDecision LastFrameRateDecision { get; private set; } =
+        new(FrameRatePolicy.DefaultLockedFps, 0, FrameRateWarningKind.None);
+
+    internal static void UpdateFrameRate() => UpdateFrameRate(notifyPlayer: false);
+
+    internal static void UpdateFrameRate(bool notifyPlayer)
     {
-        // Toggle between 60 FPS (default) and 165 FPS
-        Application.targetFrameRate = BAUConfigs.UnlockFPS.Value ? 999 : 60;
+        double refreshHz = DetectMonitorRefreshRateHz();
+        bool vSyncEnabled = IsGameVSyncEnabled();
+        var decision = FrameRatePolicy.Compute(BAUConfigs.UnlockFPS.Value, refreshHz, vSyncEnabled);
+        LastFrameRateDecision = decision;
+
+        Application.targetFrameRate = decision.TargetFps;
+
+        if (!BAUConfigs.UnlockFPS.Value)
+        {
+            BAUPlugin.Logger.Log($"Frame rate locked at {decision.TargetFps} FPS.", "Performance");
+            return;
+        }
+
+        switch (decision.Warning)
+        {
+            case FrameRateWarningKind.VSyncConflict:
+                BAUPlugin.Logger.Warning(
+                    $"Unlock FPS target set to {decision.TargetFps} FPS (display {decision.DetectedRefreshHz}Hz), but Among Us VSync is enabled and will cap frame rate to the monitor refresh.",
+                    "Performance");
+                if (notifyPlayer)
+                {
+                    BetterNotificationManager.Notify(TranslationStrings.Performance_Warning_VSyncConflict.LocalizedString, 6f);
+                }
+                break;
+
+            case FrameRateWarningKind.ClampedToSafeCap:
+                BAUPlugin.Logger.Warning(
+                    $"Display refresh ({decision.DetectedRefreshHz}Hz) exceeds safe ceiling; Unlock FPS capped at {decision.TargetFps} FPS to avoid CPU/network thread starvation.",
+                    "Performance");
+                if (notifyPlayer)
+                {
+                    BetterNotificationManager.Notify(TranslationStrings.Performance_Warning_FpsClamped.Format(decision.TargetFps), 5f);
+                }
+                break;
+
+            case FrameRateWarningKind.RefreshRateUnknown:
+                BAUPlugin.Logger.Warning(
+                    $"Could not detect monitor refresh rate; Unlock FPS set to safe fallback {decision.TargetFps} FPS.",
+                    "Performance");
+                break;
+
+            default:
+                BAUPlugin.Logger.Log(
+                    $"Unlock FPS active: target {decision.TargetFps} FPS (display {decision.DetectedRefreshHz}Hz).",
+                    "Performance");
+                break;
+        }
+    }
+
+    private static double DetectMonitorRefreshRateHz()
+    {
+        try
+        {
+            var current = Screen.currentResolution;
+            double hz = current.m_RefreshRate.value;
+            if (hz > 0.0)
+                return hz;
+
+            var resolutions = Screen.resolutions;
+            if (resolutions != null)
+            {
+                double best = 0.0;
+                for (int i = 0; i < resolutions.Length; i++)
+                {
+                    double candidate = resolutions[i].m_RefreshRate.value;
+                    if (candidate > best && candidate <= 1000.0)
+                    {
+                        best = candidate;
+                    }
+                }
+
+                return best;
+            }
+        }
+        catch
+        {
+        }
+
+        return 0.0;
+    }
+
+    private static bool IsGameVSyncEnabled()
+    {
+        try
+        {
+            return DataManager.Settings != null
+                && DataManager.Settings.Video != null
+                && DataManager.Settings.Video.VSync;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private static void OpenSaveData()

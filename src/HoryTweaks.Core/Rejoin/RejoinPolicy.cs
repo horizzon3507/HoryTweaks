@@ -25,11 +25,28 @@ internal static class RejoinPolicy
     /// <summary>Total window in seconds during which rejoin is attempted.</summary>
     internal const float RejoinWindowSeconds = 30f;
 
+    /// <summary>Seconds before the very first retry attempt after an involuntary disconnect.</summary>
+    internal const float InitialRetryDelaySeconds = 2f;
+
     /// <summary>Seconds between join attempts inside the rejoin window.</summary>
     internal const float AttemptIntervalSeconds = 4f;
 
     /// <summary>Seconds after which a join attempt with no result is abandoned and retried.</summary>
     internal const float AttemptTimeoutSeconds = 12f;
+
+    /// <summary>
+    /// Computes the delay before the next retry attempt (1-based) so the first retry
+    /// recovers quickly while subsequent attempts space out cleanly.
+    /// </summary>
+    internal static float GetRetryDelaySeconds(int attemptNumber)
+    {
+        return attemptNumber switch
+        {
+            <= 1 => InitialRetryDelaySeconds,
+            2 => 3f,
+            _ => AttemptIntervalSeconds
+        };
+    }
 
     // Reason codes mirror the game's DisconnectReasons enum; stored as ints so this
     // class stays free of IL2CPP/Unity references and can be unit tested directly.

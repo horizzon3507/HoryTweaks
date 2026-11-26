@@ -100,9 +100,10 @@ Proton and game updates can affect mod compatibility. HoryTweaks does not provid
 
 ### Client improvements
 
-- **Interface** — lobby information, customizable chat and minimap options, colorblind-friendly labels and scroll-wheel zoom.
-- **Chat commands** — player info (`/players`, `/player`), log export (`/dump`) and an adjustable prefix.
+- **Interface** — lobby information, customizable chat and minimap options, colorblind-friendly labels, scroll-wheel zoom and unfocused Alt+Tab window alerts.
+- **Chat commands** — player info (`/players`, `/player`), local chat mute (`/mute`, `/unmute`), match summary export (`/summary`), chat copy (`/copy`), log export (`/dump`) and an adjustable prefix.
 - **Presets** — named settings presets you can restore, copy, paste and share.
+- **Match history & POV video replay** — the last 25 finished matches saved locally in `Better_Data/MatchHistory` with a timeline, Discord summary copy, and a 2D replay on the real map, plus optional lightweight real-POV `.mp4` recordings (newest 5 / 250 MiB cap; native Windows Media Foundation on Windows and in-process Cisco OpenH264 on Linux/Steam Proton). Available only outside of matches, can be turned off or cleared, and never records Freeplay.
 - **Localization** — [16 languages](src/HoryTweaks/Resources/Lang) including full Brazilian Portuguese.
 
 </td>

@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using HoryTweaks.Features.Chat;
 using HoryTweaks.Features.Hud;
+using HoryTweaks.Features.Notifications;
 using HoryTweaks.Game;
 using HoryTweaks.Plugin;
 using HoryTweaks.Infrastructure.UnityInterop;
@@ -108,6 +109,9 @@ internal static class ClientPatch
     [HarmonyPostfix]
     private static void AmongUsClient_CoStartGame_Postfix(AmongUsClient __instance)
     {
+        // Alert unfocused guests (and hosts, deduplicated by policy cooldown) when a match starts
+        WindowAlertManager.NotifyGameStarted();
+
         // Censor in-game chat
         ChatPatch.CensorPlayerChats();
 

@@ -119,6 +119,21 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<bool> ChatExtendedHistory { get; } = new("Better Options", "ChatExtendedHistory", true);
 
     /// <summary>
+    /// Gets the configuration entry for recording finished matches to the local match history.
+    /// </summary>
+    internal static BAUConfigEntry<bool> MatchHistory { get; } = new("Better Options", "MatchHistory", true);
+
+    /// <summary>
+    /// Gets the configuration entry for recording lightweight real-POV MP4 replays alongside match history.
+    /// </summary>
+    internal static BAUConfigEntry<bool> MatchVideoReplay { get; } = new("Better Options", "MatchVideoReplay", true);
+
+    /// <summary>
+    /// Gets the configuration entry for flashing the game window when unfocused on lobby full, game start or meetings.
+    /// </summary>
+    internal static BAUConfigEntry<bool> WindowAlerts { get; } = new("Better Options", "WindowAlerts", true);
+
+    /// <summary>
     /// Loads configuration options from BepInEx config file.
     /// </summary>
     internal static void LoadConfigs()
@@ -130,7 +145,8 @@ internal static class BAUConfigs
             MinimapIcons, BetterMinimapColors, VentColorGroups,
             BetterColorblindText, ColorblindTextOnTop, CompressSettingFiles,
             ScrollZoom, CommandPrefix,
-            FavoriteColor, SettingsPreset, AutoRejoin, ChatExtendedHistory
+            FavoriteColor, SettingsPreset, AutoRejoin, ChatExtendedHistory, MatchHistory,
+            MatchVideoReplay, WindowAlerts
         ]);
 
         OptionsMenuBehaviourPatch.UpdateFrameRate();

@@ -8,16 +8,20 @@ using HarmonyLib;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using HoryTweaks.Core.Formatting;
 using HoryTweaks.Game;
 using HoryTweaks.Localization;
 using HoryTweaks.Game.Players;
 using HoryTweaks.Infrastructure.UnityInterop;
+using HoryTweaks.Features.MatchHistory;
 
 namespace HoryTweaks.Features.GameSummary;
 
 [HarmonyPatch]
 internal static class GameSummaryPatch
 {
+    internal static string? LatestSummaryMarkdown { get; private set; }
+
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
     [HarmonyPostfix]
     private static void EndGameManager_SetEverythingUp_Postfix(EndGameManager __instance)
@@ -25,6 +29,12 @@ internal static class GameSummaryPatch
         // Check for null references
         if (__instance == null)
             return;
+
+        // Save the match recording now that the match is over
+        MatchRecorder.Finish();
+
+        // Build and cache a clean Discord-ready summary before visual creation
+        LatestSummaryMarkdown = BuildMarkdownSummary();
 
         // Log game end to console
         LogGameEnd();
@@ -55,7 +65,7 @@ internal static class GameSummaryPatch
         ConfigureSummaryText(summaryText);
 
         // Get win condition info
-        var (winTeam, winTag, winColor) = GetWinInfo();
+        var (winTeam, winTag, winColor) = GetWinInfo(EndGameResult.CachedGameOverReason);
         BAUPlugin.Logger.Log($"{winTeam}: {winTag}", "GameSummary");
 
         // Build and display summary text
@@ -63,7 +73,129 @@ internal static class GameSummaryPatch
         var playerList = BuildPlayerList();
 
         summaryText.text = $"{summaryHeader}\n\n<size=58%>{playerList}</size>";
+        CreateCopySummaryButton(endGameManager, summaryObject.transform);
         BAUPlugin.Logger.LogHeader("Game Summary End", "GameSummary");
+    }
+
+    private static void CreateCopySummaryButton(EndGameManager endGameManager, Transform summaryTransform)
+    {
+        if (string.IsNullOrWhiteSpace(LatestSummaryMarkdown) || endGameManager.WinText == null)
+            return;
+
+        try
+        {
+            var buttonObj = UnityEngine.Object.Instantiate(endGameManager.WinText.gameObject, summaryTransform.parent);
+            buttonObj.name = "CopySummaryButton (TMP)";
+            buttonObj.DestroyTextTranslators();
+
+            var camera = HudManager.InstanceExists
+                ? HudManager.Instance.GetComponentInChildren<Camera>()
+                : Camera.main;
+
+            buttonObj.transform.position = AspectPosition.ComputeWorldPosition(
+                camera,
+                AspectPosition.EdgeAlignments.LeftBottom,
+                new Vector3(1.1f, 0.45f, -5f));
+            buttonObj.transform.localScale = new Vector3(0.24f, 0.24f, 0.24f);
+
+            var label = buttonObj.GetComponent<TextMeshPro>();
+            if (label == null)
+                return;
+
+            label.autoSizeTextContainer = false;
+            label.enableAutoSizing = false;
+            label.alignment = TextAlignmentOptions.Left;
+            label.color = new Color(1f, 1f, 0.75f, 1f);
+            label.text = $"[ {TranslationStrings.MatchHistory_CopySummary.LocalizedString} ]";
+
+            var collider = buttonObj.GetComponent<BoxCollider2D>();
+            if (collider == null)
+            {
+                collider = buttonObj.AddComponent<BoxCollider2D>();
+            }
+            collider.size = new Vector2(12f, 2.2f);
+            collider.offset = new Vector2(4.5f, 0f);
+
+            var button = buttonObj.GetComponent<PassiveButton>();
+            if (button == null)
+            {
+                button = buttonObj.AddComponent<PassiveButton>();
+            }
+            button.Colliders = new Collider2D[] { collider };
+            button.OnClick = new();
+            button.OnMouseOver = new();
+            button.OnMouseOut = new();
+            button.OnMouseOver.AddListener(() => label.color = Color.white);
+            button.OnMouseOut.AddListener(() => label.color = new Color(1f, 1f, 0.75f, 1f));
+            button.OnClick.AddListener(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(LatestSummaryMarkdown))
+                {
+                    GUIUtility.systemCopyBuffer = LatestSummaryMarkdown;
+                    label.text = $"[ {TranslationStrings.MatchHistory_SummaryCopied.LocalizedString} ]";
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            BAUPlugin.Logger.Error(ex, "GameSummary");
+        }
+    }
+
+    private static string? BuildMarkdownSummary()
+    {
+        try
+        {
+            if (GameData.Instance == null || GameData.Instance.AllPlayers == null)
+                return null;
+
+            var (winTeam, winTag, _) = GetWinInfo(EndGameResult.CachedGameOverReason);
+            string mapName = Enum.GetName(typeof(MapNames), (int)GameState.GetActiveMapId) ?? "?";
+            var players = new List<MatchSummaryPlayer>();
+
+            foreach (var playerData in GetSortedPlayers())
+            {
+                if (playerData == null || playerData.Role == null)
+                    continue;
+
+                var extended = playerData.ExtendedData();
+                string name = extended != null ? extended.RealName : playerData.PlayerName;
+                string roleName = playerData.RoleType.GetRoleName();
+                bool isImpostor = playerData.Role.IsImpostor;
+                int kills = extended != null && extended.RoleInfo != null ? extended.RoleInfo.Kills : 0;
+                int done = playerData.Tasks != null ? playerData.Tasks.WhereIl2Cpp(t => t.Complete).Count : 0;
+                int total = playerData.Tasks != null ? playerData.Tasks.Count : 0;
+                string status = playerData.Disconnected
+                    ? TranslationStrings.DC.LocalizedString
+                    : playerData.IsDead
+                        ? TranslationStrings.Dead.LocalizedString
+                        : TranslationStrings.Alive.LocalizedString;
+
+                players.Add(new MatchSummaryPlayer(name, roleName, isImpostor, kills, done, total, status));
+            }
+
+            return MatchSummaryFormatter.Format(
+                mapName,
+                winTeam,
+                winTag,
+                durationMs: null,
+                players,
+                CreateSummaryLabels());
+        }
+        catch (Exception ex)
+        {
+            BAUPlugin.Logger.Error(ex, "GameSummary");
+            return null;
+        }
+    }
+
+    internal static MatchSummaryLabels CreateSummaryLabels()
+    {
+        return new MatchSummaryLabels(
+            Translator.GetString(StringNames.ImpostorsCategory),
+            Translator.GetString(StringNames.Crewmates),
+            TranslationStrings.Kills.LocalizedString,
+            TranslationStrings.Tasks.LocalizedString);
     }
 
     // Creates the text object for the summary
@@ -105,9 +237,9 @@ internal static class GameSummaryPatch
     }
 
     // Determines which team won and how
-    private static (string Team, string Tag, string Color) GetWinInfo()
+    internal static (string Team, string Tag, string Color) GetWinInfo(GameOverReason reason)
     {
-        return EndGameResult.CachedGameOverReason switch
+        return reason switch
         {
             // Classic mode wins
             GameOverReason.CrewmatesByTask => (

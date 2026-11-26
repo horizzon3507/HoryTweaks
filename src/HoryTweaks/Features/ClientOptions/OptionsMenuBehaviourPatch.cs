@@ -11,6 +11,8 @@ using UnityEngine;
 using HoryTweaks.Features.Chat;
 using HoryTweaks.Features.Hud;
 using HoryTweaks.Features.Meeting;
+using HoryTweaks.Features.MatchHistory;
+using HoryTweaks.Features.MatchHistory.Video;
 using HoryTweaks.Features.Minimap;
 using HoryTweaks.Features.Moderation;
 using HoryTweaks.Features.PlayerInfo;
@@ -35,6 +37,7 @@ internal static class OptionsMenuBehaviourPatch
         // Create custom "Better Options" tab in settings menu
         BetterOptionsTab = CreateTabPage(__instance, TranslationStrings.BetterOption.LocalizedString);
         ModerationCenterMenu.Reset();
+        MatchHistoryMenu.Reset();
 
         // Populate the tab with all BAU client options
         SetupAllClientOptions(__instance);
@@ -59,6 +62,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ChatDarkMode, BAUConfigs.ChatDarkMode, 1, __instance, ChatPatch.SetChatTheme);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_ForceOwnLanguage, BAUConfigs.ForceOwnLanguage, 1, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.Chat_ExtendedHistory, BAUConfigs.ChatExtendedHistory, 1, __instance);
+        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_WindowAlerts, BAUConfigs.WindowAlerts, 1, __instance);
 
         // Page 2: in-game readability and map
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_BetterColorblindText, BAUConfigs.BetterColorblindText, 2, __instance, CosmeticsLayerPatch.UpdateAllColorblindText);
@@ -75,6 +79,8 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 3, __instance, ConvertAllSettingFiles);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_HideConsole, BAUConfigs.HideConsole, 3, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.Rejoin_AutoRejoin, BAUConfigs.AutoRejoin, 3, __instance);
+        ClientOptionItem.CreateToggle(TranslationStrings.MatchHistory_Record, BAUConfigs.MatchHistory, 3, __instance, MatchRecorder.OnConfigToggled);
+        ClientOptionItem.CreateToggle(TranslationStrings.MatchHistory_RecordVideo, BAUConfigs.MatchVideoReplay, 3, __instance, MatchVideoRecorder.OnConfigToggled);
 
         // Page 4: read-only list of hidden controls and gestures
         GestureHelpPage.Create(__instance);
@@ -106,6 +112,7 @@ internal static class OptionsMenuBehaviourPatch
         });
 
         ClientOptionItem.CreateButton(TranslationStrings.BetterOption_Moderation, -1, __instance, () => ModerationCenterMenu.Open(__instance));
+        ClientOptionItem.CreateButton(TranslationStrings.BetterOption_MatchHistory, -1, __instance, () => MatchHistoryMenu.Open(__instance), MatchHistoryMenu.CanOpenWithNotice);
     }
 
     private static void SendBetterRpcAction()

@@ -335,5 +335,9 @@
   "BetterOption.NetworkOptimization": "Оптимизация сети",
   "Network.Warning.HighPing": "Высокий пинг ({0}ms)",
   "Network.Warning.HighJitter": "Нестабильный пинг (±{0}ms)",
-  "Network.Warning.PacketLoss": "Потеря пакетов ({0} повторов)"
+  "Network.Warning.PacketLoss": "Потеря пакетов ({0} повторов)",
+  "Performance.Warning.LowFps": "Низкий FPS ({0})",
+  "Performance.Warning.FrameHitch": "Фриз кадра ({0}ms)",
+  "Performance.Warning.VSyncConflict": "В настройках видео включён VSync — разблокировка FPS ограничена VSync.",
+  "Performance.Warning.FpsClamped": "Разблокировка FPS ограничена {0} FPS для стабильности сети и CPU."
 }

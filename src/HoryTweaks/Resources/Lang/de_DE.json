@@ -335,5 +335,9 @@
   "BetterOption.NetworkOptimization": "Netzwerkoptimierung",
   "Network.Warning.HighPing": "Hoher Ping ({0}ms)",
   "Network.Warning.HighJitter": "Instabiler Ping (±{0}ms)",
-  "Network.Warning.PacketLoss": "Paketverlust ({0} Neuversuche)"
+  "Network.Warning.PacketLoss": "Paketverlust ({0} Neuversuche)",
+  "Performance.Warning.LowFps": "Niedrige FPS ({0})",
+  "Performance.Warning.FrameHitch": "Frame-Ruckler ({0}ms)",
+  "Performance.Warning.VSyncConflict": "VSync ist in den Videoeinstellungen aktiv — FPS-Freigabe wird von VSync begrenzt.",
+  "Performance.Warning.FpsClamped": "FPS-Freigabe auf {0} FPS für Netzwerk- und CPU-Stabilität begrenzt."
 }

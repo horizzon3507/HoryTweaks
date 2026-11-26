@@ -1,16 +1,24 @@
 using BepInEx;
 using BepInEx.Logging;
+using HoryTweaks.Core.Logging;
 using HoryTweaks.Utilities;
 using HoryTweaks.Game;
 
 namespace HoryTweaks.Infrastructure.Logging;
 
 /// <summary>
-/// Provides logging for BetterAmongUs with various log levels and destinations.
+/// Provides logging for HoryTweaks with various log levels and non-blocking consistent console output.
 /// </summary>
-internal sealed class BAULogger(ManualLogSource manualLogSource)
+internal sealed class BAULogger : IDisposable
 {
-    private readonly ManualLogSource _manualLogSource = manualLogSource;
+    private readonly ManualLogSource _manualLogSource;
+    private readonly AsyncConsoleWriter _consoleWriter;
+
+    internal BAULogger(ManualLogSource manualLogSource)
+    {
+        _manualLogSource = manualLogSource;
+        _consoleWriter = new AsyncConsoleWriter(WriteToConsole);
+    }
 
     /// <summary>
     /// Logs a message with specified parameters.
@@ -28,13 +36,34 @@ internal sealed class BAULogger(ManualLogSource manualLogSource)
                 return;
 
             _manualLogSource.LogInfo($"[{tag}] {info}");
-            if (logConsole)
+            if (logConsole && ConsoleManager.ConsoleActive)
             {
-                ConsoleManager.SetConsoleColor(color);
-                ConsoleManager.ConsoleStream.WriteLine($"{DateTime.Now:HH:mm} HoryTweaks[{tag}]: {Utils.RemoveHtmlText(info)}");
+                string line = $"{DateTime.Now:HH:mm} HoryTweaks[{tag}]: {Utils.RemoveHtmlText(info)}";
+                _consoleWriter.Enqueue(color, line);
             }
         }
         catch { }
+    }
+
+    internal void WriteConsoleRaw(ConsoleColor color, string text)
+    {
+        if (!ConsoleManager.ConsoleActive)
+            return;
+
+        _consoleWriter.Enqueue(color, text);
+    }
+
+    internal void FlushConsole(int timeoutMs = 500) => _consoleWriter.Flush(timeoutMs);
+
+    public void Dispose() => _consoleWriter.Dispose();
+
+    private static void WriteToConsole(ConsoleColor color, string line)
+    {
+        if (!ConsoleManager.ConsoleActive || ConsoleManager.ConsoleStream == null)
+            return;
+
+        ConsoleManager.SetConsoleColor(color);
+        ConsoleManager.ConsoleStream.WriteLine(line);
     }
 
     /// <summary>
@@ -179,7 +208,8 @@ internal class CustomLogListener(BAULogger bauLogger, ILogSource outputSource) :
     {
         if (ReferenceEquals(eventArgs.Source, _outputSource)
             || eventArgs.Source.SourceName.ToLower().Contains("unity")
-            || eventArgs.Source.SourceName.ToLower().Contains("betteramongus"))
+            || eventArgs.Source.SourceName.ToLower().Contains("betteramongus")
+            || eventArgs.Source.SourceName.ToLower().Contains("horytweaks"))
             return;
 
         if (eventArgs.Level is LogLevel.None or LogLevel.Info)

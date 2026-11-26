@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Cóipeáil achoimre an chluiche dheireanaigh chuig an ngearrthaisce",
   "Chat.Summary.Copied": "Cóipeáladh achoimre an chluiche chuig an ngearrthaisce.",
   "Chat.Summary.Empty": "Níl aon achoimre cluiche críochnaithe le cóipeáil fós.",
-  "MatchHistory.OpenFolder": "Oscail Fillteán"
+  "MatchHistory.OpenFolder": "Oscail Fillteán",
+  "BetterOption.NetworkOptimization": "Optamú Líonra",
+  "Network.Warning.HighPing": "Ping ard ({0}ms)",
+  "Network.Warning.HighJitter": "Ping éagobhsaí (±{0}ms)",
+  "Network.Warning.PacketLoss": "Caillteanas paicéad ({0} athsheolta)"
 }

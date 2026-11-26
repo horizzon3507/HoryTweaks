@@ -116,4 +116,13 @@ public class RejoinPolicyTests
         Assert.True(RejoinPolicy.RejoinWindowSeconds / RejoinPolicy.AttemptIntervalSeconds >= 3);
         Assert.True(RejoinPolicy.AttemptTimeoutSeconds >= RejoinPolicy.AttemptIntervalSeconds);
     }
+
+    [Fact]
+    public void Retry_delay_starts_fast_and_caps_at_attempt_interval()
+    {
+        Assert.Equal(RejoinPolicy.InitialRetryDelaySeconds, RejoinPolicy.GetRetryDelaySeconds(1));
+        Assert.True(RejoinPolicy.GetRetryDelaySeconds(1) < RejoinPolicy.AttemptIntervalSeconds);
+        Assert.Equal(RejoinPolicy.AttemptIntervalSeconds, RejoinPolicy.GetRetryDelaySeconds(3));
+        Assert.Equal(RejoinPolicy.AttemptIntervalSeconds, RejoinPolicy.GetRetryDelaySeconds(10));
+    }
 }

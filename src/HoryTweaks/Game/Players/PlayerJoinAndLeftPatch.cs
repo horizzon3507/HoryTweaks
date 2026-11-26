@@ -47,9 +47,20 @@ internal static class PlayerJoinAndLeftPatch
 
     private static IEnumerator CoCheckPlayerOnJoin(ClientData data)
     {
-        while (!data.InScene || data.Character == null || data.Character.Data == null || data.Character.Data.IsIncomplete)
+        float deadline = UnityEngine.Time.unscaledTime + 15f;
+        while (data != null && (!data.InScene || data.Character == null || data.Character.Data == null || data.Character.Data.IsIncomplete))
         {
+            if (!GameState.IsInGame || AmongUsClient.Instance == null || AmongUsClient.Instance.FindClientById(data.Id) == null || UnityEngine.Time.unscaledTime > deadline)
+            {
+                yield break;
+            }
+
             yield return null;
+        }
+
+        if (data == null || !GameState.IsInGame)
+        {
+            yield break;
         }
 
         if (GameState.IsInGame)

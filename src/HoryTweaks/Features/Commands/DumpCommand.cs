@@ -12,6 +12,7 @@ using HoryTweaks.Game;
 using HoryTweaks.Infrastructure.Configuration;
 using HoryTweaks.Infrastructure.Logging;
 using HoryTweaks.Infrastructure.Persistence;
+using HoryTweaks.Networking;
 using HoryTweaks.Plugin;
 
 namespace HoryTweaks.Features.Commands;
@@ -147,6 +148,7 @@ internal sealed class DumpCommand : BaseCommand
             .Entry("LessInfo", BAUConfigs.LessInfo.Value)
             .Entry("DisableLobbyTheme", BAUConfigs.DisableLobbyTheme.Value)
             .Entry("UnlockFPS", BAUConfigs.UnlockFPS.Value)
+            .Entry("NetworkOptimization", BAUConfigs.NetworkOptimization.Value)
             .Entry("ShowFPS", BAUConfigs.ShowFPS.Value)
             .Entry("MinimapIcons", BAUConfigs.MinimapIcons.Value)
             .Entry("BetterMinimapColors", BAUConfigs.BetterMinimapColors.Value)
@@ -156,6 +158,11 @@ internal sealed class DumpCommand : BaseCommand
             .Entry("CompressSettingFiles", BAUConfigs.CompressSettingFiles.Value)
             .Entry("CommandPrefix", BAUConfigs.CommandPrefix.Value)
             .Entry("SettingsPreset", BAUConfigs.SettingsPreset.Value);
+
+        report.Section("Network")
+            .Entry("Connection health", ConnectionResiliencePatch.HealthTracker.FormatDiagnosticSummary())
+            .Entry("Packet dispatch", NetworkManager.FormatDiagnosticSummary())
+            .Entry("Last ended session", ConnectionResiliencePatch.LastEndedSessionSummary);
 
         report.Section("Data")
             .Entry("Better_Data folder present", SafeValue(() => Directory.Exists(BetterDataManager.Folders.fileFolderPath)))

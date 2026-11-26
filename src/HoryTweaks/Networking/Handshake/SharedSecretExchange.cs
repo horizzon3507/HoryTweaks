@@ -1,131 +1,161 @@
-
+using System.Buffers.Binary;
 using System.Security.Cryptography;
 
 namespace HoryTweaks.Networking.Handshake;
 
 /// <summary>
 /// Handles secure key exchange using Elliptic Curve Diffie-Hellman (ECDH) for establishing shared secrets.
+/// Probes ECDH support once per process so Wine/Proton environments without NIST P-256 CNG support
+/// do not repeatedly throw exceptions on every player join.
 /// </summary>
 internal sealed class SharedSecretExchange
 {
-    private readonly ECDiffieHellman? dh;
-    private byte[] publicKey;
-    private int tempKey;
-    private byte[] sharedSecret = [];
-    private readonly bool cryptoDisabled;
+    private static readonly object EcdhProbeLock = new();
+    private static bool? _ecdhSupported;
+
+    private ECDiffieHellman? _dh;
+    private byte[] _publicKey;
+    private int _tempKey;
+    private byte[] _sharedSecret = [];
+    private readonly bool _cryptoDisabled;
+    private int? _remoteTempKey;
 
     /// <summary>
     /// Gets a value indicating whether cryptographic operations are available.
     /// </summary>
-    internal bool CryptoAvailable => !cryptoDisabled;
+    internal bool CryptoAvailable => !_cryptoDisabled;
 
     /// <summary>
     /// Gets or sets a value indicating whether to use the fallback key exchange mechanism.
     /// </summary>
     internal bool UseFallback { get; set; }
 
-    private int? remoteTempKey;
+    /// <summary>
+    /// Gets a value indicating whether the key exchange data has been cleared.
+    /// </summary>
+    internal bool HasBeenCleared { get; private set; }
 
     /// <summary>
-    /// Initializes a new instance of the SharedSecretExchange class with a new ECDH key pair.
+    /// Initializes a new instance of the SharedSecretExchange class with a new ECDH key pair when supported.
     /// </summary>
     internal SharedSecretExchange()
     {
-        try
+        if (IsEcdhSupported())
         {
-            dh = ECDiffieHellman.Create();
-            dh.GenerateKey(ECCurve.NamedCurves.nistP256);
-            publicKey = dh.ExportSubjectPublicKeyInfo();
+            try
+            {
+                _dh = ECDiffieHellman.Create();
+                _dh.GenerateKey(ECCurve.NamedCurves.nistP256);
+                _publicKey = _dh.ExportSubjectPublicKeyInfo();
+            }
+            catch (Exception ex)
+            {
+                MarkEcdhUnsupported(ex);
+                _cryptoDisabled = true;
+                DisposeDh();
+                _publicKey = [];
+            }
         }
-        catch (Exception ex)
+        else
         {
-            BAUPlugin.Logger.Error("ECDH unavailable, using fallback handshake: " + ex.Message, logConsole: false);
-            cryptoDisabled = true;
-            dh = null;
-            publicKey = [];
+            _cryptoDisabled = true;
+            _publicKey = [];
         }
 
-        tempKey = GenerateSecureTempKey();
+        _tempKey = GenerateSecureTempKey();
     }
 
-    /// <summary>
-    /// Generates a cryptographically secure random temporary key.
-    /// </summary>
-    /// <returns>A random positive integer used as a temporary key.</returns>
+    private static bool IsEcdhSupported()
+    {
+        if (_ecdhSupported.HasValue)
+            return _ecdhSupported.Value;
+
+        lock (EcdhProbeLock)
+        {
+            if (_ecdhSupported.HasValue)
+                return _ecdhSupported.Value;
+
+            try
+            {
+                using var probe = ECDiffieHellman.Create();
+                probe.GenerateKey(ECCurve.NamedCurves.nistP256);
+                _ = probe.ExportSubjectPublicKeyInfo();
+                _ecdhSupported = true;
+            }
+            catch (Exception ex)
+            {
+                _ecdhSupported = false;
+                BAUPlugin.Logger.Warning("ECDH unavailable on this runtime; using fallback handshake for all peers: " + ex.Message, "Handshake");
+            }
+
+            return _ecdhSupported.Value;
+        }
+    }
+
+    private static void MarkEcdhUnsupported(Exception ex)
+    {
+        lock (EcdhProbeLock)
+        {
+            if (_ecdhSupported != false)
+            {
+                _ecdhSupported = false;
+                BAUPlugin.Logger.Warning("ECDH failed; switching to fallback handshake for future peers: " + ex.Message, "Handshake");
+            }
+        }
+    }
+
     private static int GenerateSecureTempKey()
     {
-        byte[] buffer = new byte[4];
+        Span<byte> buffer = stackalloc byte[4];
         RandomNumberGenerator.Fill(buffer);
-        return Math.Abs(BitConverter.ToInt32(buffer, 0));
+        return BinaryPrimitives.ReadInt32LittleEndian(buffer) & int.MaxValue;
     }
 
-    /// <summary>
-    /// Sets the temporary key received from the remote party.
-    /// </summary>
-    /// <param name="key">The temporary key from the remote party.</param>
     internal void SetRemoteTempKey(int key)
     {
-        remoteTempKey = key;
+        _remoteTempKey = key;
     }
 
-    /// <summary>
-    /// Gets the public key for key exchange.
-    /// </summary>
-    /// <returns>The public key in SubjectPublicKeyInfo format, or an empty array if cryptography is disabled.</returns>
     internal byte[] GetPublicKey()
     {
-        if (cryptoDisabled) return [];
-        return publicKey;
+        return _cryptoDisabled ? [] : _publicKey;
     }
 
-    /// <summary>
-    /// Gets the temporary key used for initial communication.
-    /// </summary>
-    /// <returns>A random integer used as a temporary key.</returns>
     internal int GetTempKey()
     {
-        return tempKey;
+        return _tempKey;
     }
 
-    /// <summary>
-    /// Gets the established shared secret.
-    /// </summary>
-    /// <returns>The shared secret byte array.</returns>
     internal byte[] GetSharedSecret()
     {
-        return sharedSecret;
+        return _sharedSecret;
     }
 
-    /// <summary>
-    /// Generates a shared secret using another party's public key.
-    /// </summary>
-    /// <param name="otherPartyPublicKey">The other party's public key in SubjectPublicKeyInfo format.</param>
-    /// <returns>The shared secret byte array, or an empty array if generation fails.</returns>
     internal byte[] GenerateSharedSecret(byte[] otherPartyPublicKey)
     {
-        if (sharedSecret.Length > 0) return sharedSecret;
+        if (_sharedSecret.Length > 0)
+            return _sharedSecret;
 
-        if (cryptoDisabled || UseFallback)
+        if (_cryptoDisabled || UseFallback || _dh == null)
         {
-            if (!remoteTempKey.HasValue)
+            if (!_remoteTempKey.HasValue)
                 return [];
 
-            sharedSecret = DeriveFallbackSecret(tempKey, remoteTempKey.Value);
-            return sharedSecret;
+            _sharedSecret = DeriveFallbackSecret(_tempKey, _remoteTempKey.Value);
+            return _sharedSecret;
         }
 
         try
         {
-            using var otherPartyDH = ECDiffieHellman.Create();
-
             if (otherPartyPublicKey == null || otherPartyPublicKey.Length == 0)
                 return [];
 
+            using var otherPartyDH = ECDiffieHellman.Create();
             otherPartyDH.ImportSubjectPublicKeyInfo(otherPartyPublicKey, out _);
-            sharedSecret = dh.DeriveKeyMaterial(otherPartyDH.PublicKey);
+            _sharedSecret = _dh.DeriveKeyMaterial(otherPartyDH.PublicKey);
 
-            dh.Dispose();
-            return sharedSecret;
+            DisposeDh();
+            return _sharedSecret;
         }
         catch (Exception ex)
         {
@@ -134,62 +164,50 @@ internal sealed class SharedSecretExchange
         }
     }
 
-    /// <summary>
-    /// Gets a numeric hash of the shared secret for verification purposes.
-    /// </summary>
-    /// <returns>A 32-bit integer hash of the shared secret, or 0 if no shared secret exists.</returns>
     internal int GetSharedSecretHash()
     {
-        if (sharedSecret.Length == 0) return 0;
+        if (_sharedSecret.Length == 0)
+            return 0;
 
-        using SHA256 sha256 = SHA256.Create();
-        byte[] hashBytes = sha256.ComputeHash(sharedSecret);
+        Span<byte> hashBytes = stackalloc byte[32];
+        SHA256.HashData(_sharedSecret, hashBytes);
 
         int numericHash = (hashBytes[0] << 24) |
                           (hashBytes[1] << 16) |
                           (hashBytes[2] << 8) |
                           hashBytes[3];
 
-        return Math.Abs(numericHash);
+        return numericHash == int.MinValue ? int.MaxValue : Math.Abs(numericHash);
     }
 
-    /// <summary>
-    /// Derives a fallback shared secret using temporary keys when ECDH is unavailable.
-    /// </summary>
-    /// <param name="local">The local temporary key.</param>
-    /// <param name="remote">The remote temporary key.</param>
-    /// <returns>A 256-bit hash derived from the ordered temporary keys.</returns>
     private static byte[] DeriveFallbackSecret(int local, int remote)
     {
-        using SHA256 sha256 = SHA256.Create();
-
         int a = local < remote ? local : remote;
         int b = local < remote ? remote : local;
 
-        byte[] buffer = new byte[8];
+        Span<byte> buffer = stackalloc byte[8];
+        BinaryPrimitives.WriteInt32LittleEndian(buffer, a);
+        BinaryPrimitives.WriteInt32LittleEndian(buffer[4..], b);
 
-        Buffer.BlockCopy(BitConverter.GetBytes(a), 0, buffer, 0, 4);
-        Buffer.BlockCopy(BitConverter.GetBytes(b), 0, buffer, 4, 4);
-
-        return sha256.ComputeHash(buffer);
+        return SHA256.HashData(buffer);
     }
 
-    /// <summary>
-    /// Gets a value indicating whether the key exchange data has been cleared for security.
-    /// </summary>
-    internal bool HasBeenCleared { get; private set; }
-
-    /// <summary>
-    /// Clears all sensitive key exchange data for security purposes.
-    /// </summary>
     internal void ClearData()
     {
         if (HasBeenCleared)
             return;
 
         HasBeenCleared = true;
-        publicKey = [];
-        tempKey = 0;
-        sharedSecret = [];
+        DisposeDh();
+        _publicKey = [];
+        _tempKey = 0;
+        _sharedSecret = [];
+    }
+
+    private void DisposeDh()
+    {
+        var dh = _dh;
+        _dh = null;
+        dh?.Dispose();
     }
 }

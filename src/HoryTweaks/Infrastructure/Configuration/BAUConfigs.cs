@@ -1,5 +1,6 @@
 using HoryTweaks.Modules.Support;
 using HoryTweaks.Features.ClientOptions;
+using HoryTweaks.Networking;
 
 namespace HoryTweaks.Infrastructure.Configuration;
 
@@ -114,6 +115,11 @@ internal static class BAUConfigs
     internal static BAUConfigEntry<bool> AutoRejoin { get; } = new("Better Options", "AutoRejoin", true);
 
     /// <summary>
+    /// Gets the configuration entry for Hazel UDP resilience, fast-path packet dispatch, and background-suspend tolerance.
+    /// </summary>
+    internal static BAUConfigEntry<bool> NetworkOptimization { get; } = new("Better Options", "NetworkOptimization", true);
+
+    /// <summary>
     /// Gets the configuration entry for extended chat history setting.
     /// </summary>
     internal static BAUConfigEntry<bool> ChatExtendedHistory { get; } = new("Better Options", "ChatExtendedHistory", true);
@@ -145,10 +151,11 @@ internal static class BAUConfigs
             MinimapIcons, BetterMinimapColors, VentColorGroups,
             BetterColorblindText, ColorblindTextOnTop, CompressSettingFiles,
             ScrollZoom, CommandPrefix,
-            FavoriteColor, SettingsPreset, AutoRejoin, ChatExtendedHistory, MatchHistory,
+            FavoriteColor, SettingsPreset, AutoRejoin, NetworkOptimization, ChatExtendedHistory, MatchHistory,
             MatchVideoReplay, WindowAlerts
         ]);
 
         OptionsMenuBehaviourPatch.UpdateFrameRate();
+        ConnectionResiliencePatch.ApplyToActiveClient();
     }
 }

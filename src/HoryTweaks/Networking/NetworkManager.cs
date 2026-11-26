@@ -1,6 +1,12 @@
 using AmongUs.InnerNet.GameDataMessages;
 using BepInEx.Unity.IL2CPP.Utils;
-
+using HoryTweaks.Core.Networking;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Game;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Infrastructure.UnityInterop;
+using HoryTweaks.Networking.Rpc;
 using HoryTweaks.Structs;
 using HoryTweaks.Utilities;
 using HarmonyLib;
@@ -8,108 +14,176 @@ using Hazel;
 using InnerNet;
 using System.Collections;
 using UnityEngine;
-using HoryTweaks.Networking.Rpc;
-using HoryTweaks.Features.GameOptions;
-using HoryTweaks.Game;
-using HoryTweaks.Game.Players;
-using HoryTweaks.Infrastructure.UnityInterop;
 
 namespace HoryTweaks.Networking;
 
 /// <summary>
-/// Manages network communication and RPC handling for BetterAmongUs.
+/// Manages network communication, low-allocation GameData dispatch, and RPC handling.
 /// </summary>
 internal static class NetworkManager
 {
+    private const int MaxDeferredAttempts = 10;
+    private const float InvalidTagLogCooldownSeconds = 5f;
+
+    private static readonly bool[] KnownRpcCalls = BuildKnownRpcCallsTable();
+    private static readonly SendErrorTracker SendErrorsTracker = new();
+    private static float _lastInvalidTagLogTime = float.NegativeInfinity;
+
+    internal static long FastPathPacketsDispatched { get; private set; }
+    internal static long DeferredPacketsDispatched { get; private set; }
+    internal static int AbsorbedTransientSendErrors => SendErrorsTracker.AbsorbedTransientErrors;
+
     /// <summary>
     /// Gets the InnerNetClient instance from AmongUsClient.
     /// </summary>
     internal static InnerNetClient InnerNetClient => AmongUsClient.Instance;
 
     /// <summary>
-    /// Sends a message to the game server.
+    /// Resets per-session network counters when connecting or disconnecting.
     /// </summary>
-    /// <param name="writer">The MessageWriter containing the data to send.</param>
+    internal static void ResetSession()
+    {
+        SendErrorsTracker.Reset();
+        FastPathPacketsDispatched = 0;
+        DeferredPacketsDispatched = 0;
+        _lastInvalidTagLogTime = float.NegativeInfinity;
+    }
+
+    /// <summary>
+    /// Formats packet-dispatch diagnostics for the /dump report.
+    /// </summary>
+    internal static string FormatDiagnosticSummary()
+    {
+        return $"fastPath={FastPathPacketsDispatched}, deferred={DeferredPacketsDispatched}, absorbedSendErrors={AbsorbedTransientSendErrors}";
+    }
+
+    /// <summary>
+    /// Sends a message to the game server while avoiding unnecessary buffer copies for non-host
+    /// clients and absorbing isolated transient send failures on unreliable packets.
+    /// </summary>
     internal static void SendToServer(MessageWriter writer)
     {
-        if (InnerNetClient == null)
+        var client = InnerNetClient;
+        if (client == null)
             return;
 
+        // Only hosts run host-side RPC validation on outgoing packets; non-host clients
+        // skip local RPC handling in BetterRpcRouter, so inspecting every outgoing movement
+        // packet would only allocate buffers and burn CPU.
+        if (client.InOnlineScene && GameState.IsHost && writer.Length > 0)
+        {
+            try
+            {
+                StreamlineMessage(writer, writer.SendOption);
+            }
+            catch (Exception ex)
+            {
+                BAUPlugin.Logger.Error(ex, "NetworkManager");
+            }
+        }
+
+        if (client.connection != null)
+        {
+            SendErrors sendErrors = client.connection.Send(writer);
+            if (sendErrors != SendErrors.None && !GameState.IsFreePlay)
+            {
+                if (!BAUConfigs.NetworkOptimization.Value)
+                {
+                    client.EnqueueDisconnect(DisconnectReasons.Error, "Failed to send message: " + sendErrors.ToString());
+                    return;
+                }
+
+                var errorKind = MapSendError(sendErrors);
+                bool isReliable = writer.SendOption == SendOption.Reliable;
+                var action = SendErrorsTracker.Evaluate(errorKind, isReliable, Time.unscaledTimeAsDouble, out bool shouldWarn);
+
+                if (action == SendErrorAction.Disconnect)
+                {
+                    client.EnqueueDisconnect(DisconnectReasons.Error, "Failed to send message: " + sendErrors.ToString());
+                }
+                else if (shouldWarn)
+                {
+                    BAUPlugin.Logger.Warning(
+                        $"Transient {(isReliable ? "reliable" : "unreliable")} send error ({sendErrors}) absorbed without disconnecting.",
+                        "NetworkManager");
+                }
+            }
+            else if (sendErrors == SendErrors.None)
+            {
+                SendErrorsTracker.Evaluate(SendErrorKind.None, false, Time.unscaledTimeAsDouble, out _);
+            }
+        }
+        else
+        {
+            client.EnqueueDisconnect(DisconnectReasons.Custom, "InnerNetClient.connection is null");
+        }
+    }
+
+    /// <summary>
+    /// Inspects outgoing host packets for RPC messages without leaking pooled MessageReaders.
+    /// </summary>
+    internal static void StreamlineMessage(MessageWriter writer, SendOption sendOption)
+    {
+        var client = InnerNetClient;
+        if (client == null || !client.InOnlineScene)
+            return;
+
+        MessageReader rootReader = writer.ToReader();
         try
         {
-            StreamlineMessage(writer, writer.SendOption);
-        }
-        catch (Exception ex)
-        {
-            BAUPlugin.Logger.Error(ex, "NetworkManager");
+            while (rootReader.Position < rootReader.Length)
+            {
+                MessageReader subReader = rootReader.ReadMessage();
+                try
+                {
+                    if (subReader.Tag == 5 || subReader.Tag == 6)
+                    {
+                        ReadData(subReader, sendOption);
+                    }
+                }
+                finally
+                {
+                    subReader.Recycle();
+                }
+            }
         }
         finally
         {
-            if (InnerNetClient.connection != null)
-            {
-                SendErrors sendErrors = InnerNetClient.connection.Send(writer);
-                if (sendErrors != SendErrors.None && !GameState.IsFreePlay)
-                {
-                    InnerNetClient.EnqueueDisconnect(DisconnectReasons.Error, "Failed to send message: " + sendErrors.ToString());
-                }
-            }
-            else
-            {
-                InnerNetClient?.EnqueueDisconnect(DisconnectReasons.Custom, "InnerNetClient.connection is null");
-            }
+            rootReader.Recycle();
         }
     }
 
     /// <summary>
-    /// Processes and forwards messages from a MessageWriter.
+    /// Reads outgoing GameData/GameDataTo payloads using zero-copy slices and guaranteed recycling.
     /// </summary>
-    /// <param name="writer">The MessageWriter containing messages to process.</param>
-    /// <param name="sendOption">The send option for the messages.</param>
-    internal static void StreamlineMessage(MessageWriter writer, SendOption sendOption)
-    {
-        if (!InnerNetClient.InOnlineScene)
-        {
-            return;
-        }
-
-        MessageReader[] allReaders = writer.MessagesToReaders();
-
-        foreach (MessageReader reader in allReaders)
-        {
-            if (reader.Tag == 5 || reader.Tag == 6)
-            {
-                ReadData(reader, sendOption);
-                reader.Recycle();
-                continue;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Reads data from a MessageReader and processes it based on the send option.
-    /// </summary>
-    /// <param name="reader">The MessageReader containing data to read.</param>
-    /// <param name="sendOption">The send option for the data.</param>
     internal static void ReadData(MessageReader reader, SendOption sendOption)
     {
-        var typeFlag = reader.Tag;
-        int GameId = reader.ReadInt32();
-        int ClientId = -1;
+        byte typeFlag = reader.Tag;
+        _ = reader.ReadInt32(); // GameId
+        int clientId = -1;
 
         if (typeFlag == 6)
         {
-            ClientId = reader.ReadPackedInt32();
+            clientId = reader.ReadPackedInt32();
         }
 
-        MessageReader[] allDataReaders = reader.MessagesToReadersNewBuffer();
-
-        foreach (MessageReader dataReader in allDataReaders)
+        while (reader.Position < reader.Length)
         {
-            if (dataReader.Tag == 2)
+            MessageReader dataReader = reader.ReadMessage();
+            try
             {
-                var data = ReadRpc(MessageReader.Get(dataReader), typeFlag, ClientId);
-                HandleInnerNetObject(data.Sender, (byte)data.CalledRpc, data.Reader);
-                continue;
+                if (dataReader.Tag == (byte)GameDataTypes.RpcFlag)
+                {
+                    var data = ReadRpc(dataReader, typeFlag, clientId);
+                    if (data.Sender != null)
+                    {
+                        HandleInnerNetObject(data.Sender, (byte)data.CalledRpc, data.Reader);
+                    }
+                }
+            }
+            finally
+            {
+                dataReader.Recycle();
             }
         }
     }
@@ -117,34 +191,68 @@ internal static class NetworkManager
     /// <summary>
     /// Reads RPC data from a MessageReader.
     /// </summary>
-    /// <param name="reader">The MessageReader containing RPC data.</param>
-    /// <param name="flag">The message flag.</param>
-    /// <param name="targetId">The target client ID.</param>
-    /// <returns>An RPCData structure containing the parsed RPC information.</returns>
     internal static RPCData ReadRpc(MessageReader reader, byte flag, int targetId)
     {
-        var netId = reader.ReadPackedUInt32();
+        uint netId = reader.ReadPackedUInt32();
         byte calledId = reader.ReadByte();
 
-        return new RPCData(AmongUsClient.Instance.FindObjectByNetId<InnerNetObject>(netId), (SendOption)flag, targetId, (RpcCalls)calledId, reader);
+        return new RPCData(
+            AmongUsClient.Instance.FindObjectByNetId<InnerNetObject>(netId),
+            (SendOption)flag,
+            targetId,
+            (RpcCalls)calledId,
+            reader);
     }
 
     /// <summary>
-    /// Handles GameData messages from the server.
+    /// Handles incoming GameData sub-messages synchronously on the fast path (zero coroutines,
+    /// zero buffer copies) whenever the target object is already spawned, falling back to a
+    /// deferred coroutine only for spawns or packets that arrive ahead of spawn.
     /// </summary>
-    /// <param name="parentReader">The MessageReader containing GameData messages.</param>
     public static void HandleGameData(MessageReader parentReader)
     {
+        var client = InnerNetClient;
+        if (client == null)
+        {
+            parentReader.Recycle();
+            return;
+        }
+
         try
         {
+            bool hasParentTagHandlers = RpcHandlerRegistry.HasGameDataTagHandler(parentReader.Tag);
+
             while (parentReader.Position < parentReader.Length)
             {
-                MessageReader messageReader = parentReader.ReadMessageAsNewBuffer();
-                int currentMessageNumber = InnerNetClient.msgNum++;
-                var oldReader = MessageReader.Get(messageReader);
-                InnerNetClient.StartCoroutine(HandleGameDataInner(messageReader, currentMessageNumber));
-                RPCHandler.HandleRPC(parentReader.Tag, null, oldReader, HandlerFlag.HandleGameDataTag);
-                oldReader.Recycle();
+                int subMessageStart = parentReader.Position;
+                MessageReader messageReader = parentReader.ReadMessage();
+                int currentMessageNumber = client.msgNum++;
+
+                try
+                {
+                    if (hasParentTagHandlers)
+                    {
+                        MessageReader tagView = MessageReader.Get(messageReader);
+                        try
+                        {
+                            RPCHandler.HandleRPC(parentReader.Tag, null, tagView, HandlerFlag.HandleGameDataTag);
+                        }
+                        finally
+                        {
+                            tagView.Recycle();
+                        }
+                    }
+
+                    DispatchGameDataMessage(client, parentReader, subMessageStart, messageReader, currentMessageNumber);
+                }
+                catch (Exception ex)
+                {
+                    BAUPlugin.Logger.Error(ex, "NetworkManager");
+                }
+                finally
+                {
+                    messageReader.Recycle();
+                }
             }
         }
         finally
@@ -153,88 +261,111 @@ internal static class NetworkManager
         }
     }
 
-    /// <summary>
-    /// Internal coroutine to handle different types of GameData messages.
-    /// </summary>
-    /// <param name="reader">The MessageReader containing the GameData.</param>
-    /// <param name="msgNum">The message number for tracking.</param>
-    /// <returns>An IEnumerator for the coroutine.</returns>
-    private static IEnumerator HandleGameDataInner(MessageReader reader, int msgNum)
+    private static void DispatchGameDataMessage(
+        InnerNetClient client,
+        MessageReader parentReader,
+        int subMessageStart,
+        MessageReader reader,
+        int msgNum)
     {
-        int attemptCount = 0;
         reader.Position = 0;
-        byte tag = reader.Tag;
 
-        switch ((GameDataTypes)tag)
+        switch ((GameDataTypes)reader.Tag)
         {
-            case GameDataTypes.DataFlag: // Object deserialization
-                yield return HandleObjectDeserialization(reader, msgNum, attemptCount);
+            case GameDataTypes.DataFlag:
+                HandleObjectDeserializationFast(client, parentReader, subMessageStart, reader, msgNum);
                 break;
 
-            case GameDataTypes.RpcFlag: // RPC handling
-                yield return HandleRpcCall(reader, msgNum, attemptCount);
+            case GameDataTypes.RpcFlag:
+                HandleRpcCallFast(client, parentReader, subMessageStart, reader, msgNum);
                 break;
 
-            case GameDataTypes.SpawnFlag: // Spawn handling
-                InnerNetClient.StartCoroutine(InnerNetClient.CoHandleSpawn(reader));
+            case GameDataTypes.SpawnFlag:
+                DeferredPacketsDispatched++;
+                client.StartCoroutine(client.CoHandleSpawn(CloneSubMessage(parentReader, subMessageStart)));
                 break;
 
-            case GameDataTypes.DespawnFlag: // Object destruction
-                yield return HandleObjectDestruction(reader);
+            case GameDataTypes.DespawnFlag:
+                FastPathPacketsDispatched++;
+                HandleObjectDestruction(client, reader);
                 break;
 
-            case GameDataTypes.ReadyFlag: // Client ready status
-                yield return HandleClientReady(reader);
+            case GameDataTypes.ReadyFlag:
+                FastPathPacketsDispatched++;
+                HandleClientReady(client, reader);
                 break;
 
-            case GameDataTypes.SceneChangeFlag: // Scene change
-                HandleSceneChange(reader);
+            case GameDataTypes.SceneChangeFlag:
+                FastPathPacketsDispatched++;
+                HandleSceneChange(client, reader);
                 break;
 
-            case GameDataTypes.XboxDeclareXuid: // Special case (ulong parsing) (DO NOT USE)
-                yield return HandleXboxDeclareXuid(reader);
+            case GameDataTypes.XboxDeclareXuid:
+                FastPathPacketsDispatched++;
                 break;
 
-            default: // Invalid tags
+            default:
                 HandleInvalidTag(reader);
                 break;
         }
     }
 
-    /// <summary>
-    /// Handles object deserialization from a MessageReader.
-    /// </summary>
-    private static IEnumerator HandleObjectDeserialization(MessageReader reader, int msgNum, int initialAttemptCount)
+    private static void HandleObjectDeserializationFast(
+        InnerNetClient client,
+        MessageReader parentReader,
+        int subMessageStart,
+        MessageReader reader,
+        int msgNum)
     {
-        int attemptCount = initialAttemptCount;
+        uint netId = reader.ReadPackedUInt32();
+
+        if (client.allObjects.AllObjectsFast.TryGetValue(netId, out InnerNetObject innerNetObject))
+        {
+            FastPathPacketsDispatched++;
+            innerNetObject.Deserialize(reader, false);
+            return;
+        }
+
+        if (client.DestroyedObjects.Contains(netId))
+        {
+            FastPathPacketsDispatched++;
+            return;
+        }
+
+        // Rare slow path: packet arrived before object spawn — clone buffer and retry asynchronously.
+        DeferredPacketsDispatched++;
+        Debug.LogWarning($"Stored data for {netId}");
+        client.StartCoroutine(HandleObjectDeserializationDeferred(CloneSubMessage(parentReader, subMessageStart), msgNum));
+    }
+
+    private static IEnumerator HandleObjectDeserializationDeferred(MessageReader reader, int msgNum)
+    {
+        int attemptCount = 1;
         try
         {
-            InnerNetObject innerNetObject;
-            while (true)
+            while (attemptCount <= MaxDeferredAttempts)
             {
+                yield return Effects.Wait(0.1f);
+
+                var client = InnerNetClient;
+                if (client == null)
+                    yield break;
+
+                reader.Position = 0;
                 uint netId = reader.ReadPackedUInt32();
 
-                if (InnerNetClient.allObjects.AllObjectsFast.TryGetValue(netId, out innerNetObject))
+                if (client.allObjects.AllObjectsFast.TryGetValue(netId, out InnerNetObject innerNetObject))
                 {
                     innerNetObject.Deserialize(reader, false);
-                    break;
+                    yield break;
                 }
 
-                if (InnerNetClient.DestroyedObjects.Contains(netId))
-                {
-                    break;
-                }
-
-                Debug.LogWarning("Stored data for " + netId.ToString());
-                attemptCount++;
-
-                if (attemptCount > 10)
+                if (client.DestroyedObjects.Contains(netId))
                 {
                     yield break;
                 }
 
-                reader.Position = 0;
-                yield return Effects.Wait(0.1f);
+                attemptCount++;
             }
         }
         finally
@@ -243,77 +374,64 @@ internal static class NetworkManager
         }
     }
 
-    /// <summary>
-    /// Handles RPC calls from a MessageReader.
-    /// </summary>
-    private static IEnumerator HandleRpcCall(MessageReader reader, int msgNum, int initialAttemptCount)
+    private static void HandleRpcCallFast(
+        InnerNetClient client,
+        MessageReader parentReader,
+        int subMessageStart,
+        MessageReader reader,
+        int msgNum)
     {
-        int attemptCount = initialAttemptCount;
+        uint netId = reader.ReadPackedUInt32();
+        byte rpcCall = reader.ReadByte();
+
+        if (client.allObjects.AllObjectsFast.TryGetValue(netId, out InnerNetObject innerNetObject))
+        {
+            FastPathPacketsDispatched++;
+            ExecuteRpc(innerNetObject, rpcCall, reader);
+            return;
+        }
+
+        if (netId == uint.MaxValue || client.DestroyedObjects.Contains(netId))
+        {
+            FastPathPacketsDispatched++;
+            return;
+        }
+
+        // Rare slow path: RPC arrived before target netId spawned.
+        DeferredPacketsDispatched++;
+        Debug.LogWarning($"Stored Msg {msgNum} RPC {(RpcCalls)rpcCall} for {netId}");
+        client.StartCoroutine(HandleRpcCallDeferred(CloneSubMessage(parentReader, subMessageStart), msgNum));
+    }
+
+    private static IEnumerator HandleRpcCallDeferred(MessageReader reader, int msgNum)
+    {
+        int attemptCount = 1;
         try
         {
-            while (true)
+            while (attemptCount <= MaxDeferredAttempts)
             {
-                uint netId;
-                byte rpcCall;
+                yield return Effects.Wait(0.1f);
 
-                try
+                var client = InnerNetClient;
+                if (client == null)
+                    yield break;
+
+                reader.Position = 0;
+                uint netId = reader.ReadPackedUInt32();
+                byte rpcCall = reader.ReadByte();
+
+                if (client.allObjects.AllObjectsFast.TryGetValue(netId, out InnerNetObject innerNetObject))
                 {
-                    netId = reader.ReadPackedUInt32();
-                    rpcCall = reader.ReadByte();
-                }
-                catch
-                {
-                    throw;
-                }
-
-                if (InnerNetClient.allObjects.AllObjectsFast.TryGetValue(netId, out InnerNetObject innerNetObject))
-                {
-                    if (!HandleInnerNetObject(innerNetObject, rpcCall, reader))
-                    {
-                        break;
-                    }
-
-                    if (innerNetObject is PlayerPhysics playerPhysics)
-                    {
-                        if (rpcCall == (byte)RPC.CUSTOM_RPC_CALL)
-                        {
-                            if (RPC.HandleCustomRPCPacked(playerPhysics.myPlayer, reader))
-                            {
-                                break;
-                            }
-                        }
-                    }
-
-                    if (Enum.IsDefined(typeof(RpcCalls), rpcCall))
-                    {
-                        innerNetObject?.HandleRpc(rpcCall, reader);
-                    }
-                    else
-                    {
-                        if (innerNetObject is PlayerControl player2)
-                        {
-                            RPC.HandleCustomRPCLegacy(player2, rpcCall, reader);
-                        }
-                    }
-
-                    break;
+                    ExecuteRpc(innerNetObject, rpcCall, reader);
+                    yield break;
                 }
 
-                if (netId == 4294967295U || InnerNetClient.DestroyedObjects.Contains(netId))
-                {
-                    break;
-                }
-
-                Debug.LogWarning($"Stored Msg {msgNum} RPC {(RpcCalls)rpcCall} for {netId}");
-                attemptCount++;
-
-                if (attemptCount > 10)
+                if (netId == uint.MaxValue || client.DestroyedObjects.Contains(netId))
                 {
                     yield break;
                 }
 
-                reader.Position = 0;
-                yield return Effects.Wait(0.1f);
+                attemptCount++;
             }
         }
         finally
@@ -322,146 +440,155 @@ internal static class NetworkManager
         }
     }
 
-    /// <summary>
-    /// Handles object destruction messages.
-    /// </summary>
-    private static IEnumerator HandleObjectDestruction(MessageReader reader)
+    private static void ExecuteRpc(InnerNetObject innerNetObject, byte rpcCall, MessageReader reader)
     {
-        try
-        {
-            uint netId = reader.ReadPackedUInt32();
-            InnerNetClient.DestroyedObjects.Add(netId);
+        if (!HandleInnerNetObject(innerNetObject, rpcCall, reader))
+            return;
 
-            InnerNetObject innerNetObject = InnerNetClient.FindObjectByNetId<InnerNetObject>(netId);
-            if (innerNetObject && !innerNetObject.AmOwner)
-            {
-                InnerNetClient.RemoveNetObject(innerNetObject);
-                innerNetObject.gameObject.DestroyObj();
-            }
-        }
-        finally
+        if (innerNetObject is PlayerPhysics playerPhysics && rpcCall == (byte)RPC.CUSTOM_RPC_CALL)
         {
-            reader.Recycle();
+            if (RPC.HandleCustomRPCPacked(playerPhysics.myPlayer, reader))
+                return;
         }
-        yield break;
+
+        if (KnownRpcCalls[rpcCall])
+        {
+            innerNetObject.HandleRpc(rpcCall, reader);
+        }
+        else if (innerNetObject is PlayerControl player2)
+        {
+            RPC.HandleCustomRPCLegacy(player2, rpcCall, reader);
+        }
     }
 
-    /// <summary>
-    /// Handles client ready status messages.
-    /// </summary>
-    private static IEnumerator HandleClientReady(MessageReader reader)
+    private static void HandleObjectDestruction(InnerNetClient client, MessageReader reader)
     {
-        try
+        uint netId = reader.ReadPackedUInt32();
+        client.DestroyedObjects.Add(netId);
+
+        InnerNetObject innerNetObject = client.FindObjectByNetId<InnerNetObject>(netId);
+        if (innerNetObject != null && !innerNetObject.AmOwner)
         {
-            ClientData clientData = InnerNetClient.FindClientById(reader.ReadPackedInt32());
-            if (clientData != null)
-            {
-                clientData.IsReady = true;
-            }
+            client.RemoveNetObject(innerNetObject);
+            innerNetObject.gameObject.DestroyObj();
         }
-        finally
-        {
-            reader.Recycle();
-        }
-        yield break;
     }
 
-    /// <summary>
-    /// Handles scene change messages.
-    /// </summary>
-    private static void HandleSceneChange(MessageReader reader)
+    private static void HandleClientReady(InnerNetClient client, MessageReader reader)
+    {
+        ClientData clientData = client.FindClientById(reader.ReadPackedInt32());
+        if (clientData != null)
+        {
+            clientData.IsReady = true;
+        }
+    }
+
+    private static void HandleSceneChange(InnerNetClient client, MessageReader reader)
     {
         int clientId = reader.ReadPackedInt32();
-        ClientData clientData = InnerNetClient.FindClientById(clientId);
+        ClientData clientData = client.FindClientById(clientId);
         string sceneName = reader.ReadString();
 
         if (clientData != null && !string.IsNullOrWhiteSpace(sceneName))
         {
-            InnerNetClient.StartCoroutine(InnerNetClient.CoOnPlayerChangedScene(clientData, sceneName));
+            client.StartCoroutine(client.CoOnPlayerChangedScene(clientData, sceneName));
         }
         else
         {
             Debug.Log($"Couldn't find client {clientId} to change scene to {sceneName}");
-            reader.Recycle();
         }
     }
 
-    /// <summary>
-    /// Handles Xbox XUID declaration messages (currently disabled).
-    /// </summary>
-    private static IEnumerator HandleXboxDeclareXuid(MessageReader reader)
-    {
-        reader.Recycle();
-        yield break;
-    }
-
-    /// <summary>
-    /// Handles invalid message tags.
-    /// </summary>
     private static void HandleInvalidTag(MessageReader reader)
     {
-        BAUPlugin.Logger.Warning($"Bad tag {reader.Tag} at {reader.Offset}+{reader.Position}={reader.Length}: " + string.Join(" ", reader.Buffer.Take(128)), "NetworkManager");
-        reader.Recycle();
+        float now = Time.unscaledTime;
+        if (now - _lastInvalidTagLogTime < InvalidTagLogCooldownSeconds)
+            return;
+
+        _lastInvalidTagLogTime = now;
+        BAUPlugin.Logger.Warning(
+            $"Bad tag {reader.Tag} at {reader.Offset}+{reader.Position}={reader.Length}",
+            "NetworkManager");
     }
 
-    /// <summary>
-    /// Handles InnerNetObject RPCs.
-    /// </summary>
+    private static MessageReader CloneSubMessage(MessageReader parentReader, int subMessageStart)
+    {
+        int savedEnd = parentReader.Position;
+        parentReader.Position = subMessageStart;
+        MessageReader ownedCopy = parentReader.ReadMessageAsNewBuffer();
+        parentReader.Position = savedEnd;
+        return ownedCopy;
+    }
+
     private static bool HandleInnerNetObject(InnerNetObject netObj, byte callId, MessageReader reader)
     {
         if (netObj is PlayerControl player)
         {
-            if (!PlayerRpc(player, callId, reader))
-            {
-                return false;
-            }
+            return PlayerRpc(player, callId, reader);
         }
-        else if (netObj is PlayerPhysics physics)
+
+        if (netObj is PlayerPhysics physics)
         {
-            if (!PlayerRpc(physics.myPlayer, callId, reader))
-            {
-                return false;
-            }
+            return physics.myPlayer == null || PlayerRpc(physics.myPlayer, callId, reader);
         }
-        else if (netObj is CustomNetworkTransform networkTransform)
+
+        if (netObj is CustomNetworkTransform networkTransform)
         {
-            if (!PlayerRpc(networkTransform.myPlayer, callId, reader))
-            {
-                return false;
-            }
+            return networkTransform.myPlayer == null || PlayerRpc(networkTransform.myPlayer, callId, reader);
         }
 
         return true;
     }
 
-    /// <summary>
-    /// Processes RPCs for a player with rate limiting and host validation.
-    /// </summary>
     private static bool PlayerRpc(PlayerControl player, byte callId, MessageReader reader)
     {
-        if (player.ExtendedData() != null && BetterGameSettings.RpcRateLimiting.GetBool())
+        var extendedData = player.ExtendedData();
+        if (extendedData != null && BetterGameSettings.RpcRateLimiting.GetBool())
         {
-            player.ExtendedData().ActivityInfo.RPCSentPS++;
-            if (player.ExtendedData().ActivityInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
+            extendedData.ActivityInfo.RPCSentPS++;
+            if (extendedData.ActivityInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
             {
                 return false;
             }
         }
 
-        if (GameState.IsHost)
+        if (GameState.IsHost && RpcHandlerRegistry.GetCallIdHandlers(callId) != null)
         {
             var tempReader = MessageReader.Get(reader);
-            if (RPCHandler.HandleRPC(callId, player, tempReader, HandlerFlag.BetterHost) == false)
+            try
+            {
+                if (!RPCHandler.HandleRPC(callId, player, tempReader, HandlerFlag.BetterHost))
+                {
+                    return false;
+                }
+            }
+            finally
             {
                 tempReader.Recycle();
-                return false;
             }
-            tempReader.Recycle();
         }
 
         BetterRpcRouter.HandleRPC(player, callId, reader);
-
         return true;
+    }
+
+    private static SendErrorKind MapSendError(SendErrors error) => error switch
+    {
+        SendErrors.None => SendErrorKind.None,
+        SendErrors.Disconnected => SendErrorKind.Disconnected,
+        _ => SendErrorKind.Unknown
+    };
+
+    private static bool[] BuildKnownRpcCallsTable()
+    {
+        var table = new bool[256];
+        foreach (RpcCalls call in Enum.GetValues<RpcCalls>())
+        {
+            byte value = (byte)call;
+            table[value] = true;
+        }
+
+        return table;
     }
 
     [HarmonyPatch]
@@ -473,16 +600,18 @@ internal static class NetworkManager
         {
             if (BetterGameSettings.RpcRateLimiting.GetBool())
             {
-                player.ExtendedData().ActivityInfo.RPCSentPS++;
-                if (player.ExtendedData().ActivityInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
+                var ext = player != null ? player.ExtendedData() : null;
+                if (ext != null && ext.ActivityInfo != null)
                 {
-                    return false;
+                    ext.ActivityInfo.RPCSentPS++;
+                    if (ext.ActivityInfo.RPCSentPS >= BetterGameSettings.RpcRateLimit.GetInt())
+                    {
+                        return false;
+                    }
                 }
             }
 
-            if (BetterRpcRouter.RpcUpdateSystemCheck(player, systemType, msgReader) != true) return false;
-
-            return true;
+            return BetterRpcRouter.RpcUpdateSystemCheck(player, systemType, msgReader);
         }
     }
 }

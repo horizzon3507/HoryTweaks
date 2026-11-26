@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Kopyahin ang buod ng huling laban sa clipboard",
   "Chat.Summary.Copied": "Nakopya sa clipboard ang buod ng laban.",
   "Chat.Summary.Empty": "Wala pang natapos na buod ng laban na makokopya.",
-  "MatchHistory.OpenFolder": "Buksan ang Folder"
+  "MatchHistory.OpenFolder": "Buksan ang Folder",
+  "BetterOption.NetworkOptimization": "Pag-optimize ng Network",
+  "Network.Warning.HighPing": "Mataas na ping ({0}ms)",
+  "Network.Warning.HighJitter": "Hindi matatag na ping (±{0}ms)",
+  "Network.Warning.PacketLoss": "Nawawalang packet ({0} muling padala)"
 }

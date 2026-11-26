@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Zusammenfassung des letzten Spiels in die Zwischenablage kopieren",
   "Chat.Summary.Copied": "Spielzusammenfassung in die Zwischenablage kopiert.",
   "Chat.Summary.Empty": "Noch keine abgeschlossene Spielzusammenfassung zum Kopieren.",
-  "MatchHistory.OpenFolder": "Ordner öffnen"
+  "MatchHistory.OpenFolder": "Ordner öffnen",
+  "BetterOption.NetworkOptimization": "Netzwerkoptimierung",
+  "Network.Warning.HighPing": "Hoher Ping ({0}ms)",
+  "Network.Warning.HighJitter": "Instabiler Ping (±{0}ms)",
+  "Network.Warning.PacketLoss": "Paketverlust ({0} Neuversuche)"
 }

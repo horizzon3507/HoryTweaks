@@ -1,12 +1,10 @@
 using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils;
-
+using HoryTweaks.Core.Rejoin;
 using HoryTweaks.Generated;
-
+using HoryTweaks.Infrastructure.Configuration;
 using InnerNet;
 using UnityEngine;
-using HoryTweaks.Core.Rejoin;
-using HoryTweaks.Infrastructure.Configuration;
 
 namespace HoryTweaks.Features.Rejoin;
 
@@ -30,6 +28,7 @@ internal static class AutoRejoinManager
     internal static void NotifyGameJoined()
     {
         _rejoinActive = false;
+        _attemptInFlight = false;
 
         var client = AmongUsClient.Instance;
         if (client == null || client.AmHost || client.NetworkMode != NetworkModes.OnlineGame)
@@ -39,7 +38,8 @@ internal static class AutoRejoinManager
         }
 
         _lastGameId = client.GameId;
-        _lastRegion = ServerManager.Instance?.CurrentRegion;
+        var serverManager = ServerManager.Instance;
+        _lastRegion = serverManager != null ? serverManager.CurrentRegion : null;
         _hasLastLobby = true;
     }
 
@@ -48,11 +48,10 @@ internal static class AutoRejoinManager
     {
         if (_rejoinActive)
         {
-            // A result arrived while retrying: definite removals stop the loop,
-            // transient failures (game not found, lobby full, ...) keep it going.
             if (RejoinPolicy.ShouldCancelRejoin((int)reason))
             {
                 _rejoinActive = false;
+                _attemptInFlight = false;
             }
             return;
         }
@@ -63,56 +62,80 @@ internal static class AutoRejoinManager
         if (!RejoinPolicy.ShouldAttemptRejoin((int)reason))
             return;
 
+        var client = AmongUsClient.Instance;
+        if (client == null)
+            return;
+
         BAUPlugin.Logger.Log($"Auto-rejoin: retrying lobby {GameCode.IntToGameName(_lastGameId)} after {Enum.GetName(reason)}", "AutoRejoin");
-        AmongUsClient.Instance.StartCoroutine(CoAutoRejoin());
+        client.StartCoroutine(CoAutoRejoin());
     }
 
     // Called when the user dismisses the disconnect popup.
     internal static void NotifyPopupClosed()
     {
         _rejoinActive = false;
+        _attemptInFlight = false;
     }
 
     private static IEnumerator CoAutoRejoin()
     {
         _rejoinActive = true;
         var client = AmongUsClient.Instance;
-        string code = GameCode.IntToGameName(_lastGameId);
-        float remaining = RejoinPolicy.RejoinWindowSeconds;
-        float nextAttemptIn = 0f;
-
-        while (_rejoinActive && remaining > 0f)
+        if (client == null)
         {
+            _rejoinActive = false;
+            yield break;
+        }
+
+        string code = GameCode.IntToGameName(_lastGameId);
+        float deadline = Time.unscaledTime + RejoinPolicy.RejoinWindowSeconds;
+        // Brief initial delay lets the server tear down the dropped session cleanly before retry #1.
+        float nextAttemptAt = Time.unscaledTime + RejoinPolicy.InitialRetryDelaySeconds;
+        int attemptNumber = 0;
+
+        while (_rejoinActive)
+        {
+            float now = Time.unscaledTime;
+            float remaining = deadline - now;
+            if (remaining <= 0f)
+                break;
+
             var popup = DisconnectPopup.Instance;
             if (popup == null)
-            {
                 break;
-            }
 
             popup.SetText($"{TranslationStrings.Rejoin_Reconnecting.Format(code, Mathf.CeilToInt(remaining))}\n{TranslationStrings.Rejoin_CancelHint.LocalizedString}");
 
-            nextAttemptIn -= TickSeconds;
-            if (nextAttemptIn <= 0f && !_attemptInFlight)
+            if (now >= nextAttemptAt && !_attemptInFlight)
             {
-                nextAttemptIn = RejoinPolicy.AttemptIntervalSeconds;
+                attemptNumber++;
+                nextAttemptAt = now + RejoinPolicy.GetRetryDelaySeconds(attemptNumber);
                 SwitchBackToLastRegion();
-                client.StartCoroutine(CoAttemptJoin(_lastGameId));
+
+                var activeClient = AmongUsClient.Instance;
+                if (activeClient == null)
+                    break;
+
+                activeClient.StartCoroutine(CoAttemptJoin(_lastGameId));
             }
 
             // Never let a hung attempt block the rest of the window.
-            if (_attemptInFlight && Time.time - _attemptStartedAt > RejoinPolicy.AttemptTimeoutSeconds)
+            if (_attemptInFlight && now - _attemptStartedAt > RejoinPolicy.AttemptTimeoutSeconds)
             {
                 _attemptInFlight = false;
             }
 
-            yield return new WaitForSeconds(TickSeconds);
-            remaining -= TickSeconds;
+            yield return new WaitForSecondsRealtime(TickSeconds);
         }
 
-        if (_rejoinActive && remaining <= 0f)
+        if (_rejoinActive && Time.unscaledTime >= deadline)
         {
             BAUPlugin.Logger.Log($"Auto-rejoin: gave up rejoining {code}", "AutoRejoin");
-            DisconnectPopup.Instance?.SetText(TranslationStrings.Rejoin_Failed.Format(code));
+            var popup = DisconnectPopup.Instance;
+            if (popup != null)
+            {
+                popup.SetText(TranslationStrings.Rejoin_Failed.Format(code));
+            }
         }
 
         _rejoinActive = false;
@@ -122,11 +145,13 @@ internal static class AutoRejoinManager
     private static IEnumerator CoAttemptJoin(int gameId)
     {
         _attemptInFlight = true;
-        _attemptStartedAt = Time.time;
+        _attemptStartedAt = Time.unscaledTime;
 
-        // Reuse the game's normal join-by-code flow instead of hand-crafting joins.
-        yield return AmongUsClient.Instance.StartCoroutine(
-            AmongUsClient.Instance.CoJoinOnlineGameFromCode(gameId, false));
+        var client = AmongUsClient.Instance;
+        if (client != null)
+        {
+            yield return client.StartCoroutine(client.CoJoinOnlineGameFromCode(gameId, false));
+        }
 
         _attemptInFlight = false;
     }
@@ -135,11 +160,8 @@ internal static class AutoRejoinManager
     {
         var serverManager = ServerManager.Instance;
         if (serverManager == null || _lastRegion == null)
-        {
             return;
-        }
 
-        // Game codes are region-scoped: move back before asking the matchmaker.
         if (serverManager.CurrentRegion == null || serverManager.CurrentRegion.Name != _lastRegion.Name)
         {
             serverManager.SetRegion(_lastRegion);

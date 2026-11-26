@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Copia il riepilogo dell'ultima partita negli appunti",
   "Chat.Summary.Copied": "Riepilogo partita copiato negli appunti.",
   "Chat.Summary.Empty": "Nessun riepilogo di partita completata da copiare.",
-  "MatchHistory.OpenFolder": "Apri cartella"
+  "MatchHistory.OpenFolder": "Apri cartella",
+  "BetterOption.NetworkOptimization": "Ottimizzazione Rete",
+  "Network.Warning.HighPing": "Ping alto ({0}ms)",
+  "Network.Warning.HighJitter": "Ping instabile (±{0}ms)",
+  "Network.Warning.PacketLoss": "Perdita pacchetti ({0} reinvii)"
 }

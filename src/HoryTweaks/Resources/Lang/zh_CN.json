@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "将上一场对局战报复制到剪贴板",
   "Chat.Summary.Copied": "对局战报已复制到剪贴板。",
   "Chat.Summary.Empty": "暂无可复制的已结束对局战报。",
-  "MatchHistory.OpenFolder": "打开文件夹"
+  "MatchHistory.OpenFolder": "打开文件夹",
+  "BetterOption.NetworkOptimization": "网络优化",
+  "Network.Warning.HighPing": "高延迟 ({0}ms)",
+  "Network.Warning.HighJitter": "延迟不稳定 (±{0}ms)",
+  "Network.Warning.PacketLoss": "丢包 ({0} 次重发)"
 }

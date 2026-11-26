@@ -43,15 +43,21 @@ internal sealed class HandshakeHandler
     {
         if (!BAUConfigs.SendBetterRpc.Value) yield break;
 
-        while (_extendedData.BaseMono == null || _extendedData.BaseMono.Object == null || PlayerControl.LocalPlayer == null)
+        float deadline = Time.unscaledTime + 20f;
+        while (_extendedData == null || _extendedData.BaseMono == null || _extendedData.BaseMono.Object == null || PlayerControl.LocalPlayer == null)
         {
-            if (GameState.IsFreePlay) yield break;
+            if (GameState.IsFreePlay || _extendedData == null || Time.unscaledTime > deadline)
+                yield break;
+
             yield return null;
         }
 
         yield return new WaitForSeconds(1f + (0.2f * _extendedData.BaseMono.PlayerId));
 
-        SendSecretToPlayer();
+        if (_extendedData != null && _extendedData.BaseMono != null && _extendedData.BaseMono.Object != null)
+        {
+            SendSecretToPlayer();
+        }
     }
 
     /// <summary>

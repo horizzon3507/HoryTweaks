@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Kopieer de samenvatting van het laatste potje naar het klembord",
   "Chat.Summary.Copied": "Wedstrijdsamenvatting gekopieerd naar het klembord.",
   "Chat.Summary.Empty": "Nog geen voltooide wedstrijdsamenvatting om te kopiëren.",
-  "MatchHistory.OpenFolder": "Map openen"
+  "MatchHistory.OpenFolder": "Map openen",
+  "BetterOption.NetworkOptimization": "Netwerkoptimalisatie",
+  "Network.Warning.HighPing": "Hoge ping ({0}ms)",
+  "Network.Warning.HighJitter": "Instabiele ping (±{0}ms)",
+  "Network.Warning.PacketLoss": "Pakketverlies ({0} herpogingen)"
 }

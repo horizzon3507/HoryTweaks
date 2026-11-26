@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Copiar el resumen de la última partida al portapapeles",
   "Chat.Summary.Copied": "Resumen de la partida copiado al portapapeles.",
   "Chat.Summary.Empty": "Aún no hay ningún resumen de partida terminada para copiar.",
-  "MatchHistory.OpenFolder": "Abrir Carpeta"
+  "MatchHistory.OpenFolder": "Abrir Carpeta",
+  "BetterOption.NetworkOptimization": "Optimización de Red",
+  "Network.Warning.HighPing": "Ping alto ({0}ms)",
+  "Network.Warning.HighJitter": "Ping inestable (±{0}ms)",
+  "Network.Warning.PacketLoss": "Pérdida de paquetes ({0} reenvíos)"
 }

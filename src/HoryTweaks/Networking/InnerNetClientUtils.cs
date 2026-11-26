@@ -138,9 +138,16 @@ internal static class InnerNetClientUtils
         var reader = writer.ToReader();
         List<MessageReader> readers = [];
 
-        while (reader.Position < reader.Length)
+        try
         {
-            readers.Add(reader.ReadMessage());
+            while (reader.Position < reader.Length)
+            {
+                readers.Add(reader.ReadMessageAsNewBuffer());
+            }
+        }
+        finally
+        {
+            reader.Recycle();
         }
 
         return [.. readers];

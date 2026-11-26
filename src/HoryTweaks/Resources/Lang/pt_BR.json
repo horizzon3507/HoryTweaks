@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Copiar o resumo da última partida para a área de transferência",
   "Chat.Summary.Copied": "Resumo da partida copiado para a área de transferência.",
   "Chat.Summary.Empty": "Nenhum resumo de partida concluída para copiar ainda.",
-  "MatchHistory.OpenFolder": "Abrir Pasta"
+  "MatchHistory.OpenFolder": "Abrir Pasta",
+  "BetterOption.NetworkOptimization": "Otimização de Rede",
+  "Network.Warning.HighPing": "Ping alto ({0}ms)",
+  "Network.Warning.HighJitter": "Ping instável (±{0}ms)",
+  "Network.Warning.PacketLoss": "Perda de pacotes ({0} reenvios)"
 }

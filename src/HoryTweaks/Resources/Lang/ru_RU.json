@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Скопировать итоги последнего матча в буфер обмена",
   "Chat.Summary.Copied": "Итоги матча скопированы в буфер обмена.",
   "Chat.Summary.Empty": "Пока нет завершённого матча для копирования.",
-  "MatchHistory.OpenFolder": "Открыть папку"
+  "MatchHistory.OpenFolder": "Открыть папку",
+  "BetterOption.NetworkOptimization": "Оптимизация сети",
+  "Network.Warning.HighPing": "Высокий пинг ({0}ms)",
+  "Network.Warning.HighJitter": "Нестабильный пинг (±{0}ms)",
+  "Network.Warning.PacketLoss": "Потеря пакетов ({0} повторов)"
 }

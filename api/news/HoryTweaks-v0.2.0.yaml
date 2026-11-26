@@ -1,0 +1,54 @@
+^show: true
+^type: 1
+^title: Stability, Speed & Replays
+^subtitle: Network anti-disconnect refactor, FPS/GC overhaul, and POV MP4 replays!
+^listtitle: HoryTweaks v0.2.0
+^date: 2026-11-25T22:20:00.0000000Z
+
+^content-en_US:
+ # HoryTweaks v0.2.0 (beta)
+
+ Welcome to **HoryTweaks v0.2.0-beta** — a major stability, networking, and performance refactor built to stop unnecessary disconnects, tame ping spikes and lag, and bring cross-platform match replays to Among Us!
+ ---
+
+ ## Highlights
+
+ #### Network Resilience & Anti-Disconnect
+ - **Fast-Path Packet Dispatch**: Incoming GameData and RPC packets now dispatch synchronously without per-packet coroutine storms or buffer copies, cutting GC pauses and packet delay.
+ - **Hazel UDP & Suspend Tuning**: New **Network Optimization** toggle (Page 3, enabled by default) raises client-side disconnect timeouts, resend limits, UDP receive buffer size, and Alt+Tab suspend tolerance while staying 100% compatible with official Innersloth servers.
+ - **Transient Send-Error Protection**: Isolated unreliable send errors no longer kick you out of a lobby immediately.
+ - **Live Ping & Packet-Loss Warnings**: High ping, unstable jitter, and packet resend spikes now surface clear warnings on the HUD, in logs, and in `/dump`.
+ ---
+ #### Performance, Smart FPS & Warnings
+ - **Smart Unlock FPS (120–240 FPS)**: Replaces the runaway 999 FPS cap with a display-aware 120–240 FPS target and warns about VSync conflicts, safety clamping, frame hitches, and sustained low FPS.
+ - **Total Update-Loop Refactor**: Eliminated per-frame `Camera.main` lookups, main-menu hierarchy scans, `MessageReader` pool leaks, Wine/Proton ECDH exception storms, and redundant UI/TMP rebuilds.
+ ---
+ #### Replays & Quality of Life
+ - **Match History 2D + POV `.mp4` Replay**: Review your last 25 matches on the real map or open lightweight real-POV `.mp4` videos on Windows and Linux/Steam Proton (Cisco OpenH264 + built-in MP4 muxer).
+ - **QoL Tools**: Instant `/forceskip`, local `/mute` & `/unmute`, Discord-ready `/summary`, Alt+Tab window alerts, and non-blocking async console logging.
+ ---
+ ## [Github](https://github.com/horizzon3507/HoryTweaks/)
+
+^content-pt_BR:
+ # HoryTweaks v0.2.0 (beta)
+
+ Bem-vindo ao **HoryTweaks v0.2.0-beta** — uma grande refatoração de estabilidade, rede e desempenho para reduzir desconexões fáceis, controlar picos de ping e lag e trazer replays de partida multiplataforma para o Among Us!
+ ---
+
+ ## Destaques
+
+ #### Estabilidade de Rede e Anti-Desconexão
+ - **Despacho Rápido de Pacotes**: Pacotes GameData e RPC agora são processados de forma síncrona sem tempestade de coroutines nem cópias desnecessárias de buffer, reduzindo travamentos de GC e atraso.
+ - **Ajuste Hazel UDP e Alt+Tab**: A nova opção **Otimização de Rede** (Página 3, ligada por padrão) aumenta tolerância de desconexão, limite de reenvios, buffer UDP e tempo em segundo plano mantendo 100% de compatibilidade com os servidores oficiais da Innersloth.
+ - **Proteção contra Erros Transitórios**: Falhas isoladas de envio em pacotes não confiáveis não derrubam mais sua partida imediatamente.
+ - **Avisos de Ping e Perda de Pacotes**: Ping alto, instabilidade (jitter) e picos de reenvio exibem avisos claros no HUD, nos logs e no `/dump`.
+ ---
+ #### Desempenho, FPS Inteligente e Avisos
+ - **Destravar FPS Inteligente (120–240 FPS)**: Substitui o teto descontrolado de 999 FPS por um alvo inteligente de 120–240 FPS baseado no monitor, com avisos de conflito de VSync, travamentos de frame e FPS baixo.
+ - **Refatoração Total de Loops**: Eliminamos buscas `Camera.main` por frame, varreduras no menu principal, vazamentos de `MessageReader`, tempestades de exceção ECDH no Wine/Proton e reconstruções redundantes de UI/texto.
+ ---
+ #### Replays e Qualidade de Vida
+ - **Histórico 2D + Replay POV em `.mp4`**: Revise suas últimas 25 partidas no mapa real ou abra vídeos `.mp4` leves no Windows e Linux/Steam Proton (Cisco OpenH264 + muxer MP4 nativo).
+ - **Ferramentas de QoL**: `/forceskip` instantâneo, `/mute` e `/unmute` locais, resumo `/summary` pronto para Discord, alertas de janela em Alt+Tab e console assíncrono que não trava o jogo.
+ ---
+ ## [Github](https://github.com/horizzon3507/HoryTweaks/)

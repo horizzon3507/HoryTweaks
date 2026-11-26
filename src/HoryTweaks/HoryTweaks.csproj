@@ -6,7 +6,7 @@
 		<AssemblyName>HoryTweaks</AssemblyName>
 		<RootNamespace>HoryTweaks</RootNamespace>
 		<Configurations>Debug;Release;Beta</Configurations>
-		<VersionPrefix>0.1.4</VersionPrefix>
+		<VersionPrefix>0.2.0</VersionPrefix>
 		<VersionSuffix Condition="'$(Configuration)' == 'Beta'">beta-0</VersionSuffix>
 		<GitVersion>false</GitVersion>
 	</PropertyGroup>

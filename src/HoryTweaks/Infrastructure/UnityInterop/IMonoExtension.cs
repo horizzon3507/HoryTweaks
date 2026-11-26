@@ -35,6 +35,11 @@ internal interface IMonoExtension
     private static readonly Dictionary<(nint Owner, Type ExtensionType), ExtensionPair> _extensions = [];
 
     /// <summary>
+    /// Reverse index mapping an extension instance back to its registration key for O(1) removal.
+    /// </summary>
+    private static readonly Dictionary<IMonoExtension, (nint Owner, Type ExtensionType)> _extensionKeys = new(ReferenceEqualityComparer.Instance);
+
+    /// <summary>
     /// Represents a pairing between a base MonoBehavior and its extension.
     /// </summary>
     private struct ExtensionPair
@@ -99,6 +104,10 @@ internal interface IMonoExtension
                 return extension;
             }
 
+            if (pair.Extension != null)
+            {
+                _extensionKeys.Remove(pair.Extension);
+            }
             _extensions.Remove(key);
         }
 
@@ -125,6 +134,10 @@ internal interface IMonoExtension
                 return alive;
             }
 
+            if (existing.Extension != null)
+            {
+                _extensionKeys.Remove(existing.Extension);
+            }
             _extensions.Remove(key);
         }
 
@@ -140,6 +153,7 @@ internal interface IMonoExtension
             Base = monoBehaviour,
             Extension = component
         };
+        _extensionKeys[component] = key;
 
         try
         {
@@ -149,6 +163,7 @@ internal interface IMonoExtension
         catch (Exception ex)
         {
             _extensions.Remove(key);
+            _extensionKeys.Remove(component);
             BAUPlugin.Logger?.Error($"Failed to attach {typeof(T).Name} to {monoBehaviour.name}: {ex}");
             return null;
         }
@@ -157,10 +172,7 @@ internal interface IMonoExtension
     }
 
     /// <summary>
-    /// Tries to remove an extension from its attached MonoBehaviour.
-    /// Only entries pointing at this exact extension instance are removed;
-    /// a repeated call is a no-op and a stale OnDestroy cannot drop a newer
-    /// registration for the same owner and type.
+    /// Removes an extension from its attached MonoBehaviour in O(1) using the reverse index.
     /// </summary>
     /// <param name="monoExtension">The extension instance to remove.</param>
     internal static void TryRemoveExtension(IMonoExtension monoExtension)
@@ -168,19 +180,11 @@ internal interface IMonoExtension
         if (monoExtension == null)
             return;
 
-        (nint Owner, Type ExtensionType)? staleKey = null;
-        foreach (var (key, pair) in _extensions)
+        if (_extensionKeys.Remove(monoExtension, out var key) &&
+            _extensions.TryGetValue(key, out var pair) &&
+            ReferenceEquals(pair.Extension, monoExtension))
         {
-            if (ReferenceEquals(pair.Extension, monoExtension))
-            {
-                staleKey = key;
-                break;
-            }
-        }
-
-        if (staleKey.HasValue)
-        {
-            _extensions.Remove(staleKey.Value);
+            _extensions.Remove(key);
         }
     }
 

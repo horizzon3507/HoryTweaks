@@ -22,62 +22,116 @@ internal static partial class Utils
     /// </summary>
     /// <param name="clientId">The client ID to look up.</param>
     /// <returns>The ClientData if found, null otherwise.</returns>
-    internal static ClientData? ClientFromClientId(ClientId clientId) =>
-        AmongUsClient.Instance.allClients.FirstOrDefaultIl2Cpp(cd => cd.Id == clientId);
+    internal static ClientData? ClientFromClientId(ClientId clientId)
+    {
+        var client = AmongUsClient.Instance;
+        if (client == null || client.allClients == null)
+            return null;
 
+        var list = client.allClients;
+        int count = list.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var cd = list[i];
+            if (cd != null && cd.Id == clientId)
+                return cd;
+        }
 
-    /// <summary>
-    /// Gets NetworkedPlayerInfo from a player ID.
-    /// </summary>
-    /// <param name="playerId">The player ID to look up.</param>
-    /// <returns>The NetworkedPlayerInfo if found, null otherwise.</returns>
-    internal static NetworkedPlayerInfo? PlayerDataFromPlayerId(PlayerId playerId) =>
-        GameData.Instance.AllPlayers.FirstOrDefaultIl2Cpp(data => data.PlayerId == playerId);
+        return null;
+    }
 
+    internal static NetworkedPlayerInfo? PlayerDataFromPlayerId(PlayerId playerId)
+    {
+        var gameData = GameData.Instance;
+        if (gameData == null || gameData.AllPlayers == null)
+            return null;
 
-    /// <summary>
-    /// Gets NetworkedPlayerInfo from a client ID.
-    /// </summary>
-    /// <param name="clientId">The client ID to look up.</param>
-    /// <returns>The NetworkedPlayerInfo if found, null otherwise.</returns>
-    internal static NetworkedPlayerInfo? PlayerDataFromClientId(ClientId clientId) =>
-        GameData.Instance.AllPlayers.FirstOrDefaultIl2Cpp(data => data.ClientId == clientId);
+        var list = gameData.AllPlayers;
+        int count = list.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var data = list[i];
+            if (data != null && data.PlayerId == playerId)
+                return data;
+        }
 
+        return null;
+    }
 
-    /// <summary>
-    /// Gets NetworkedPlayerInfo from a friend code.
-    /// </summary>
-    /// <param name="friendCode">The friend code to look up.</param>
-    /// <returns>The NetworkedPlayerInfo if found, null otherwise.</returns>
-    internal static NetworkedPlayerInfo? PlayerDataFromFriendCode(string friendCode) =>
-        GameData.Instance.AllPlayers.FirstOrDefaultIl2Cpp(data => data.FriendCode == friendCode);
+    internal static NetworkedPlayerInfo? PlayerDataFromClientId(ClientId clientId)
+    {
+        var gameData = GameData.Instance;
+        if (gameData == null || gameData.AllPlayers == null)
+            return null;
 
+        var list = gameData.AllPlayers;
+        int count = list.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var data = list[i];
+            if (data != null && data.ClientId == clientId)
+                return data;
+        }
 
-    /// <summary>
-    /// Gets PlayerControl from a player ID.
-    /// </summary>
-    /// <param name="playerId">The player ID to look up.</param>
-    /// <returns>The PlayerControl if found, null otherwise.</returns>
-    internal static PlayerControl? PlayerFromPlayerId(PlayerId playerId) =>
-        BAUPlugin.AllPlayerControls.FirstOrDefault(player => player.PlayerId == playerId);
+        return null;
+    }
 
+    internal static NetworkedPlayerInfo? PlayerDataFromFriendCode(string friendCode)
+    {
+        var gameData = GameData.Instance;
+        if (gameData == null || gameData.AllPlayers == null)
+            return null;
 
-    /// <summary>
-    /// Gets PlayerControl from a client ID.
-    /// </summary>
-    /// <param name="clientId">The client ID to look up.</param>
-    /// <returns>The PlayerControl if found, null otherwise.</returns>
-    internal static PlayerControl? PlayerFromClientId(ClientId clientId) =>
-        BAUPlugin.AllPlayerControls.FirstOrDefault(player => player.GetClientId() == clientId);
+        var list = gameData.AllPlayers;
+        int count = list.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var data = list[i];
+            if (data != null && data.FriendCode == friendCode)
+                return data;
+        }
 
+        return null;
+    }
 
-    /// <summary>
-    /// Gets PlayerControl from a network ID.
-    /// </summary>
-    /// <param name="netId">The network ID to look up.</param>
-    /// <returns>The PlayerControl if found, null otherwise.</returns>
-    internal static PlayerControl? PlayerFromNetId(NetId netId) =>
-        BAUPlugin.AllPlayerControls.FirstOrDefault(player => player.NetId == netId);
+    internal static PlayerControl? PlayerFromPlayerId(PlayerId playerId)
+    {
+        var list = BAUPlugin.AllPlayerControls;
+        for (int i = 0; i < list.Count; i++)
+        {
+            var player = list[i];
+            if (player != null && player.PlayerId == playerId)
+                return player;
+        }
+
+        return null;
+    }
+
+    internal static PlayerControl? PlayerFromClientId(ClientId clientId)
+    {
+        var list = BAUPlugin.AllPlayerControls;
+        for (int i = 0; i < list.Count; i++)
+        {
+            var player = list[i];
+            if (player != null && player.GetClientId() == clientId)
+                return player;
+        }
+
+        return null;
+    }
+
+    internal static PlayerControl? PlayerFromNetId(NetId netId)
+    {
+        var list = BAUPlugin.AllPlayerControls;
+        for (int i = 0; i < list.Count; i++)
+        {
+            var player = list[i];
+            if (player != null && player.NetId == netId)
+                return player;
+        }
+
+        return null;
+    }
 
     // Chat functionality
 

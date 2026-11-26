@@ -1,45 +1,42 @@
 using AmongUs.Data;
-
-using HoryTweaks.Generated;
-
-using HoryTweaks.Modules.Support;
-
-using HoryTweaks.Structs;
-using HoryTweaks.Utilities;
-using Il2CppInterop.Runtime.Attributes;
-using TMPro;
-using UnityEngine;
-using HoryTweaks.Plugin.Registration;
-using HoryTweaks.Infrastructure.Configuration;
 using HoryTweaks.Game;
 using HoryTweaks.Game.Players;
+using HoryTweaks.Generated;
+using HoryTweaks.Infrastructure.Configuration;
 using HoryTweaks.Infrastructure.UnityInterop;
+using HoryTweaks.Modules.Support;
+using HoryTweaks.Plugin.Registration;
+using HoryTweaks.Structs;
+using HoryTweaks.Utilities;
+using TMPro;
+using UnityEngine;
 
 namespace HoryTweaks.Features.PlayerInfo;
 
 /// <summary>
-/// Displays extended player information during meetings.
+/// Displays extended player information during meetings with time-based updates and cached child transforms.
 /// </summary>
 [RegisterInIl2Cpp]
 internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
 {
+    private const float MeetingUpdateIntervalSeconds = 0.2f;
+
     private NetworkedPlayerInfo? _playerInfo;
     private PlayerVoteArea? _pva;
+    private Transform? _votePlayerBase;
+    private Transform? _deadXBorder;
     private Vector3 _namePos;
     private Vector3 _infoPos;
-    private Vector3 _TopPos;
+    private Vector3 _topPos;
 
     private readonly SplitStringBuilder _ssbTag = new(100, '-');
     private readonly SplitStringBuilder _ssbInfo = new(100, '-');
-    private string _lastInfoText = "", _lastTopText = "";
-    private int _lastUpdateFrame;
-    private const int UPDATE_COOLDOWN = 5;
+    private string _lastInfoText = string.Empty;
+    private string _lastTopText = string.Empty;
+    private float _nextMeetingUpdateTime;
+    private bool _disconnectApplied;
+    private int _lastLayoutState = -1;
 
-    /// <summary>
-    /// Initializes the meeting info display.
-    /// </summary>
-    /// <param name="player">The player to display info for.</param>
-    /// <param name="pva">The PlayerVoteArea associated with the player.</param>
     internal void Init(NetworkedPlayerInfo? playerInfo, PlayerVoteArea pva)
     {
         _playerInfo = playerInfo;
@@ -52,31 +49,37 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
         _topText.fontSize = 1.3f;
         _namePos = _nameText.transform.localPosition - new Vector3(0f, 0.02f, 0f);
         _infoPos = _infoText.transform.localPosition;
-        _TopPos = _topText.transform.localPosition;
+        _topPos = _topText.transform.localPosition;
 
-        var PlayerLevel = pva.transform.Find("PlayerLevel");
-        PlayerLevel.localPosition = new Vector3(PlayerLevel.localPosition.x, PlayerLevel.localPosition.y, -2f);
-        var LevelDisplay = Instantiate(PlayerLevel, pva.transform);
-        LevelDisplay.transform.SetSiblingIndex(pva.transform.Find("PlayerLevel").GetSiblingIndex() + 1);
-        LevelDisplay.gameObject.name = "PlayerId";
-        LevelDisplay.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 1f, 1f);
-        var IdLabel = LevelDisplay.transform.Find("LevelLabel");
-        var IdNumber = LevelDisplay.transform.Find("LevelNumber");
-        IdLabel.gameObject.DestroyTextTranslators();
-        IdLabel.GetComponent<TextMeshPro>().text = TranslationStrings.Command_PlayerInfo_ID.LocalizedString;
-        IdNumber.GetComponent<TextMeshPro>().text = pva.PlayerId.Value.ToString();
-        IdLabel.name = "IdLabel";
-        IdNumber.name = "IdNumber";
-        PlayerLevel.transform.position += new Vector3(0.23f, 0f);
+        _votePlayerBase = pva.transform.Find("votePlayerBase");
+        _deadXBorder = pva.transform.Find("deadX_border");
+
+        var playerLevel = pva.transform.Find("PlayerLevel");
+        if (playerLevel != null)
+        {
+            playerLevel.localPosition = new Vector3(playerLevel.localPosition.x, playerLevel.localPosition.y, -2f);
+            var levelDisplay = Instantiate(playerLevel, pva.transform);
+            levelDisplay.transform.SetSiblingIndex(playerLevel.GetSiblingIndex() + 1);
+            levelDisplay.gameObject.name = "PlayerId";
+            levelDisplay.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 1f, 1f);
+            var idLabel = levelDisplay.transform.Find("LevelLabel");
+            var idNumber = levelDisplay.transform.Find("LevelNumber");
+            idLabel.gameObject.DestroyTextTranslators();
+            idLabel.GetComponent<TextMeshPro>().text = TranslationStrings.Command_PlayerInfo_ID.LocalizedString;
+            idNumber.GetComponent<TextMeshPro>().text = pva.PlayerId.Value.ToString();
+            idLabel.name = "IdLabel";
+            idNumber.name = "IdNumber";
+            playerLevel.transform.position += new Vector3(0.23f, 0f);
+        }
     }
 
-    /// <summary>
-    /// LateUpdate override with cooldown for performance optimization.
-    /// </summary>
     protected override void LateUpdate()
     {
-        if (Time.frameCount - _lastUpdateFrame < UPDATE_COOLDOWN)
+        float now = Time.unscaledTime;
+        if (now < _nextMeetingUpdateTime)
             return;
+
+        _nextMeetingUpdateTime = now + MeetingUpdateIntervalSeconds;
 
         if (_pva == null)
             return;
@@ -84,7 +87,7 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
         _ssbTag.Clear();
         _ssbInfo.Clear();
 
-        if (_playerInfo.Object != null)
+        if (_playerInfo != null && _playerInfo.Object != null)
         {
             UpdateInfo();
         }
@@ -94,177 +97,159 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
         }
 
         UpdateTextPositions();
-
-        if (!BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_CustomColorBlindText))
-        {
-            if (!DataManager.Settings.Accessibility.ColorBlindMode)
-            {
-                _pva.ColorBlindName.gameObject.SetActive(false);
-            }
-            else
-            {
-                _pva.ColorBlindName.gameObject.SetActive(true);
-
-                float offsetY = BAUConfigs.ColorblindTextOnTop.Value ? 0.19f : -0.19f;
-
-                if (BAUConfigs.BetterColorblindText.Value)
-                {
-                    _pva.ColorBlindName.transform.localPosition = new Vector3(-0.91f, offsetY, -0.05f);
-                }
-                else
-                {
-                    _pva.ColorBlindName.transform.localPosition = _pva.NameText.transform.localPosition + new Vector3(0f, offsetY, 0f);
-                }
-            }
-        }
-
-        _lastUpdateFrame = Time.frameCount;
+        UpdateColorBlindName();
     }
 
-    /// <summary>
-    /// Updates the text positions based on content presence.
-    /// </summary>
+    private void UpdateColorBlindName()
+    {
+        if (_pva == null || _pva.ColorBlindName == null || BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_CustomColorBlindText))
+            return;
+
+        var cbObj = _pva.ColorBlindName.gameObject;
+        if (!DataManager.Settings.Accessibility.ColorBlindMode)
+        {
+            if (cbObj.activeSelf)
+                cbObj.SetActive(false);
+            return;
+        }
+
+        if (!cbObj.activeSelf)
+            cbObj.SetActive(true);
+
+        float offsetY = BAUConfigs.ColorblindTextOnTop.Value ? 0.19f : -0.19f;
+        Vector3 targetPos = BAUConfigs.BetterColorblindText.Value
+            ? new Vector3(-0.91f, offsetY, -0.05f)
+            : _pva.NameText.transform.localPosition + new Vector3(0f, offsetY, 0f);
+
+        if (_pva.ColorBlindName.transform.localPosition != targetPos)
+        {
+            _pva.ColorBlindName.transform.localPosition = targetPos;
+        }
+    }
+
     private void UpdateTextPositions()
     {
-        if (_nameText == null)
+        if (_nameText == null || _infoText == null || _topText == null)
             return;
 
-        if (_infoText == null)
+        bool hasInfoText = !string.IsNullOrEmpty(_lastInfoText);
+        bool hasTopText = !string.IsNullOrEmpty(_lastTopText);
+        int state = (hasInfoText ? 1 : 0) | (hasTopText ? 2 : 0);
+
+        if (state == _lastLayoutState)
             return;
 
-        if (_topText == null)
-            return;
-
-        bool hasInfoText = !string.IsNullOrEmpty(_infoText.text);
-        bool hasTopText = !string.IsNullOrEmpty(_topText.text);
+        _lastLayoutState = state;
 
         if (hasInfoText && hasTopText)
         {
             _nameText.transform.localPosition = _namePos + new Vector3(0f, -0.1f, 0f);
             _infoText.transform.localPosition = _infoPos + new Vector3(0f, -0.1f, 0f);
-            _topText.transform.localPosition = _TopPos + new Vector3(0f, -0.1f, 0f);
+            _topText.transform.localPosition = _topPos + new Vector3(0f, -0.1f, 0f);
         }
         else if (hasInfoText || hasTopText)
         {
             _nameText.transform.localPosition = _namePos;
-            _infoText.transform.localPosition = _TopPos;
-            _topText.transform.localPosition = _TopPos;
+            _infoText.transform.localPosition = _topPos;
+            _topText.transform.localPosition = _topPos;
         }
         else
         {
             _nameText.transform.localPosition = _namePos;
             _infoText.transform.localPosition = _infoPos;
-            _topText.transform.localPosition = _TopPos;
+            _topText.transform.localPosition = _topPos;
         }
     }
 
-    /// <summary>
-    /// Updates player information display.
-    /// </summary>
     private void UpdateInfo()
     {
         if (_playerInfo == null || _playerInfo.ExtendedData() == null)
             return;
 
         _ssbInfo.Append(_playerInfo.GetRoleInfo(true));
+        string infoText = _ssbInfo.ToString();
+        string topText = _ssbTag.ToString();
 
-        UpdateNameTextPosition(_ssbInfo.ToString(), _ssbInfo.ToString());
-
-        UpdateTextIfChanged(_infoText, _ssbInfo.ToString(), ref _lastInfoText);
-        UpdateTextIfChanged(_topText, _ssbTag.ToString(), ref _lastTopText);
+        UpdateNameTextPosition(infoText);
+        UpdateTextIfChanged(_infoText, infoText, ref _lastInfoText);
+        UpdateTextIfChanged(_topText, topText, ref _lastTopText);
     }
 
-    /// <summary>
-    /// Updates name text position based on role and info text presence.
-    /// </summary>
-    /// <param name="roleText">The role text.</param>
-    /// <param name="infoText">The info text.</param>
-    private void UpdateNameTextPosition(string roleText, string infoText)
+    private void UpdateNameTextPosition(string infoText)
     {
-        if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_PlayerMeetingInfo))
+        if (_pva == null || BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_PlayerMeetingInfo))
             return;
 
-        bool hasRole = !string.IsNullOrEmpty(roleText);
-        bool hasInfo = !string.IsNullOrEmpty(infoText);
-
-        Vector3 textPos;
-        if (hasRole && hasInfo)
-            textPos = new Vector3(_pva.NameText.transform.localPosition.x, -0.045f);
-        else
-            textPos = new Vector3(_pva.NameText.transform.localPosition.x, 0.015f);
-
-        _pva.NameText.transform.localPosition = textPos;
-    }
-
-    /// <summary>
-    /// Updates text if changed, optimizing performance.
-    /// </summary>
-    /// <param name="textMesh">TextMeshPro component to update.</param>
-    /// <param name="newText">New text to set.</param>
-    /// <param name="lastValue">Reference to last value for comparison.</param>
-    private static void UpdateTextIfChanged(TextMeshPro textMesh, string newText, ref string lastValue)
-    {
-        if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_PlayerMeetingInfo))
+        float targetY = !string.IsNullOrEmpty(infoText) ? -0.045f : 0.015f;
+        var current = _pva.NameText.transform.localPosition;
+        if (Mathf.Abs(current.y - targetY) > 0.0001f)
         {
-            textMesh.SetText(string.Empty);
-            return;
+            _pva.NameText.transform.localPosition = new Vector3(current.x, targetY, current.z);
         }
+    }
 
+    private static void UpdateTextIfChanged(TextMeshPro? textMesh, string newText, ref string lastValue)
+    {
         if (textMesh == null)
             return;
 
-        if (newText != lastValue)
+        if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_PlayerMeetingInfo))
+        {
+            if (lastValue.Length > 0)
+            {
+                textMesh.SetText(string.Empty);
+                lastValue = string.Empty;
+            }
+            return;
+        }
+
+        if (!string.Equals(newText, lastValue, StringComparison.Ordinal))
         {
             textMesh.SetText(newText);
             lastValue = newText;
         }
     }
 
-    /// <summary>
-    /// Updates display for disconnected players.
-    /// </summary>
     private void UpdateDisconnect()
     {
         string disconnectText = GetDisconnectText();
 
-        if (disconnectText != _lastInfoText)
+        if (!string.Equals(disconnectText, _lastInfoText, StringComparison.Ordinal) && _infoText != null)
         {
-            if (_infoText != null)
-            {
-                _infoText.SetText($"<color=#6b6b6b>{disconnectText}</color>");
-                _lastInfoText = disconnectText;
-            }
+            _infoText.SetText($"<color=#6b6b6b>{disconnectText}</color>");
+            _lastInfoText = disconnectText;
         }
 
-        if (_lastTopText != string.Empty)
+        if (_lastTopText.Length > 0 && _topText != null)
         {
-            if (_topText != null)
-            {
-                _topText.SetText("");
-                _lastTopText = string.Empty;
-            }
+            _topText.SetText(string.Empty);
+            _lastTopText = string.Empty;
         }
 
-        var votePlayerBase = _pva.transform.Find("votePlayerBase");
-        if (votePlayerBase != null)
+        if (_disconnectApplied || _pva == null)
+            return;
+
+        _disconnectApplied = true;
+
+        if (_votePlayerBase != null && _votePlayerBase.gameObject.activeSelf)
         {
-            votePlayerBase.gameObject.SetActive(false);
+            _votePlayerBase.gameObject.SetActive(false);
         }
-        var deadXBorder = _pva.transform.Find("deadX_border");
-        if (deadXBorder != null)
+
+        if (_deadXBorder != null && _deadXBorder.gameObject.activeSelf)
         {
-            deadXBorder.gameObject.SetActive(false);
+            _deadXBorder.gameObject.SetActive(false);
         }
+
         _pva.ClearForResults();
         _pva.SetDisabled();
     }
 
-    /// <summary>
-    /// Gets disconnect reason text for display.
-    /// </summary>
-    /// <returns>Disconnect reason text.</returns>
     private string GetDisconnectText()
     {
+        if (_pva == null || GameData.Instance == null)
+            return string.Empty;
+
         var playerData = GameData.Instance.GetPlayerById(_pva.PlayerId);
         if (playerData == null)
             return string.Empty;
@@ -273,22 +258,13 @@ internal sealed class MeetingInfoDisplay : PlayerInfoDisplay
         if (betterData == null)
             return string.Empty;
 
-        switch (betterData.DisconnectReason)
+        return betterData.DisconnectReason switch
         {
-            case DisconnectReasons.ExitGame:
-                return TranslationStrings.DisconnectReasonMeeting_Left.LocalizedString;
-
-            case DisconnectReasons.Banned:
-                return TranslationStrings.DisconnectReasonMeeting_Banned.LocalizedString;
-
-            case DisconnectReasons.Kicked:
-                return TranslationStrings.DisconnectReasonMeeting_Kicked.LocalizedString;
-
-            case DisconnectReasons.Hacking:
-                return TranslationStrings.DisconnectReasonMeeting_Cheater.LocalizedString;
-
-            default:
-                return TranslationStrings.DisconnectReasonMeeting_Left.LocalizedString;
-        }
+            DisconnectReasons.ExitGame => TranslationStrings.DisconnectReasonMeeting_Left.LocalizedString,
+            DisconnectReasons.Banned => TranslationStrings.DisconnectReasonMeeting_Banned.LocalizedString,
+            DisconnectReasons.Kicked => TranslationStrings.DisconnectReasonMeeting_Kicked.LocalizedString,
+            DisconnectReasons.Hacking => TranslationStrings.DisconnectReasonMeeting_Cheater.LocalizedString,
+            _ => TranslationStrings.DisconnectReasonMeeting_Left.LocalizedString
+        };
     }
 }

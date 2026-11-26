@@ -1,29 +1,29 @@
 using AmongUs.Data;
-
-using HoryTweaks.Generated;
-
 using HoryTweaks.Core.Validation;
+using HoryTweaks.Features.GameOptions;
+using HoryTweaks.Game;
+using HoryTweaks.Game.Players;
+using HoryTweaks.Generated;
+using HoryTweaks.Infrastructure.Configuration;
 using HoryTweaks.Modules.Support;
-
+using HoryTweaks.Plugin.Registration;
 using HoryTweaks.Structs;
 using HoryTweaks.Utilities;
 using Il2CppInterop.Runtime.Attributes;
 using TMPro;
 using UnityEngine;
-using HoryTweaks.Game.Players;
-using HoryTweaks.Plugin.Registration;
-using HoryTweaks.Features.GameOptions;
-using HoryTweaks.Game;
-using HoryTweaks.Infrastructure.Configuration;
 
 namespace HoryTweaks.Features.PlayerInfo;
 
 /// <summary>
-/// Displays extended player information during gameplay.
+/// Displays extended player information during gameplay with time-based throttling and dirty-checks.
 /// </summary>
 [RegisterInIl2Cpp]
 internal class PlayerInfoDisplay : MonoBehaviour
 {
+    private const float UpdateIntervalSeconds = 0.2f;
+    private static readonly Vector3 NameParentLocalPosition = new(0f, 0.8f, -0.5f);
+
     protected PlayerControl? _player;
     protected TextMeshPro? _nameText;
     protected TextMeshPro? _infoText;
@@ -33,15 +33,15 @@ internal class PlayerInfoDisplay : MonoBehaviour
     private readonly SplitStringBuilder _ssbTag = new(100, '-');
     private readonly SplitStringBuilder _ssbTagTop = new(100, '-');
     private readonly SplitStringBuilder _ssbTagBottom = new(100, '-');
-    private string _lastTopText = "", _lastBottomText = "", _lastInfoText = "";
-    private int _lastUpdateFrame;
-    private const int UPDATE_COOLDOWN = 10;
+    private string _lastTopText = string.Empty;
+    private string _lastBottomText = string.Empty;
+    private string _lastInfoText = string.Empty;
+    private string? _lastRawName;
+    private string? _lastColorBlindText;
+    private Vector3 _lastColorBlindPos;
+    private bool _hasColorBlindPos;
+    private float _nextUpdateTime;
 
-
-    /// <summary>
-    /// Initializes the player info display.
-    /// </summary>
-    /// <param name="player">The player to display info for.</param>
     internal void Init(PlayerControl player)
     {
         _player = player;
@@ -58,15 +58,13 @@ internal class PlayerInfoDisplay : MonoBehaviour
         _infoText.fontSize = 1.3f;
         _topText.fontSize = 1.3f;
         _bottomText.fontSize = 1.3f;
+
+        if (_nameText != null && _nameText.transform.parent != null)
+        {
+            _nameText.transform.parent.localPosition = NameParentLocalPosition;
+        }
     }
 
-    /// <summary>
-    /// Instantiates a player info text object.
-    /// </summary>
-    /// <param name="name">The name of the text object.</param>
-    /// <param name="positionOffset">The position offset from the parent.</param>
-    /// <param name="parent">The parent transform.</param>
-    /// <returns>The created TextMeshPro component.</returns>
     protected TextMeshPro InstantiatePlayerInfoText(string name, Vector3 positionOffset, Transform parent)
     {
         var newTextObject = Instantiate(_nameText, parent);
@@ -81,34 +79,34 @@ internal class PlayerInfoDisplay : MonoBehaviour
         return textMesh;
     }
 
-    /// <summary>
-    /// Resets all text displays to empty.
-    /// </summary>
     private void ResetText()
     {
-        if (_infoText != null)
+        if (_infoText != null && _lastInfoText.Length > 0)
         {
             _infoText.SetText(string.Empty);
+            _lastInfoText = string.Empty;
         }
 
-        if (_topText != null)
+        if (_topText != null && _lastTopText.Length > 0)
         {
             _topText.SetText(string.Empty);
+            _lastTopText = string.Empty;
         }
 
-        if (_bottomText != null)
+        if (_bottomText != null && _lastBottomText.Length > 0)
         {
             _bottomText.SetText(string.Empty);
+            _lastBottomText = string.Empty;
         }
     }
 
-    /// <summary>
-    /// LateUpdate override with cooldown for performance optimization.
-    /// </summary>
     protected virtual void LateUpdate()
     {
-        if (Time.frameCount - _lastUpdateFrame < UPDATE_COOLDOWN)
+        float now = Time.unscaledTime;
+        if (now < _nextUpdateTime)
             return;
+
+        _nextUpdateTime = now + UpdateIntervalSeconds;
 
         if (_player == null || _player.Data == null || _player.Data.ExtendedData() == null || _nameText == null)
         {
@@ -122,33 +120,29 @@ internal class PlayerInfoDisplay : MonoBehaviour
 
         UpdatePlayerInfo();
         UpdateColorBlindTextPosition();
-        _nameText.transform.parent.localPosition = new Vector3(0f, 0.8f, -0.5f);
 
-        _lastUpdateFrame = Time.frameCount;
+        var parent = _nameText.transform.parent;
+        if (parent != null && parent.localPosition != NameParentLocalPosition)
+        {
+            parent.localPosition = NameParentLocalPosition;
+        }
     }
 
-    /// <summary>
-    /// Updates player information display.
-    /// </summary>
     private void UpdatePlayerInfo()
     {
-        if (_player == null)
-            return;
-
-        if (_player.Data == null)
-            return;
-
-        if (_nameText == null)
-            return;
-
-        if (_topText == null || _bottomText == null || _infoText == null)
+        if (_player == null || _player.Data == null || _nameText == null ||
+            _topText == null || _bottomText == null || _infoText == null)
             return;
 
         var betterData = _player.ExtendedData();
 
         if (!_player.DataIsCollected())
         {
-            _nameText.text = TranslationStrings.Player_Loading.LocalizedString;
+            string loading = TranslationStrings.Player_Loading.LocalizedString;
+            if (!string.Equals(_nameText.text, loading, StringComparison.Ordinal))
+            {
+                _nameText.text = loading;
+            }
             return;
         }
 
@@ -157,24 +151,24 @@ internal class PlayerInfoDisplay : MonoBehaviour
             ResetText();
             if (!BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_NameOverride))
             {
-                _player.RawSetName(_player.Data.PlayerName);
+                SetRawNameIfChanged(_player.Data.PlayerName);
             }
             return;
         }
 
-        string newName = _player.Data.PlayerName;
-        string platform = Utils.GetPlatformName(_player, useTag: true);
-
-        string friendCode = ValidateFriendCode(out string friendCodeColor);
-
         if (DataManager.Settings == null || DataManager.Settings.Gameplay == null)
             return;
 
-        if (DataManager.Settings.Gameplay.StreamerMode)
-            platform = TranslationStrings.Player_PlatformHidden.LocalizedString;
+        string newName = _player.Data.PlayerName;
 
         if (GameState.IsInGame && GameState.IsLobby && !GameState.IsFreePlay)
         {
+            string platform = DataManager.Settings.Gameplay.StreamerMode
+                ? TranslationStrings.Player_PlatformHidden.LocalizedString
+                : Utils.GetPlatformName(_player, useTag: true);
+
+            string friendCode = ValidateFriendCode(out string friendCodeColor);
+
             SetLobbyInfo(ref newName, betterData, _ssbTag);
 
             _ssbTagTop.Append($"<color=#9e9e9e>{platform}</color>")
@@ -194,7 +188,7 @@ internal class PlayerInfoDisplay : MonoBehaviour
                 if (_player.IsImpostorTeammate())
                     newName = newName.ToColor(Colors.ImpostorRed);
 
-                _player.RawSetName(newName);
+                SetRawNameIfChanged(newName);
             }
             else
             {
@@ -208,7 +202,7 @@ internal class PlayerInfoDisplay : MonoBehaviour
                 if (_player.IsImpostorTeammate())
                     name = name.ToColor(Colors.ImpostorRed);
 
-                _player.RawSetName(name);
+                SetRawNameIfChanged(name);
             }
         }
 
@@ -217,68 +211,63 @@ internal class PlayerInfoDisplay : MonoBehaviour
         UpdateTextIfChanged(_infoText, _ssbTag, ref _lastInfoText);
     }
 
-    /// <summary>
-    /// Updates text if changed, optimizing performance.
-    /// </summary>
-    /// <param name="textMesh">TextMeshPro component to update.</param>
-    /// <param name="ssb">StringBuilder containing new text.</param>
-    /// <param name="lastValue">Reference to last value for comparison.</param>
+    private void SetRawNameIfChanged(string name)
+    {
+        if (_player == null)
+            return;
+
+        if (!string.Equals(_lastRawName, name, StringComparison.Ordinal))
+        {
+            _player.RawSetName(name);
+            _lastRawName = name;
+        }
+    }
+
     private static void UpdateTextIfChanged(TextMeshPro textMesh, SplitStringBuilder ssb, ref string lastValue)
     {
-        if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_PlayerInfo))
-        {
-            textMesh.SetText(string.Empty);
-            return;
-        }
-
         if (textMesh == null)
             return;
 
+        if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_PlayerInfo))
+        {
+            if (lastValue.Length > 0)
+            {
+                textMesh.SetText(string.Empty);
+                lastValue = string.Empty;
+            }
+            return;
+        }
+
         string newText = ssb.ToString();
-        if (newText != lastValue)
+        if (!string.Equals(newText, lastValue, StringComparison.Ordinal))
         {
             textMesh.SetText(newText);
             lastValue = newText;
         }
     }
 
-    /// <summary>
-    /// Validates and formats the player's friend code.
-    /// </summary>
-    /// <param name="color">Output parameter for the friend code color.</param>
-    /// <returns>The formatted friend code string.</returns>
     private string ValidateFriendCode(out string color)
     {
         color = "#FFFFFF";
         if (_player == null || _player.Data == null)
             return string.Empty;
 
-        void TryKick()
-        {
-            if (GameState.IsHost && BetterGameSettings.InvalidFriendCode.GetBool())
-            {
-                string kickMessage = TranslationStrings.HostTools_KickMessage.Format(
-                    TranslationStrings.HostTools_Kick,
-                    TranslationStrings.HostTools_InvalidFriendCode
-                );
-                _player.TryKick(false, kickMessage);
-            }
-        }
-
         string friendCode = _player.Data.FriendCode;
-
-        // Proper friend code validation
         var invalidReason = FriendCodeRules.Validate(friendCode);
         bool isValidFriendCode = invalidReason == FriendCodeInvalidReason.None;
 
         if (invalidReason == FriendCodeInvalidReason.Empty)
         {
             friendCode = TranslationStrings.Player_NoFriendCode.LocalizedString;
-            color = "#ff0000";
         }
 
-        if (!isValidFriendCode)
-            TryKick();
+        if (!isValidFriendCode && GameState.IsHost && BetterGameSettings.InvalidFriendCode.GetBool())
+        {
+            string kickMessage = TranslationStrings.HostTools_KickMessage.Format(
+                TranslationStrings.HostTools_Kick,
+                TranslationStrings.HostTools_InvalidFriendCode);
+            _player.TryKick(false, kickMessage);
+        }
 
         color = isValidFriendCode ? "#00f7ff" : "#ff0000";
 
@@ -290,13 +279,10 @@ internal class PlayerInfoDisplay : MonoBehaviour
         return friendCode.Trim();
     }
 
-    /// <summary>
-    /// Sets lobby specific information.
-    /// </summary>
     [HideFromIl2Cpp]
-    private void SetLobbyInfo(ref string newName, ExtendedPlayerInfo betterData, SplitStringBuilder ssbTag)
+    private void SetLobbyInfo(ref string newName, ExtendedPlayerInfo? betterData, SplitStringBuilder ssbTag)
     {
-        if (betterData == null)
+        if (betterData == null || _player == null)
             return;
 
         if (_player.IsHost() && BAUConfigs.LobbyPlayerInfo.Value)
@@ -312,64 +298,67 @@ internal class PlayerInfoDisplay : MonoBehaviour
                 verificationSymbol,
                 isHoryUser ? "#ffffbe" : "#a8d8ff");
         }
+
         ssbTag.Append($"<color=#b554ff>{TranslationStrings.Command_PlayerInfo_ID.LocalizedString}: {_player.PlayerId}</color>");
     }
 
-    /// <summary>
-    /// Sets in-game specific information.
-    /// </summary>
-    /// <param name="ssbTagTop">StringBuilder for top tag text.</param>
     [HideFromIl2Cpp]
     private void SetInGameInfo(SplitStringBuilder ssbTagTop)
     {
-        ssbTagTop.Append(_player.GetRoleInfo(true));
+        if (_player != null)
+        {
+            ssbTagTop.Append(_player.GetRoleInfo(true));
+        }
     }
 
-    /// <summary>
-    /// Updates color blind text position.
-    /// </summary>
     private void UpdateColorBlindTextPosition()
     {
-        if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_CustomColorBlindText))
-        {
+        if (_player == null || BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_CustomColorBlindText))
             return;
-        }
 
         var text = _player.cosmetics.colorBlindText;
+        if (text == null)
+            return;
 
         if (!DataManager.Settings.Accessibility.ColorBlindMode)
         {
             if (text.enabled)
                 text.enabled = false;
-
             return;
         }
 
         if (!text.enabled)
             return;
 
+        Vector3 targetPos;
         if (!BAUConfigs.BetterColorblindText.Value)
         {
-            text.transform.localPosition = BAUConfigs.ColorblindTextOnTop.Value
+            targetPos = BAUConfigs.ColorblindTextOnTop.Value
                 ? new Vector3(0f, 0.4f, 0f)
                 : new Vector3(0f, -0.2f, 0f);
-            return;
         }
-
-        if (BAUConfigs.ColorblindTextOnTop.Value)
+        else if (BAUConfigs.ColorblindTextOnTop.Value)
         {
-            text.text = _player.cosmetics.GetColorBlindText();
-            text.transform.localPosition = new Vector3(0f, 0.4f, 0.4999f);
-            return;
-        }
-
-        if (!_player.onLadder && !_player.MyPhysics.Animations.IsPlayingAnyLadderAnimation())
-        {
-            text.transform.localPosition = new Vector3(0f, -1.3f, 0.4999f);
+            string cbText = _player.cosmetics.GetColorBlindText();
+            if (!string.Equals(_lastColorBlindText, cbText, StringComparison.Ordinal))
+            {
+                text.text = cbText;
+                _lastColorBlindText = cbText;
+            }
+            targetPos = new Vector3(0f, 0.4f, 0.4999f);
         }
         else
         {
-            text.transform.localPosition = new Vector3(0f, -1.5f, 0.4999f);
+            targetPos = (!_player.onLadder && !_player.MyPhysics.Animations.IsPlayingAnyLadderAnimation())
+                ? new Vector3(0f, -1.3f, 0.4999f)
+                : new Vector3(0f, -1.5f, 0.4999f);
+        }
+
+        if (!_hasColorBlindPos || _lastColorBlindPos != targetPos)
+        {
+            text.transform.localPosition = targetPos;
+            _lastColorBlindPos = targetPos;
+            _hasColorBlindPos = true;
         }
     }
 }

@@ -1,96 +1,115 @@
-
-
-using HoryTweaks.Utilities;
 using HarmonyLib;
-using UnityEngine;
 using HoryTweaks.Game;
 using HoryTweaks.Infrastructure.Configuration;
+using HoryTweaks.Utilities;
+using UnityEngine;
 
 namespace HoryTweaks.Features.Hud;
 
 [HarmonyPatch]
 internal class ZoomPatch
 {
-    private static bool _wasZooming = false; // Track if user was zooming
-    private static float _lastOrthographicSize = 0f; // Track last camera size
+    private const float DefaultOrthoSize = 3.0f;
+    private const float MaxOrthoSize = 18.0f;
+
+    private static bool _wasZooming;
+    private static float _lastOrthographicSize;
+    private static Camera? _cachedMainCamera;
+
+    private static Camera? GetMainCamera()
+    {
+        if (_cachedMainCamera == null || !_cachedMainCamera.isActiveAndEnabled)
+        {
+            _cachedMainCamera = Camera.main;
+        }
+
+        return _cachedMainCamera;
+    }
 
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     [HarmonyPostfix]
     private static void HudManager_Update_Postfix(HudManager __instance)
     {
-        // Determine if zooming is allowed:
-        // - Player can move AND
-        // - Not Guardian Angel AND
-        // - Either not in gameplay OR player is dead
+        var mainCamera = GetMainCamera();
+        var localPlayer = PlayerControl.LocalPlayer;
+        if (mainCamera == null || localPlayer == null)
+            return;
+
+        bool isAlive = localPlayer.IsAlive();
         bool canZoom = BAUConfigs.ScrollZoom.Value &&
-              GameState.IsCanMove &&
-              !PlayerControl.LocalPlayer.IsGhostRole() &&
-              (!GameState.IsInGamePlay || !PlayerControl.LocalPlayer.IsAlive());
+            GameState.IsCanMove &&
+            !localPlayer.IsGhostRole() &&
+            (!GameState.IsInGamePlay || !isAlive);
 
-        // Should we reset zoom (when player was zooming but no longer can)
         bool shouldReset = !canZoom && _wasZooming;
-
-        _lastOrthographicSize = Camera.main.orthographicSize;
+        float currentSize = mainCamera.orthographicSize;
+        _lastOrthographicSize = currentSize;
 
         if (shouldReset)
         {
-            // Reset to default zoom
-            SetZoomSize(reset: true);
+            SetZoomSize(mainCamera, reset: true);
             _wasZooming = false;
+            currentSize = mainCamera.orthographicSize;
         }
         else if (canZoom)
         {
-            // Handle scroll wheel input
-            if (Input.mouseScrollDelta.y > 0 && Camera.main.orthographicSize > 3.0f)
+            float scrollY = Input.mouseScrollDelta.y;
+            if (scrollY > 0f && currentSize > DefaultOrthoSize)
             {
                 _wasZooming = true;
-                SetZoomSize(zoomIn: true); // Scroll up = zoom in
+                SetZoomSize(mainCamera, zoomIn: true);
+                currentSize = mainCamera.orthographicSize;
             }
-            else if (Input.mouseScrollDelta.y < 0 &&
-                    (GameState.IsDead || GameState.IsFreePlay || GameState.IsLobby) &&
-                    Camera.main.orthographicSize < 18.0f)
+            else if (scrollY < 0f &&
+                (GameState.IsDead || GameState.IsFreePlay || GameState.IsLobby) &&
+                currentSize < MaxOrthoSize)
             {
                 _wasZooming = true;
-                SetZoomSize(zoomOut: true); // Scroll down = zoom out
+                SetZoomSize(mainCamera, zoomOut: true);
+                currentSize = mainCamera.orthographicSize;
             }
         }
 
-        // Show/hide shadow quad based on zoom level and if player is alive
         if (__instance.ShadowQuad != null)
         {
-            __instance.ShadowQuad.gameObject.SetActive(Camera.main.orthographicSize == 3.0f && PlayerControl.LocalPlayer.IsAlive());
+            bool showShadow = Mathf.Approximately(currentSize, DefaultOrthoSize) && isAlive;
+            var shadowObj = __instance.ShadowQuad.gameObject;
+            if (shadowObj.activeSelf != showShadow)
+            {
+                shadowObj.SetActive(showShadow);
+            }
         }
     }
 
-    // Handles zoom in/out and reset functionality
-    private static void SetZoomSize(bool zoomIn = false, bool zoomOut = false, bool reset = false)
+    private static void SetZoomSize(Camera mainCamera, bool zoomIn = false, bool zoomOut = false, bool reset = false)
     {
-        if (!HudManager.InstanceExists) return;
+        if (!HudManager.InstanceExists)
+            return;
 
         if (reset)
         {
-            // Reset to default zoom (3.0)
-            Camera.main.orthographicSize = 3.0f;
-            HudManager.Instance.UICamera.orthographicSize = 3.0f;
+            mainCamera.orthographicSize = DefaultOrthoSize;
+            HudManager.Instance.UICamera.orthographicSize = DefaultOrthoSize;
             HudManager.Instance.Chat.transform.localScale = Vector3.one;
 
-            if (GameState.IsMeeting)
+            if (GameState.IsMeeting && MeetingHud.Instance != null)
+            {
                 MeetingHud.Instance.transform.localScale = Vector3.one;
+            }
         }
         else if (zoomIn || zoomOut)
         {
-            // Zoom in (multiply by 1/1.5 = 0.666) or zoom out (multiply by 1.5)
-            float size = zoomIn ? 1 / 1.5f : 1.5f;
-            Camera.main.orthographicSize *= size;
-            HudManager.Instance.UICamera.orthographicSize *= size;
+            float scale = zoomIn ? (1f / 1.5f) : 1.5f;
+            mainCamera.orthographicSize *= scale;
+            HudManager.Instance.UICamera.orthographicSize *= scale;
         }
 
-        // Trigger resolution change event if camera size changed
-        if (Camera.main.orthographicSize != _lastOrthographicSize)
+        if (!Mathf.Approximately(mainCamera.orthographicSize, _lastOrthographicSize))
         {
             ResolutionManager.ResolutionChanged.Invoke(
                 (float)Screen.width / Screen.height,
-                Screen.width, Screen.height,
+                Screen.width,
+                Screen.height,
                 Screen.fullScreen);
         }
     }

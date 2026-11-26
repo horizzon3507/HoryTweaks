@@ -129,22 +129,38 @@ internal static class ChatCommandsPatch
     private static bool isTypedOut;
     private static string typedCommand = "";
     private static BaseCommand? closestCommand;
+    private static string? _lastProcessedInput;
+    private static string _lastCommandText = string.Empty;
+    private static string _lastCommandInfo = string.Empty;
+    private static string _cachedFullSuggestion = string.Empty;
 
-    // Update command suggestion UI as user types
+    // Update command suggestion UI only when input changes or Tab is pressed
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Update))]
     [HarmonyPostfix]
     private static void ChatController_Update_Postfix(ChatController __instance)
     {
-        if (!_enabled || BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_AllCommands))
+        if (commandText == null || commandInfo == null)
+            return;
+
+        if (!_enabled || !__instance.IsOpenOrOpening || BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_AllCommands))
         {
             ClearCommandDisplay();
+            _lastProcessedInput = null;
             return;
         }
 
         string text = __instance.freeChatField.textArea.text;
 
-        if (commandText == null || commandInfo == null)
+        if (isTypedOut && Input.GetKeyDown(KeyCode.Tab) && !string.IsNullOrEmpty(_cachedFullSuggestion))
+        {
+            __instance.freeChatField.textArea.SetText(_cachedFullSuggestion);
+            text = _cachedFullSuggestion;
+        }
+
+        if (string.Equals(text, _lastProcessedInput, StringComparison.Ordinal))
             return;
+
+        _lastProcessedInput = text;
 
         // Check if text starts with command prefix
         if (text.Length > 0 && text.StartsWith(CommandPrefix))
@@ -176,13 +192,22 @@ internal static class ChatCommandsPatch
     private static void ClearCommandDisplay()
     {
         isTypedOut = false;
-        commandText.text = string.Empty;
-        commandInfo.text = string.Empty;
+        _cachedFullSuggestion = string.Empty;
+        if (_lastCommandText.Length > 0 && commandText != null)
+        {
+            commandText.text = string.Empty;
+            _lastCommandText = string.Empty;
+        }
+        if (_lastCommandInfo.Length > 0 && commandInfo != null)
+        {
+            commandInfo.text = string.Empty;
+            _lastCommandInfo = string.Empty;
+        }
     }
 
     private static void HandleValidSuggestion(ChatController __instance, string text, string[] typedParts)
     {
-        if (closestCommand == null)
+        if (closestCommand == null || commandText == null || commandInfo == null)
             return;
 
         isTypedOut = true;
@@ -190,26 +215,32 @@ internal static class ChatCommandsPatch
         // Generate suggestion text
         string suggestion = GenerateSuggestion(typedParts);
         string fullSuggestion = CommandPrefix + suggestion;
+        _cachedFullSuggestion = fullSuggestion;
 
         // The ghost text can only overlay the input when it extends it glyph-for-glyph; an alias
         // such as "th" expanding to "transferhost" would draw mismatched characters on top.
         bool overlaysTypedText = fullSuggestion.StartsWith(text, StringComparison.OrdinalIgnoreCase);
 
-        // Tab completion
-        if (Input.GetKeyDown(KeyCode.Tab) && typedParts.Length >= 1)
-        {
-            __instance.freeChatField.textArea.SetText(fullSuggestion);
-        }
-
         // Red text if command cannot be run
+        string displayedSuggestion = fullSuggestion;
         if (!closestCommand.CanRunCommand(out string _))
         {
-            fullSuggestion = fullSuggestion.ToColor("#FF0300");
+            displayedSuggestion = displayedSuggestion.ToColor("#FF0300");
         }
 
-        // Update UI elements
-        commandText.text = overlaysTypedText ? fullSuggestion : string.Empty;
-        commandInfo.text = $"{closestCommand.Description}{GenerateArgumentInfo()}{GenerateCanRunInfo()}";
+        string nextGhost = overlaysTypedText ? displayedSuggestion : string.Empty;
+        if (!string.Equals(nextGhost, _lastCommandText, StringComparison.Ordinal))
+        {
+            commandText.text = nextGhost;
+            _lastCommandText = nextGhost;
+        }
+
+        string nextInfo = $"{closestCommand.Description}{GenerateArgumentInfo()}{GenerateCanRunInfo()}";
+        if (!string.Equals(nextInfo, _lastCommandInfo, StringComparison.Ordinal))
+        {
+            commandInfo.text = nextInfo;
+            _lastCommandInfo = nextInfo;
+        }
     }
 
     private static string GenerateSuggestion(string[] typedParts)

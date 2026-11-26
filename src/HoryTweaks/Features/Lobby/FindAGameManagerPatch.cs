@@ -160,21 +160,25 @@ internal static class FindAGameManagerPatch
         return @$"{hostStr}{Environment.NewLine}<size=65%>{Utils.GetPlatformName(listing.Platform)} ({GameCode.IntToGameName(listing.GameId)})";
     }
 
+    private static Sprite? _cachedBlackSquareSprite;
+
     private static SpriteRenderer CreateBlackSquareSprite()
     {
-        // Create a black sprite to visually cut off scrolling content
+        // Reuse a single 1x1 black sprite instead of allocating and leaking a 100x100 Texture2D each time
+        if (_cachedBlackSquareSprite == null)
+        {
+            var texture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+            texture.SetPixel(0, 0, Color.black);
+            texture.Apply();
+            texture.hideFlags |= HideFlags.HideAndDontSave;
+
+            _cachedBlackSquareSprite = Sprite.Create(texture, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 1f);
+            _cachedBlackSquareSprite.hideFlags |= HideFlags.HideAndDontSave;
+        }
+
         var square = new GameObject("CutOffTop");
         var renderer = square.AddComponent<SpriteRenderer>();
-        Texture2D texture = new(100, 100);
-        Color[] pixels = texture.GetPixels();
-        for (int i = 0; i < pixels.Length; i++)
-        {
-            pixels[i] = Color.black;
-        }
-        texture.SetPixels(pixels);
-        texture.Apply();
-        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, 1, 1), Vector2.one * 0.5f);
-        renderer.sprite = sprite;
+        renderer.sprite = _cachedBlackSquareSprite;
         square.transform.localScale = new Vector3(100, 100, 1);
         return renderer;
     }

@@ -130,11 +130,12 @@ internal static class ChatCommandsPatch
     private static string typedCommand = "";
     private static BaseCommand? closestCommand;
     private static string? _lastProcessedInput;
+    private static int _lastRosterCount = -1;
     private static string _lastCommandText = string.Empty;
     private static string _lastCommandInfo = string.Empty;
     private static string _cachedFullSuggestion = string.Empty;
 
-    // Update command suggestion UI only when input changes or Tab is pressed
+    // Update command suggestion UI only when input or roster changes or Tab is pressed
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Update))]
     [HarmonyPostfix]
     private static void ChatController_Update_Postfix(ChatController __instance)
@@ -146,21 +147,25 @@ internal static class ChatCommandsPatch
         {
             ClearCommandDisplay();
             _lastProcessedInput = null;
+            _lastRosterCount = -1;
             return;
         }
 
         string text = __instance.freeChatField.textArea.text;
+        int rosterCount = BAUPlugin.AllPlayerControls.Count;
 
-        if (isTypedOut && Input.GetKeyDown(KeyCode.Tab) && !string.IsNullOrEmpty(_cachedFullSuggestion))
+        bool rosterChanged = rosterCount != _lastRosterCount;
+        if (!rosterChanged && isTypedOut && Input.GetKeyDown(KeyCode.Tab) && !string.IsNullOrEmpty(_cachedFullSuggestion))
         {
             __instance.freeChatField.textArea.SetText(_cachedFullSuggestion);
             text = _cachedFullSuggestion;
         }
 
-        if (string.Equals(text, _lastProcessedInput, StringComparison.Ordinal))
+        if (!rosterChanged && string.Equals(text, _lastProcessedInput, StringComparison.Ordinal))
             return;
 
         _lastProcessedInput = text;
+        _lastRosterCount = rosterCount;
 
         // Check if text starts with command prefix
         if (text.Length > 0 && text.StartsWith(CommandPrefix))

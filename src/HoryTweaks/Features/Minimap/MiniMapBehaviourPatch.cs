@@ -63,6 +63,7 @@ internal static class MiniMapBehaviourPatch
     [HarmonyPostfix]
     private static void MapCountOverlay_OnEnable_Postfix(MapCountOverlay __instance)
     {
+        // Leave _lastAdminSabotaged null so the first Update always syncs isSab, BackgroundColor, and SabotageText.
         _lastAdminSabotaged = null;
         if (!BAUConfigs.BetterMinimapColors.Value)
         {
@@ -70,7 +71,6 @@ internal static class MiniMapBehaviourPatch
         }
 
         bool isSabotaged = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer);
-        _lastAdminSabotaged = isSabotaged;
         __instance.BackgroundColor.SetColor(isSabotaged ? Palette.DisabledGrey : AdminNormalColor);
     }
 

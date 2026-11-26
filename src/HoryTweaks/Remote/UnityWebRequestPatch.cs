@@ -48,7 +48,12 @@ internal static class UnityWebRequestPatch
     private static bool IsGameApiRequest(UnityWebRequest request)
     {
         string? url = request.url;
-        return !string.IsNullOrEmpty(url) && url.IndexOf("/api/games", StringComparison.OrdinalIgnoreCase) >= 0;
+        if (string.IsNullOrEmpty(url))
+            return false;
+
+        int pathEnd = url.IndexOfAny(['?', '#']);
+        ReadOnlySpan<char> withoutQuery = pathEnd >= 0 ? url.AsSpan(0, pathEnd) : url.AsSpan();
+        return withoutQuery.IndexOf("/api/games".AsSpan(), StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     [HarmonyPatch(typeof(UnityWebRequest), nameof(UnityWebRequest.SendWebRequest))]

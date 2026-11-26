@@ -32,6 +32,7 @@ namespace HoryTweaks.Features.ClientOptions;
 internal static class OptionsMenuBehaviourPatch
 {
     internal static TabGroup? BetterOptionsTab { get; private set; }
+    private static TextMeshPro? _frameRateAdvisoryText;
 
     [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
     [HarmonyPostfix]
@@ -77,7 +78,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_LobbyTheme, BAUConfigs.DisableLobbyTheme, 2, __instance, ToggleLobbyTheme);
 
         // Page 3: performance, connection and files
-        ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 3, __instance, () => UpdateFrameRate(notifyPlayer: true));
+        var unlockFpsItem = ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_UnlockFPS, BAUConfigs.UnlockFPS, 3, __instance, () => UpdateFrameRate(notifyPlayer: true));
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_NetworkOptimization, BAUConfigs.NetworkOptimization, 3, __instance, ConnectionResiliencePatch.ApplyToActiveClient);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_SendBetterRpc, BAUConfigs.SendBetterRpc, 3, __instance, SendBetterRpcAction);
         ClientOptionItem.CreateToggle(TranslationStrings.BetterOption_CompressSettingFiles, BAUConfigs.CompressSettingFiles, 3, __instance, ConvertAllSettingFiles);
@@ -85,6 +86,7 @@ internal static class OptionsMenuBehaviourPatch
         ClientOptionItem.CreateToggle(TranslationStrings.Rejoin_AutoRejoin, BAUConfigs.AutoRejoin, 3, __instance);
         ClientOptionItem.CreateToggle(TranslationStrings.MatchHistory_Record, BAUConfigs.MatchHistory, 3, __instance, MatchRecorder.OnConfigToggled);
         ClientOptionItem.CreateToggle(TranslationStrings.MatchHistory_RecordVideo, BAUConfigs.MatchVideoReplay, 3, __instance, MatchVideoRecorder.OnConfigToggled);
+        CreatePage3FrameRateAdvisory(unlockFpsItem, __instance);
 
         // Page 4: read-only list of hidden controls and gestures
         GestureHelpPage.Create(__instance);
@@ -144,16 +146,24 @@ internal static class OptionsMenuBehaviourPatch
     internal static FrameRateDecision LastFrameRateDecision { get; private set; } =
         new(FrameRatePolicy.DefaultLockedFps, 0, FrameRateWarningKind.None);
 
+    /// <summary>
+    /// Computes the live frame-rate decision from current VSync and display state (so /dump never reports stale VSync status).
+    /// </summary>
+    internal static FrameRateDecision GetCurrentFrameRateDecision()
+    {
+        var decision = FrameRatePolicy.Compute(BAUConfigs.UnlockFPS.Value, DetectMonitorRefreshRateHz(), IsGameVSyncEnabled());
+        LastFrameRateDecision = decision;
+        return decision;
+    }
+
     internal static void UpdateFrameRate() => UpdateFrameRate(notifyPlayer: false);
 
     internal static void UpdateFrameRate(bool notifyPlayer)
     {
-        double refreshHz = DetectMonitorRefreshRateHz();
-        bool vSyncEnabled = IsGameVSyncEnabled();
-        var decision = FrameRatePolicy.Compute(BAUConfigs.UnlockFPS.Value, refreshHz, vSyncEnabled);
-        LastFrameRateDecision = decision;
+        var decision = GetCurrentFrameRateDecision();
 
         Application.targetFrameRate = decision.TargetFps;
+        RefreshFrameRateAdvisory(decision);
 
         if (!BAUConfigs.UnlockFPS.Value)
         {
@@ -167,7 +177,7 @@ internal static class OptionsMenuBehaviourPatch
                 BAUPlugin.Logger.Warning(
                     $"Unlock FPS target set to {decision.TargetFps} FPS (display {decision.DetectedRefreshHz}Hz), but Among Us VSync is enabled and will cap frame rate to the monitor refresh.",
                     "Performance");
-                if (notifyPlayer)
+                if (notifyPlayer && GameState.IsInGame)
                 {
                     BetterNotificationManager.Notify(TranslationStrings.Performance_Warning_VSyncConflict.LocalizedString, 6f);
                 }
@@ -177,7 +187,7 @@ internal static class OptionsMenuBehaviourPatch
                 BAUPlugin.Logger.Warning(
                     $"Display refresh ({decision.DetectedRefreshHz}Hz) exceeds safe ceiling; Unlock FPS capped at {decision.TargetFps} FPS to avoid CPU/network thread starvation.",
                     "Performance");
-                if (notifyPlayer)
+                if (notifyPlayer && GameState.IsInGame)
                 {
                     BetterNotificationManager.Notify(TranslationStrings.Performance_Warning_FpsClamped.Format(decision.TargetFps), 5f);
                 }
@@ -194,6 +204,45 @@ internal static class OptionsMenuBehaviourPatch
                     $"Unlock FPS active: target {decision.TargetFps} FPS (display {decision.DetectedRefreshHz}Hz).",
                     "Performance");
                 break;
+        }
+    }
+
+    private static void CreatePage3FrameRateAdvisory(ClientOptionItem templateItem, OptionsMenuBehaviour menu)
+    {
+        var page3 = ClientOptionItem.GetOrCreatePage(3, menu, doNotCreate: true);
+        if (page3 == null || templateItem.ToggleButton == null || templateItem.ToggleButton.Text == null)
+            return;
+
+        var label = UnityEngine.Object.Instantiate(templateItem.ToggleButton.Text, page3.transform);
+        label.name = "UnlockFpsAdvisory_TMP";
+        label.transform.localPosition = new Vector3(0f, -0.45f, -6f);
+        label.fontSize = 1.55f;
+        label.enableWordWrapping = true;
+        label.alignment = TextAlignmentOptions.Center;
+        label.color = new Color(1f, 0.72f, 0.3f, 1f);
+        label.rectTransform.sizeDelta = new Vector2(5.2f, 0.7f);
+        _frameRateAdvisoryText = label;
+
+        RefreshFrameRateAdvisory(GetCurrentFrameRateDecision());
+    }
+
+    private static void RefreshFrameRateAdvisory(FrameRateDecision decision)
+    {
+        if (_frameRateAdvisoryText == null)
+            return;
+
+        string message = decision.Warning switch
+        {
+            FrameRateWarningKind.VSyncConflict => $"{TranslationStrings.WarningIcon.LocalizedString} {TranslationStrings.Performance_Warning_VSyncConflict.LocalizedString}",
+            FrameRateWarningKind.ClampedToSafeCap => $"{TranslationStrings.WarningIcon.LocalizedString} {TranslationStrings.Performance_Warning_FpsClamped.Format(decision.TargetFps)}",
+            _ => string.Empty
+        };
+
+        _frameRateAdvisoryText.SetText(message);
+        bool visible = message.Length > 0;
+        if (_frameRateAdvisoryText.gameObject.activeSelf != visible)
+        {
+            _frameRateAdvisoryText.gameObject.SetActive(visible);
         }
     }
 

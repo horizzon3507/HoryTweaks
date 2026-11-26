@@ -178,7 +178,12 @@ internal class PlayerInfoDisplay : MonoBehaviour
         }
         else if ((GameState.IsInGame || GameState.IsFreePlay) && !GameState.IsHideNSeek)
         {
+            EnforceInvalidFriendCodeIfHost();
             SetInGameInfo(_ssbTagTop);
+        }
+        else
+        {
+            EnforceInvalidFriendCodeIfHost();
         }
 
         if (!BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_NameOverride))
@@ -243,6 +248,20 @@ internal class PlayerInfoDisplay : MonoBehaviour
         {
             textMesh.SetText(newText);
             lastValue = newText;
+        }
+    }
+
+    private void EnforceInvalidFriendCodeIfHost()
+    {
+        if (_player == null || _player.Data == null || !GameState.IsHost || !BetterGameSettings.InvalidFriendCode.GetBool())
+            return;
+
+        if (FriendCodeRules.Validate(_player.Data.FriendCode) != FriendCodeInvalidReason.None)
+        {
+            string kickMessage = TranslationStrings.HostTools_KickMessage.Format(
+                TranslationStrings.HostTools_Kick,
+                TranslationStrings.HostTools_InvalidFriendCode);
+            _player.TryKick(false, kickMessage);
         }
     }
 

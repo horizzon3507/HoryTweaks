@@ -122,6 +122,16 @@ internal static class BetterNotificationManager
         NotifyQueue.Clear();
         showTime = 0f;
         Notifying = false;
+
+        if (TextArea != null)
+        {
+            TextArea.text = string.Empty;
+        }
+
+        if (BAUNotificationManagerObj != null && BAUNotificationManagerObj.activeSelf)
+        {
+            BAUNotificationManagerObj.SetActive(false);
+        }
     }
 
     /// <summary>

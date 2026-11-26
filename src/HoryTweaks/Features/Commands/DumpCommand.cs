@@ -166,7 +166,7 @@ internal sealed class DumpCommand : BaseCommand
             .Entry("Packet dispatch", NetworkManager.FormatDiagnosticSummary())
             .Entry("Last ended session", ConnectionResiliencePatch.LastEndedSessionSummary);
 
-        var fpsDecision = OptionsMenuBehaviourPatch.LastFrameRateDecision;
+        var fpsDecision = OptionsMenuBehaviourPatch.GetCurrentFrameRateDecision();
         report.Section("Performance")
             .Entry("Target FPS", $"{fpsDecision.TargetFps} (display {fpsDecision.DetectedRefreshHz}Hz, warning={fpsDecision.Warning})")
             .Entry("Frame pacing", BetterPingTracker.FrameTracker.FormatDiagnosticSummary());

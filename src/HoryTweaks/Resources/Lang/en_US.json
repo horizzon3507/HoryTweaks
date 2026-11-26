@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Copy the last match summary to the clipboard",
   "Chat.Summary.Copied": "Match summary copied to the clipboard.",
   "Chat.Summary.Empty": "No finished match summary to copy yet.",
-  "MatchHistory.OpenFolder": "Open Folder"
+  "MatchHistory.OpenFolder": "Open Folder",
+  "BetterOption.NetworkOptimization": "Network Optimization",
+  "Network.Warning.HighPing": "High ping ({0}ms)",
+  "Network.Warning.HighJitter": "Unstable ping (±{0}ms)",
+  "Network.Warning.PacketLoss": "Packet loss ({0} resends)"
 }

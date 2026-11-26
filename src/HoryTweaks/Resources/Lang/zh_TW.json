@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "將上一場對局戰報複製到剪貼簿",
   "Chat.Summary.Copied": "對局戰報已複製到剪貼簿。",
   "Chat.Summary.Empty": "暫無可複製的已結束對局戰報。",
-  "MatchHistory.OpenFolder": "開啟資料夾"
+  "MatchHistory.OpenFolder": "開啟資料夾",
+  "BetterOption.NetworkOptimization": "網路最佳化",
+  "Network.Warning.HighPing": "高延遲 ({0}ms)",
+  "Network.Warning.HighJitter": "延遲不穩定 (±{0}ms)",
+  "Network.Warning.PacketLoss": "封包遺失 ({0} 次重送)"
 }

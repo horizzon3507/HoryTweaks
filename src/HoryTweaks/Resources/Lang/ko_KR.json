@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "마지막 매치 요약을 클립보드에 복사",
   "Chat.Summary.Copied": "매치 요약이 클립보드에 복사되었습니다.",
   "Chat.Summary.Empty": "복사할 완료된 매치 요약이 아직 없습니다.",
-  "MatchHistory.OpenFolder": "폴더 열기"
+  "MatchHistory.OpenFolder": "폴더 열기",
+  "BetterOption.NetworkOptimization": "네트워크 최적화",
+  "Network.Warning.HighPing": "높은 핑 ({0}ms)",
+  "Network.Warning.HighJitter": "불안정한 핑 (±{0}ms)",
+  "Network.Warning.PacketLoss": "패킷 손실 ({0}회 재전송)"
 }

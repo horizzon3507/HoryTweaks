@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "Copier le résumé de la dernière partie dans le presse-papiers",
   "Chat.Summary.Copied": "Résumé de la partie copié dans le presse-papiers.",
   "Chat.Summary.Empty": "Aucun résumé de partie terminée à copier.",
-  "MatchHistory.OpenFolder": "Ouvrir dossier"
+  "MatchHistory.OpenFolder": "Ouvrir dossier",
+  "BetterOption.NetworkOptimization": "Optimisation Réseau",
+  "Network.Warning.HighPing": "Ping élevé ({0}ms)",
+  "Network.Warning.HighJitter": "Ping instable (±{0}ms)",
+  "Network.Warning.PacketLoss": "Perte de paquets ({0} renvois)"
 }

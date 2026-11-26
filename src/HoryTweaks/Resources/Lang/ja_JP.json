@@ -331,5 +331,9 @@
   "Chat.Summary.Description": "直前の試合結果をクリップボードにコピー",
   "Chat.Summary.Copied": "試合結果をクリップボードにコピーしました。",
   "Chat.Summary.Empty": "コピーできる終了済み試合の結果がありません。",
-  "MatchHistory.OpenFolder": "フォルダを開く"
+  "MatchHistory.OpenFolder": "フォルダを開く",
+  "BetterOption.NetworkOptimization": "ネットワーク最適化",
+  "Network.Warning.HighPing": "高Ping ({0}ms)",
+  "Network.Warning.HighJitter": "不安定なPing (±{0}ms)",
+  "Network.Warning.PacketLoss": "パケットロス ({0}回再送)"
 }

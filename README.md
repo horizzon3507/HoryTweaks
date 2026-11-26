@@ -100,6 +100,7 @@ Proton and game updates can affect mod compatibility. HoryTweaks does not provid
 
 ### Client improvements
 
+- **Network & performance** — fast-path packet dispatch, optional Hazel UDP and Alt+Tab suspend tuning ("Network Optimization"), transient send-error protection, display-aware Unlock FPS (120–240 FPS) with VSync/hitch/ping warnings, and non-blocking async console logging.
 - **Interface** — lobby information, customizable chat and minimap options, colorblind-friendly labels, scroll-wheel zoom and unfocused Alt+Tab window alerts.
 - **Chat commands** — player info (`/players`, `/player`), local chat mute (`/mute`, `/unmute`), match summary export (`/summary`), chat copy (`/copy`), log export (`/dump`) and an adjustable prefix.
 - **Presets** — named settings presets you can restore, copy, paste and share.
@@ -128,7 +129,7 @@ All settings and moderation lists are kept under the compatible `Better_Data` us
 
 Use `/help` in chat for an overview and `/commands` for the available command list. The command prefix can be changed in settings or with `/setprefix`.
 
-`/dump` saves the full BepInEx log and a diagnostic report to `HoryTweaksLogDumps` on the desktop (or inside `Better_Data` on Starlight). The report lists the HoryTweaks version, game version, platform, compatibility checks, non-secret client options and the most recent log lines. Private log entries are left out and lobby codes, friend codes, addresses and user names are redacted, so the report can be attached to a bug report.
+`/dump` saves the full BepInEx log and a diagnostic report to `HoryTweaksLogDumps` on the desktop (or inside `Better_Data` on Starlight). The report lists the HoryTweaks version, game version, platform, compatibility checks, non-secret client options, live network health and frame-pacing summaries, and the most recent log lines. Private log entries are left out and lobby codes, friend codes, addresses and user names are redacted, so the report can be attached to a bug report.
 
 ## Community
 

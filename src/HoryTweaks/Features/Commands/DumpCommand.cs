@@ -161,7 +161,8 @@ internal sealed class DumpCommand : BaseCommand
 
         report.Section("Network")
             .Entry("Connection health", ConnectionResiliencePatch.HealthTracker.FormatDiagnosticSummary())
-            .Entry("Packet dispatch", NetworkManager.FormatDiagnosticSummary());
+            .Entry("Packet dispatch", NetworkManager.FormatDiagnosticSummary())
+            .Entry("Last ended session", ConnectionResiliencePatch.LastEndedSessionSummary);
 
         report.Section("Data")
             .Entry("Better_Data folder present", SafeValue(() => Directory.Exists(BetterDataManager.Folders.fileFolderPath)))

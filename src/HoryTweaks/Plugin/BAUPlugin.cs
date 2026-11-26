@@ -10,6 +10,7 @@ using HoryTweaks.Modules.Support;
 using HarmonyLib;
 using HoryTweaks.Utilities;
 using HoryTweaks.Features.Commands;
+using HoryTweaks.Networking;
 using HoryTweaks.Networking.Rpc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -210,6 +211,7 @@ internal partial class BAUPlugin : BasePlugin
     /// </summary>
     internal void UnloadBAU()
     {
+        ConnectionResiliencePatch.RestoreOnUnload();
         MatchVideoRecorder.Shutdown();
         Logger?.FlushConsole();
         ConsoleManager.DetachConsole();

@@ -18,25 +18,23 @@ internal enum SendErrorAction
     /// <summary>Packet succeeded; continue normally.</summary>
     Continue = 0,
 
-    /// <summary>Transient send failure absorbed without tearing down the session.</summary>
+    /// <summary>Transient unreliable send failure absorbed without tearing down the session.</summary>
     IgnoreTransient = 1,
 
-    /// <summary>Fatal or sustained failure; enqueue a disconnect.</summary>
+    /// <summary>Fatal, reliable, or sustained failure; enqueue a disconnect.</summary>
     Disconnect = 2
 }
 
 /// <summary>
-/// Tracks consecutive send errors inside a rolling time window so a single dropped unreliable
-/// movement packet (e.g., transient socket congestion or Wine/Proton EWOULDBLOCK) does not
-/// immediately kick the player out of an active lobby or match.
+/// Tracks consecutive unreliable send errors inside a rolling time window so a single dropped
+/// unreliable movement packet (e.g., transient socket congestion or Wine/Proton EWOULDBLOCK) does
+/// not immediately kick the player out of an active lobby or match. Reliable send errors always
+/// escalate immediately so reliable game state is never silently lost.
 /// </summary>
 internal sealed class SendErrorTracker
 {
     /// <summary>Consecutive unreliable unknown send errors within the window before disconnecting.</summary>
     internal const int MaxConsecutiveUnreliableErrors = 5;
-
-    /// <summary>Consecutive reliable unknown send errors within the window before disconnecting.</summary>
-    internal const int MaxConsecutiveReliableErrors = 2;
 
     /// <summary>Window in seconds during which consecutive transient errors accumulate.</summary>
     internal const double ErrorWindowSeconds = 5.0;
@@ -45,7 +43,6 @@ internal sealed class SendErrorTracker
     internal const double WarningCooldownSeconds = 3.0;
 
     private int _consecutiveUnreliableErrors;
-    private int _consecutiveReliableErrors;
     private double _lastErrorTime = double.NegativeInfinity;
     private double _lastWarningTime = double.NegativeInfinity;
 
@@ -66,40 +63,26 @@ internal sealed class SendErrorTracker
         if (error == SendErrorKind.None)
         {
             _consecutiveUnreliableErrors = 0;
-            _consecutiveReliableErrors = 0;
             return SendErrorAction.Continue;
         }
 
-        if (error == SendErrorKind.Disconnected)
+        if (error == SendErrorKind.Disconnected || isReliable)
         {
             _consecutiveUnreliableErrors = 0;
-            _consecutiveReliableErrors = 0;
             return SendErrorAction.Disconnect;
         }
 
         if (nowSeconds - _lastErrorTime > ErrorWindowSeconds)
         {
             _consecutiveUnreliableErrors = 0;
-            _consecutiveReliableErrors = 0;
         }
 
         _lastErrorTime = nowSeconds;
+        _consecutiveUnreliableErrors++;
 
-        if (isReliable)
+        if (_consecutiveUnreliableErrors >= MaxConsecutiveUnreliableErrors)
         {
-            _consecutiveReliableErrors++;
-            if (_consecutiveReliableErrors >= MaxConsecutiveReliableErrors)
-            {
-                return SendErrorAction.Disconnect;
-            }
-        }
-        else
-        {
-            _consecutiveUnreliableErrors++;
-            if (_consecutiveUnreliableErrors >= MaxConsecutiveUnreliableErrors)
-            {
-                return SendErrorAction.Disconnect;
-            }
+            return SendErrorAction.Disconnect;
         }
 
         AbsorbedTransientErrors++;
@@ -117,7 +100,6 @@ internal sealed class SendErrorTracker
     internal void Reset()
     {
         _consecutiveUnreliableErrors = 0;
-        _consecutiveReliableErrors = 0;
         _lastErrorTime = double.NegativeInfinity;
         _lastWarningTime = double.NegativeInfinity;
         AbsorbedTransientErrors = 0;

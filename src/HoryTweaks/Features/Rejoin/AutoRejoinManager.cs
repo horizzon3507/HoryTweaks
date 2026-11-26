@@ -89,7 +89,8 @@ internal static class AutoRejoinManager
 
         string code = GameCode.IntToGameName(_lastGameId);
         float deadline = Time.unscaledTime + RejoinPolicy.RejoinWindowSeconds;
-        float nextAttemptAt = Time.unscaledTime;
+        // Brief initial delay lets the server tear down the dropped session cleanly before retry #1.
+        float nextAttemptAt = Time.unscaledTime + RejoinPolicy.InitialRetryDelaySeconds;
         int attemptNumber = 0;
 
         while (_rejoinActive)

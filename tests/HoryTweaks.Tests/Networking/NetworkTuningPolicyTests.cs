@@ -12,7 +12,6 @@ public class NetworkTuningPolicyTests
             currentDisconnectTimeoutMs: 5000,
             currentResendLimit: 6,
             currentResendPingMultiplier: 1.2f,
-            currentReceiveBufferSize: 65536,
             currentSecondsSuspended: 10);
 
         Assert.Equal(NetworkTuningPolicy.TargetKeepAliveIntervalMs, tuned.KeepAliveIntervalMs);
@@ -20,7 +19,6 @@ public class NetworkTuningPolicyTests
         Assert.Equal(NetworkTuningPolicy.TargetResendTimeoutMs, tuned.ResendTimeoutMs);
         Assert.Equal(NetworkTuningPolicy.TargetResendLimit, tuned.ResendLimit);
         Assert.Equal(NetworkTuningPolicy.TargetResendPingMultiplier, tuned.ResendPingMultiplier);
-        Assert.Equal(NetworkTuningPolicy.TargetReceiveBufferSize, tuned.ReceiveBufferSize);
         Assert.Equal(NetworkTuningPolicy.TargetSecondsSuspendedBeforeDisconnect, tuned.SecondsSuspendedBeforeDisconnect);
     }
 
@@ -31,14 +29,24 @@ public class NetworkTuningPolicyTests
             currentDisconnectTimeoutMs: 20000,
             currentResendLimit: 16,
             currentResendPingMultiplier: 2.5f,
-            currentReceiveBufferSize: 2 * 1024 * 1024,
             currentSecondsSuspended: 45);
 
         Assert.Equal(20000, tuned.DisconnectTimeoutMs);
         Assert.Equal(16, tuned.ResendLimit);
         Assert.Equal(2.5f, tuned.ResendPingMultiplier);
-        Assert.Equal(2 * 1024 * 1024, tuned.ReceiveBufferSize);
         Assert.Equal(45, tuned.SecondsSuspendedBeforeDisconnect);
+    }
+
+    [Fact]
+    public void ComputeTunedSettings_preserves_zero_unlimited_resend_limit()
+    {
+        var tuned = NetworkTuningPolicy.ComputeTunedSettings(
+            currentDisconnectTimeoutMs: 5000,
+            currentResendLimit: 0,
+            currentResendPingMultiplier: 1.0f,
+            currentSecondsSuspended: 10);
+
+        Assert.Equal(0, tuned.ResendLimit);
     }
 
     [Fact]

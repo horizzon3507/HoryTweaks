@@ -1,7 +1,3 @@
-
-
-using HoryTweaks.Modules.Support;
-
 using Hazel;
 using InnerNet;
 using UnityEngine;
@@ -37,94 +33,90 @@ internal abstract class RPCHandler
     /// <summary>
     /// Checks if two positions are within a specified range.
     /// </summary>
-    /// <param name="pos1">First position.</param>
-    /// <param name="pos2">Second position.</param>
-    /// <param name="range">Maximum allowed distance.</param>
-    /// <returns>True if positions are within range, false otherwise.</returns>
     internal static bool CheckRange(Vector2 pos1, Vector2 pos2, float range) => Vector2.Distance(pos1, pos2) <= range;
 
     /// <summary>
     /// Handles normal RPC messages.
     /// </summary>
-    /// <param name="sender">The player who sent the RPC.</param>
-    /// <param name="reader">The MessageReader containing RPC data.</param>
     internal virtual void Handle(PlayerControl? sender, MessageReader reader) { }
 
     /// <summary>
     /// Handles GameData messages.
     /// </summary>
-    /// <param name="reader">The MessageReader containing GameData.</param>
     internal virtual void HandleGameData(MessageReader reader) { }
 
     /// <summary>
     /// Handles RPC messages with BetterAmongUs-specific logic.
     /// </summary>
-    /// <param name="sender">The player who sent the RPC.</param>
-    /// <param name="reader">The MessageReader containing RPC data.</param>
-    /// <returns>True if the RPC should be processed, false if it should be canceled.</returns>
     internal virtual bool BetterHandle(PlayerControl? sender, MessageReader reader) => true;
 
     protected static PlayerControl? catchedSender;
     protected static HandlerFlag catchedHandlerFlag = HandlerFlag.Handle;
 
     /// <summary>
-    /// Routes RPC messages to the appropriate handler based on the call ID and handler flag.
+    /// Routes RPC messages in O(1) using pre-indexed handler tables and precomputed support-flag keys.
     /// </summary>
-    /// <param name="calledId">The RPC call ID.</param>
-    /// <param name="sender">The player who sent the RPC.</param>
-    /// <param name="reader">The MessageReader containing RPC data.</param>
-    /// <param name="handlerFlag">The type of handling to perform.</param>
-    /// <returns>True if the RPC was handled successfully and should continue, false if canceled.</returns>
     internal static bool HandleRPC(byte calledId, PlayerControl? sender, MessageReader reader, HandlerFlag handlerFlag)
     {
+        RpcHandlerEntry[]? entries = handlerFlag == HandlerFlag.HandleGameDataTag
+            ? RpcHandlerRegistry.GetGameDataTagHandlers(calledId)
+            : RpcHandlerRegistry.GetCallIdHandlers(calledId);
+
+        if (entries == null || entries.Length == 0)
+            return true;
+
         catchedSender = sender;
         catchedHandlerFlag = handlerFlag;
         bool cancel = false;
 
-        foreach (var handler in RpcHandlerRegistry.Handlers)
+        if (handlerFlag == HandlerFlag.HandleGameDataTag)
         {
-            if (handlerFlag != HandlerFlag.HandleGameDataTag && calledId == handler.CallId)
+            for (int i = 0; i < entries.Length; i++)
             {
-                if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_RPCHandler + handler.GetType().Name)
-                    || BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_RPCHandler + handler.GetType().Name + ":" + Enum.GetName(handlerFlag)))
+                ref readonly var entry = ref entries[i];
+                if (entry.IsDisabled(handlerFlag))
                 {
                     break;
                 }
 
                 try
                 {
-                    switch (handlerFlag)
-                    {
-                        case HandlerFlag.Handle:
-                            handler.Handle(sender, reader);
-                            break;
-                        case HandlerFlag.BetterHost:
-                            cancel = !handler.BetterHandle(sender, reader);
-                            break;
-                    }
-
-                    if (!cancel) break;
-                }
-                catch
-                {
-                }
-            }
-            else if (handlerFlag == HandlerFlag.HandleGameDataTag && calledId == handler.GameDataTag)
-            {
-                if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_RPCHandler + handler.GetType().Name)
-                    || BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_RPCHandler + handler.GetType().Name + ":" + Enum.GetName(handlerFlag)))
-                {
-                    break;
-                }
-
-                try
-                {
-                    handler.HandleGameData(reader);
+                    entry.Handler.HandleGameData(reader);
                 }
                 catch (Exception ex)
                 {
                     BAUPlugin.Logger.Error(ex);
                 }
+            }
+
+            return true;
+        }
+
+        for (int i = 0; i < entries.Length; i++)
+        {
+            ref readonly var entry = ref entries[i];
+            if (entry.IsDisabled(handlerFlag))
+            {
+                break;
+            }
+
+            try
+            {
+                switch (handlerFlag)
+                {
+                    case HandlerFlag.Handle:
+                        entry.Handler.Handle(sender, reader);
+                        break;
+                    case HandlerFlag.BetterHost:
+                        cancel = !entry.Handler.BetterHandle(sender, reader);
+                        break;
+                }
+
+                if (!cancel)
+                    break;
+            }
+            catch
+            {
             }
         }
 
@@ -134,12 +126,12 @@ internal abstract class RPCHandler
     /// <summary>
     /// Logs RPC information for debugging and host validation.
     /// </summary>
-    /// <param name="info">Additional information about the RPC.</param>
-    /// <param name="player">Optional player to log information for.</param>
     internal void LogRpcInfo(string info, PlayerControl? player = null)
     {
-        string Name = Enum.GetName((RpcCalls)CallId) ?? Enum.GetName((CustomRPC)CallId) ?? $"Unregistered({CallId})";
-        Name = $"[{Enum.GetName(catchedHandlerFlag)}] > " + Name;
-        BAUPlugin.Logger.Log($"{catchedSender?.ExtendedData()?.RealName ?? player?.ExtendedData()?.RealName ?? string.Empty} {Name}: {info}", "RPC");
+        string name = Enum.GetName((RpcCalls)CallId) ?? Enum.GetName((CustomRPC)CallId) ?? $"Unregistered({CallId})";
+        name = $"[{Enum.GetName(catchedHandlerFlag)}] > " + name;
+        string? senderName = catchedSender != null ? catchedSender.ExtendedData()?.RealName : null;
+        string? playerName = player != null ? player.ExtendedData()?.RealName : null;
+        BAUPlugin.Logger.Log($"{senderName ?? playerName ?? string.Empty} {name}: {info}", "RPC");
     }
 }

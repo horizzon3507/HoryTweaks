@@ -1,5 +1,3 @@
-
-
 using HoryTweaks.Utilities;
 using Hazel;
 
@@ -11,39 +9,42 @@ namespace HoryTweaks.Networking.Rpc;
 internal static class BetterRpcRouter
 {
     /// <summary>
-    /// Handles RPCs received from players.
+    /// Handles RPCs received from remote players without leaking pooled readers on exceptions.
     /// </summary>
-    /// <param name="player">The player who sent the RPC.</param>
-    /// <param name="callId">The RPC call ID.</param>
-    /// <param name="oldReader">The MessageReader containing RPC data.</param>
     internal static void HandleRPC(PlayerControl player, byte callId, MessageReader oldReader)
     {
         if (player == null || player.Data == null || player.IsLocalPlayer())
             return;
 
+        // Avoid copying a MessageReader if no handler listens for this RPC call ID.
+        if (RpcHandlerRegistry.GetCallIdHandlers(callId) == null)
+            return;
+
         MessageReader reader = MessageReader.Get(oldReader);
-        RPCHandler.HandleRPC(callId, player, reader, HandlerFlag.Handle);
-        reader.Recycle();
+        try
+        {
+            RPCHandler.HandleRPC(callId, player, reader, HandlerFlag.Handle);
+        }
+        finally
+        {
+            reader.Recycle();
+        }
     }
 
     /// <summary>
     /// Applies host-side validation when systems are updated.
     /// </summary>
-    /// <param name="player">The player attempting the sabotage.</param>
-    /// <param name="systemType">The system type being updated.</param>
-    /// <param name="oldReader">The MessageReader containing system update data.</param>
-    /// <returns>True if the sabotage should be allowed, false otherwise.</returns>
     internal static bool RpcUpdateSystemCheck(PlayerControl player, SystemTypes systemType, MessageReader oldReader)
     {
         MessageReader reader = MessageReader.Get(oldReader);
-        RpcHandlerRegistry.UpdateSystemHandler.CatchedSystemType = systemType;
-        if (!RPCHandler.HandleRPC((byte)RpcCalls.UpdateSystem, player, reader, HandlerFlag.BetterHost))
+        try
+        {
+            RpcHandlerRegistry.UpdateSystemHandler.CatchedSystemType = systemType;
+            return RPCHandler.HandleRPC((byte)RpcCalls.UpdateSystem, player, reader, HandlerFlag.BetterHost);
+        }
+        finally
         {
             reader.Recycle();
-            return false;
         }
-        reader.Recycle();
-
-        return true;
     }
 }

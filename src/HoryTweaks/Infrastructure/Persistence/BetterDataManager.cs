@@ -42,6 +42,11 @@ internal static class BetterDataManager
         /// Directory for settings files.
         /// </summary>
         internal static readonly string settingsFolderPath = Path.Combine(fileFolderPath, $"Settings");
+
+        /// <summary>
+        /// Directory for saved match history recordings.
+        /// </summary>
+        internal static readonly string matchHistoryFolderPath = Path.Combine(fileFolderPath, $"MatchHistory");
     }
 
     /// <summary>

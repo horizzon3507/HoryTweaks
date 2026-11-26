@@ -23,10 +23,6 @@ internal static class ModerationCenterMenu
     private const int PlayerRows = 5;
     private const int HistoryRows = 4;
 
-    private static readonly Color32 SelectedColor = new(0, 150, 0, 255);
-    private static readonly Color32 IdleColor = new(77, 77, 77, 255);
-    private static readonly Color32 DangerColor = new(150, 40, 40, 255);
-
     private static GameObject? root;
     private static ToggleButtonBehaviour? template;
     private static TextMeshPro? statusText;
@@ -119,113 +115,28 @@ internal static class ModerationCenterMenu
         root.transform.localPosition = Vector3.zero;
         root.transform.localScale = Vector3.one;
 
-        statusText = CreateText("Status", new Vector3(0f, 2.05f, -6f), new Vector2(4.8f, 0.7f), 0.8f, TextAlignmentOptions.Center);
-        historyText = CreateText("History", new Vector3(0f, -1.95f, -6f), new Vector2(4.8f, 0.9f), 0.7f, TextAlignmentOptions.TopLeft);
+        var parent = root.transform;
+        statusText = OptionsPageWidgets.CreateText(parent, template, "Status", new Vector3(0f, 2.05f, -6f), new Vector2(4.8f, 0.7f), 0.8f, TextAlignmentOptions.Center);
+        historyText = OptionsPageWidgets.CreateText(parent, template, "History", new Vector3(0f, -1.95f, -6f), new Vector2(4.8f, 0.9f), 0.7f, TextAlignmentOptions.TopLeft);
 
         float actionY = -0.75f;
-        kickButton = CreateSmallButton(TranslationStrings.ModerationCenter_Kick.LocalizedString, ColumnX(0), actionY, () => RequestAction(ModerationActionKind.Kick));
-        banButton = CreateSmallButton(TranslationStrings.ModerationCenter_Ban.LocalizedString, ColumnX(1), actionY, () => RequestAction(ModerationActionKind.Ban));
-        CreateSmallButton(TranslationStrings.ModerationCenter_Refresh.LocalizedString, ColumnX(2), actionY, Refresh);
+        kickButton = OptionsPageWidgets.CreateButton(parent, template, TranslationStrings.ModerationCenter_Kick.LocalizedString, new Vector3(ColumnX(0), actionY, -6f), SmallButtonScale, () => RequestAction(ModerationActionKind.Kick));
+        banButton = OptionsPageWidgets.CreateButton(parent, template, TranslationStrings.ModerationCenter_Ban.LocalizedString, new Vector3(ColumnX(1), actionY, -6f), SmallButtonScale, () => RequestAction(ModerationActionKind.Ban));
+        OptionsPageWidgets.CreateButton(parent, template, TranslationStrings.ModerationCenter_Refresh.LocalizedString, new Vector3(ColumnX(2), actionY, -6f), SmallButtonScale, Refresh);
 
         float listY = -1.2f;
-        CreateSmallButton(TranslationStrings.ModerationCenter_PlayerList.LocalizedString, ColumnX(0), listY, () => OpenList(ModerationListKind.Player));
-        CreateSmallButton(TranslationStrings.ModerationCenter_NameList.LocalizedString, ColumnX(1), listY, () => OpenList(ModerationListKind.Name));
-        CreateSmallButton(TranslationStrings.ModerationCenter_ChatList.LocalizedString, ColumnX(2), listY, () => OpenList(ModerationListKind.Chat));
+        OptionsPageWidgets.CreateButton(parent, template, TranslationStrings.ModerationCenter_PlayerList.LocalizedString, new Vector3(ColumnX(0), listY, -6f), SmallButtonScale, () => OpenList(ModerationListKind.Player));
+        OptionsPageWidgets.CreateButton(parent, template, TranslationStrings.ModerationCenter_NameList.LocalizedString, new Vector3(ColumnX(1), listY, -6f), SmallButtonScale, () => OpenList(ModerationListKind.Name));
+        OptionsPageWidgets.CreateButton(parent, template, TranslationStrings.ModerationCenter_ChatList.LocalizedString, new Vector3(ColumnX(2), listY, -6f), SmallButtonScale, () => OpenList(ModerationListKind.Chat));
 
-        CreateSmallButton(TranslationStrings.ModerationCenter_Back.LocalizedString, -2f, -2.5f, Close);
+        OptionsPageWidgets.CreateButton(parent, template, TranslationStrings.ModerationCenter_Back.LocalizedString, new Vector3(-2f, -2.5f, -6f), SmallButtonScale, Close);
     }
 
     private static float ColumnX(int column) => -1.6f + 1.6f * column;
 
-    private static TextMeshPro? CreateText(string name, Vector3 position, Vector2 size, float fontScale, TextAlignmentOptions alignment)
-    {
-        if (root == null || template == null || template.Text == null)
-            return null;
-
-        var go = UnityEngine.Object.Instantiate(template.Text.gameObject, root.transform);
-        go.name = name;
-        go.DestroyTextTranslators();
-        go.transform.localPosition = position;
-        go.transform.localScale = Vector3.one;
-
-        var text = go.GetComponent<TextMeshPro>();
-        if (text == null)
-            return null;
-
-        text.text = string.Empty;
-        text.enableAutoSizing = false;
-        text.fontSize *= fontScale;
-        text.enableWordWrapping = true;
-        text.overflowMode = TextOverflowModes.Truncate;
-        text.alignment = alignment;
-        text.color = Color.white;
-        text.rectTransform.sizeDelta = size;
-        go.SetActive(true);
-        return text;
-    }
-
-    private static ToggleButtonBehaviour? CreateSmallButton(string label, float x, float y, Action onClick)
-    {
-        if (root == null || template == null)
-            return null;
-
-        var button = UnityEngine.Object.Instantiate(template, root.transform);
-        button.name = label;
-        button.transform.localPosition = new Vector3(x, y, -6f);
-        button.gameObject.DestroyTextTranslators();
-
-        var background = button.transform.Find("Background");
-        if (background != null)
-        {
-            background.localScale = new Vector3(SmallButtonScale, 1f, 1f);
-        }
-
-        var highlight = button.transform.Find("ButtonHighlight");
-        if (highlight != null)
-        {
-            highlight.localScale = new Vector3(SmallButtonScale, 0.95f, 1f);
-        }
-
-        if (button.Text != null)
-        {
-            var rect = button.Text.rectTransform;
-            rect.sizeDelta = new Vector2(rect.sizeDelta.x * SmallButtonScale, rect.sizeDelta.y);
-            button.Text.enableAutoSizing = true;
-            button.Text.fontSizeMax = button.Text.fontSize;
-            button.Text.fontSizeMin = button.Text.fontSize * 0.5f;
-            button.Text.text = label;
-            button.Text.color = Color.white;
-        }
-
-        SetButtonColor(button, IdleColor);
-
-        var passiveButton = button.GetComponent<PassiveButton>();
-        passiveButton.OnClick = new();
-        passiveButton.OnClick.AddListener(onClick);
-
-        button.gameObject.SetActive(true);
-        return button;
-    }
-
-    private static void SetButtonColor(ToggleButtonBehaviour? button, Color32 color)
-    {
-        if (button == null)
-            return;
-
-        if (button.Background != null)
-        {
-            button.Background.color = color;
-        }
-
-        if (button.Rollover != null)
-        {
-            button.Rollover.ChangeOutColor(color);
-        }
-    }
-
     private static void Refresh()
     {
-        if (root == null)
+        if (root == null || template == null)
             return;
 
         foreach (var (_, button) in playerButtons)
@@ -247,10 +158,12 @@ internal static class ModerationCenterMenu
             byte playerId = player.PlayerId;
             selectedStillPresent |= selectedPlayerId == playerId;
 
-            var button = CreateSmallButton(
+            var button = OptionsPageWidgets.CreateButton(
+                root.transform,
+                template,
                 player.GetPlayerNameAndColor(),
-                ColumnX(i % Columns),
-                1.55f - 0.42f * (i / Columns),
+                new Vector3(ColumnX(i % Columns), 1.55f - 0.42f * (i / Columns), -6f),
+                SmallButtonScale,
                 () => SelectPlayer(playerId));
 
             if (button != null)
@@ -331,7 +244,7 @@ internal static class ModerationCenterMenu
     {
         foreach (var (playerId, button) in playerButtons)
         {
-            SetButtonColor(button, selectedPlayerId == playerId ? SelectedColor : IdleColor);
+            OptionsPageWidgets.SetButtonColor(button, selectedPlayerId == playerId ? OptionsPageWidgets.SelectedColor : OptionsPageWidgets.IdleColor);
         }
 
         UpdateActionButtons();
@@ -365,23 +278,15 @@ internal static class ModerationCenterMenu
         bool pendingKick = pendingAction == ModerationActionKind.Kick;
         bool pendingBan = pendingAction == ModerationActionKind.Ban;
 
-        SetButtonLabel(kickButton, pendingKick
+        OptionsPageWidgets.SetButtonLabel(kickButton, pendingKick
             ? TranslationStrings.ModerationCenter_ConfirmKick.LocalizedString
             : TranslationStrings.ModerationCenter_Kick.LocalizedString);
-        SetButtonColor(kickButton, pendingKick ? DangerColor : IdleColor);
+        OptionsPageWidgets.SetButtonColor(kickButton, pendingKick ? OptionsPageWidgets.DangerColor : OptionsPageWidgets.IdleColor);
 
-        SetButtonLabel(banButton, pendingBan
+        OptionsPageWidgets.SetButtonLabel(banButton, pendingBan
             ? TranslationStrings.ModerationCenter_ConfirmBan.LocalizedString
             : TranslationStrings.ModerationCenter_Ban.LocalizedString);
-        SetButtonColor(banButton, pendingBan ? DangerColor : IdleColor);
-    }
-
-    private static void SetButtonLabel(ToggleButtonBehaviour? button, string label)
-    {
-        if (button != null && button.Text != null)
-        {
-            button.Text.text = label;
-        }
+        OptionsPageWidgets.SetButtonColor(banButton, pendingBan ? OptionsPageWidgets.DangerColor : OptionsPageWidgets.IdleColor);
     }
 
     private static void SetStatus(string text)

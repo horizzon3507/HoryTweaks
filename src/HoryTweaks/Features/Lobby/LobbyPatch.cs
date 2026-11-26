@@ -7,6 +7,7 @@ using HoryTweaks.Utilities;
 using HarmonyLib;
 using UnityEngine;
 using HoryTweaks.Features.HostTransfer;
+using HoryTweaks.Features.Notifications;
 using HoryTweaks.Game;
 using HoryTweaks.Infrastructure.Configuration;
 using HoryTweaks.Infrastructure.UnityInterop;
@@ -23,6 +24,7 @@ internal static class LobbyPatch
     {
         // Reset player selection options when lobby starts
         OptionPlayerItem.ResetAllValues();
+        WindowAlertManager.ResetLobby();
     }
 
     private static Transform? GameStartObj;
@@ -46,6 +48,11 @@ internal static class LobbyPatch
         else
         {
             GameStartObj.SetLocalY(-2.8f);
+        }
+
+        if (GameOptionsManager.Instance != null && GameOptionsManager.Instance.CurrentGameOptions != null)
+        {
+            WindowAlertManager.CheckLobbyFull(BAUPlugin.AllPlayerControls.Count, GameOptionsManager.Instance.CurrentGameOptions.MaxPlayers);
         }
 
         AfkHostTransfer.Tick();
@@ -166,6 +173,7 @@ internal static class LobbyPatch
     [HarmonyPrefix]
     private static void GameStartManager_FinallyBegin_Prefix(/*GameStartManager __instance*/)
     {
+        WindowAlertManager.NotifyGameStarted();
         BAUPlugin.Logger.LogHeader($"Game Has Started - {Enum.GetName(typeof(MapNames), GameState.GetActiveMapId)}/{GameState.GetActiveMapId}", "GamePlayManager");
     }
 }

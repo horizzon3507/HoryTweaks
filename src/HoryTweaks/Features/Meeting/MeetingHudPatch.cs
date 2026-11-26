@@ -7,6 +7,7 @@ using Rewired;
 using TMPro;
 using UnityEngine;
 using HoryTweaks.Features.Chat;
+using HoryTweaks.Features.Notifications;
 using HoryTweaks.Features.PlayerInfo;
 using HoryTweaks.Game;
 using HoryTweaks.Infrastructure.Configuration;
@@ -27,6 +28,8 @@ internal static class MeetingHudPatch
         {
             ChatPatch.UncensorPlayerChats();
         }
+
+        WindowAlertManager.NotifyMeetingStarted();
 
         if (__instance == null || __instance.playerStates == null)
             return;

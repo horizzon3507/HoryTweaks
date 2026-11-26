@@ -16,6 +16,7 @@ using UnityEngine.SceneManagement;
 using HoryTweaks.Infrastructure.Logging;
 using HoryTweaks.Features.GameOptions;
 using HoryTweaks.Features.Hud;
+using HoryTweaks.Features.MatchHistory.Video;
 using HoryTweaks.Features.Menu;
 using HoryTweaks.Features.Sound;
 using HoryTweaks.Infrastructure.Configuration;
@@ -154,6 +155,7 @@ internal partial class BAUPlugin : BasePlugin
         GithubAPI.Connect();
         BAUConfigs.LoadConfigs();
         BetterDataManager.Initialize();
+        OpenH264Provisioner.PrewarmIfNeeded();
         AudioOverrideManager.Initialize();
         Translator.Initialize();
         CommandRegistry.Initialize();
@@ -208,6 +210,8 @@ internal partial class BAUPlugin : BasePlugin
     /// </summary>
     internal void UnloadBAU()
     {
+        MatchVideoRecorder.Shutdown();
+        Logger?.FlushConsole();
         ConsoleManager.DetachConsole();
         BetterNotificationManager.Detach();
         ClientPatch.Unpatch();
@@ -245,11 +249,11 @@ internal partial class BAUPlugin : BasePlugin
         }
 
         ConsoleManager.CreateConsole();
+        ConsolePlatform.TryDisableQuickEdit();
         ConsoleManager.ConfigPreventClose.Value = true;
         if (ConsoleManager.ConfigConsoleEnabled.Value) ConsoleManager.DetachConsole();
         ConsoleManager.ConfigConsoleEnabled.Value = false;
         ConsoleManager.SetConsoleTitle($"Among Us - {ModInfo.PLUGIN_NAME} Console");
-        ConsoleManager.SetConsoleColor(ConsoleColor.Yellow);
-        ConsoleManager.ConsoleStream.WriteLine("HH   HH                       TTTTTTT                           kk           \r\nHH   HH  oooo  rr rr  yy   yy   TTT   ww      ww   eee    aa aa kk  kk  sss  \r\nHHHHHHH oo  oo rrr  r yy   yy   TTT   ww      ww ee   e  aa aaa kkkkk  s     \r\nHH   HH oo  oo rr      yyyyyy   TTT    ww ww ww  eeeee  aa  aaa kk kk   sss  \r\nHH   HH  oooo  rr          yy   TTT     ww  ww    eeeee  aaa aa kk  kk     s \r\n                       yyyyy                                            sss  ");
+        Logger.WriteConsoleRaw(ConsoleColor.Yellow, "HH   HH                       TTTTTTT                           kk           \r\nHH   HH  oooo  rr rr  yy   yy   TTT   ww      ww   eee    aa aa kk  kk  sss  \r\nHHHHHHH oo  oo rrr  r yy   yy   TTT   ww      ww ee   e  aa aaa kkkkk  s     \r\nHH   HH oo  oo rr      yyyyyy   TTT    ww ww ww  eeeee  aa  aaa kk kk   sss  \r\nHH   HH  oooo  rr          yy   TTT     ww  ww    eeeee  aaa aa kk  kk     s \r\n                       yyyyy                                            sss  ");
     }
 }

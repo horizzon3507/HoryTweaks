@@ -83,8 +83,8 @@ internal static class PlayerControlPatch
         // Log kill event with player names and roles
         BAUPlugin.Logger.LogPrivate($"{__instance.Data.PlayerName} Has killed {target.Data.PlayerName} as {__instance.Data.RoleType.GetRoleName()}", "EventLog");
 
-        // Track kill count in player's BetterData
-        if (resultFlags.HasFlag(MurderResultFlags.Succeeded) || resultFlags.HasFlag(MurderResultFlags.DecisionByHost))
+        // Track kill count in player's BetterData (DecisionByHost alone also fires for blocked attempts)
+        if (resultFlags.HasFlag(MurderResultFlags.Succeeded))
         {
             __instance.ExtendedData().RoleInfo.Kills += 1;
         }

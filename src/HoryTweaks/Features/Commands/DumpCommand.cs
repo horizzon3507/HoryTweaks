@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using HoryTweaks.Plugin.Registration;
 using HoryTweaks.Core.Diagnostics;
+using HoryTweaks.Features.ClientOptions;
+using HoryTweaks.Features.Hud;
 using HoryTweaks.Game;
 using HoryTweaks.Infrastructure.Configuration;
 using HoryTweaks.Infrastructure.Logging;
@@ -163,6 +165,11 @@ internal sealed class DumpCommand : BaseCommand
             .Entry("Connection health", ConnectionResiliencePatch.HealthTracker.FormatDiagnosticSummary())
             .Entry("Packet dispatch", NetworkManager.FormatDiagnosticSummary())
             .Entry("Last ended session", ConnectionResiliencePatch.LastEndedSessionSummary);
+
+        var fpsDecision = OptionsMenuBehaviourPatch.GetCurrentFrameRateDecision();
+        report.Section("Performance")
+            .Entry("Target FPS", $"{fpsDecision.TargetFps} (display {fpsDecision.DetectedRefreshHz}Hz, warning={fpsDecision.Warning})")
+            .Entry("Frame pacing", BetterPingTracker.FrameTracker.FormatDiagnosticSummary());
 
         report.Section("Data")
             .Entry("Better_Data folder present", SafeValue(() => Directory.Exists(BetterDataManager.Folders.fileFolderPath)))

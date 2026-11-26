@@ -122,6 +122,16 @@ internal static class BetterNotificationManager
         NotifyQueue.Clear();
         showTime = 0f;
         Notifying = false;
+
+        if (TextArea != null)
+        {
+            TextArea.text = string.Empty;
+        }
+
+        if (BAUNotificationManagerObj != null && BAUNotificationManagerObj.activeSelf)
+        {
+            BAUNotificationManagerObj.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -129,40 +139,54 @@ internal static class BetterNotificationManager
     /// </summary>
     internal static void Update()
     {
-        if (BAUNotificationManagerObj == null)
+        if (BAUNotificationManagerObj == null || TextArea == null)
             return;
-
-        if (TextArea == null)
-            return;
-
-        if (!localCamera)
-        {
-            if (HudManager.InstanceExists)
-            {
-                localCamera = HudManager.Instance.GetComponentInChildren<Camera>();
-            }
-            else
-            {
-                localCamera = Camera.main;
-            }
-        }
-
-        BAUNotificationManagerObj.transform.position = AspectPosition.ComputeWorldPosition(localCamera, AspectPosition.EdgeAlignments.Bottom, new Vector3(-1.3f, 0.7f, localCamera.nearClipPlane + 0.1f));
-
-        showTime -= Time.deltaTime;
-        if (showTime <= 0f && GameState.IsInGame)
-        {
-            TextArea.text = "";
-            BAUNotificationManagerObj.SetActive(false);
-            Notifying = false;
-
-            CheckNotifyQueue();
-        }
 
         if (!GameState.IsInGame)
         {
-            BAUNotificationManagerObj.SetActive(false);
+            if (BAUNotificationManagerObj.activeSelf)
+            {
+                BAUNotificationManagerObj.SetActive(false);
+            }
             showTime = 0f;
+            Notifying = false;
+            return;
+        }
+
+        if (!Notifying)
+        {
+            if (NotifyQueue.Count > 0)
+            {
+                CheckNotifyQueue();
+            }
+            return;
+        }
+
+        if (localCamera == null)
+        {
+            localCamera = HudManager.InstanceExists
+                ? HudManager.Instance.GetComponentInChildren<Camera>()
+                : Camera.main;
+        }
+
+        if (localCamera != null)
+        {
+            BAUNotificationManagerObj.transform.position = AspectPosition.ComputeWorldPosition(
+                localCamera,
+                AspectPosition.EdgeAlignments.Bottom,
+                new Vector3(-1.3f, 0.7f, localCamera.nearClipPlane + 0.1f));
+        }
+
+        showTime -= Time.unscaledDeltaTime;
+        if (showTime <= 0f)
+        {
+            TextArea.text = string.Empty;
+            if (BAUNotificationManagerObj.activeSelf)
+            {
+                BAUNotificationManagerObj.SetActive(false);
+            }
+            Notifying = false;
+            CheckNotifyQueue();
         }
     }
 

@@ -335,5 +335,9 @@
   "BetterOption.NetworkOptimization": "Optamú Líonra",
   "Network.Warning.HighPing": "Ping ard ({0}ms)",
   "Network.Warning.HighJitter": "Ping éagobhsaí (±{0}ms)",
-  "Network.Warning.PacketLoss": "Caillteanas paicéad ({0} athsheolta)"
+  "Network.Warning.PacketLoss": "Caillteanas paicéad ({0} athsheolta)",
+  "Performance.Warning.LowFps": "FPS íseal ({0})",
+  "Performance.Warning.FrameHitch": "Moill fhráma ({0}ms)",
+  "Performance.Warning.VSyncConflict": "Tá VSync cumasaithe i socruithe Físe — tá teorainn VSync ar Dhíghlasáil FPS.",
+  "Performance.Warning.FpsClamped": "Díghlasáil FPS teoranta do {0} FPS ar mhaithe le cobhsaíocht líonra agus LAP."
 }

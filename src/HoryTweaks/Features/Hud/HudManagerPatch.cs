@@ -53,7 +53,12 @@ internal static class HudManagerPatch
             if (__instance.Chat == null)
                 return;
 
-            __instance.Chat.gameObject.SetActive(ChatPatch.IsChatVisible);
+            bool visible = ChatPatch.IsChatVisible;
+            var chatObj = __instance.Chat.gameObject;
+            if (chatObj.activeSelf != visible)
+            {
+                chatObj.SetActive(visible);
+            }
         }
     }
 
@@ -61,13 +66,13 @@ internal static class HudManagerPatch
     [HarmonyPrefix]
     private static bool MatchInfoHudButton_Update_Prefix(MatchInfoHudButton __instance)
     {
-        if (ChatPatch.IsChatVisible)
+        var target = ChatPatch.IsChatVisible
+            ? MatchInfoHudButton.adjustedDistanceFromEdge
+            : MatchInfoHudButton.defaultDistanceFromEdge;
+
+        if (__instance.aspectPosition.DistanceFromEdge != target)
         {
-            __instance.aspectPosition.DistanceFromEdge = MatchInfoHudButton.adjustedDistanceFromEdge;
-        }
-        else
-        {
-            __instance.aspectPosition.DistanceFromEdge = MatchInfoHudButton.defaultDistanceFromEdge;
+            __instance.aspectPosition.DistanceFromEdge = target;
         }
 
         return false;

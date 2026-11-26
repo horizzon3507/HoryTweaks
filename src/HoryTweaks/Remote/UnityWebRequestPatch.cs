@@ -1,6 +1,5 @@
-
-using HoryTweaks.Modules.Support;
 using HarmonyLib;
+using HoryTweaks.Modules.Support;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -10,12 +9,17 @@ namespace HoryTweaks.Remote;
 [HarmonyPatch]
 internal static class UnityWebRequestPatch
 {
+    private static string? _cachedHeader;
+
     /// <summary>
-    /// Builds a mod version header string for network transmission.
+    /// Builds and caches the mod version header string for network transmission.
     /// Format: "major;minor;patch;metadata1/metadata2/metadata3"
     /// </summary>
     public static string GetHeader()
     {
+        if (_cachedHeader != null)
+            return _cachedHeader;
+
         var stringBuilder = new StringBuilder();
         var version = BAUPlugin.ModInfo.SemVersion;
 
@@ -37,10 +41,21 @@ internal static class UnityWebRequestPatch
             }
         }
 
-        return stringBuilder.ToString();
+        _cachedHeader = stringBuilder.ToString();
+        return _cachedHeader;
     }
 
-    // Add custom header to game API requests
+    private static bool IsGameApiRequest(UnityWebRequest request)
+    {
+        string? url = request.url;
+        if (string.IsNullOrEmpty(url))
+            return false;
+
+        int pathEnd = url.IndexOfAny(['?', '#']);
+        ReadOnlySpan<char> withoutQuery = pathEnd >= 0 ? url.AsSpan(0, pathEnd) : url.AsSpan();
+        return withoutQuery.IndexOf("/api/games".AsSpan(), StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
     [HarmonyPatch(typeof(UnityWebRequest), nameof(UnityWebRequest.SendWebRequest))]
     [HarmonyPrefix]
     private static void UnityWebRequest_SendWebRequest_Prefix(UnityWebRequest __instance)
@@ -48,16 +63,12 @@ internal static class UnityWebRequestPatch
         if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_BAUHttpHeader))
             return;
 
-        // Check if this is a game API request
-        var path = new Uri(__instance.url).AbsolutePath;
-        if (path.Contains("/api/games"))
+        if (IsGameApiRequest(__instance))
         {
-            // Add mod version header so server knows we're modded
             __instance.SetRequestHeader("BAU-Mod", GetHeader());
         }
     }
 
-    // Check server response for mod support acknowledgment
     [HarmonyPatch(typeof(UnityWebRequest), nameof(UnityWebRequest.SendWebRequest))]
     [HarmonyPostfix]
     private static void UnityWebRequest_SendWebRequest_Postfix(UnityWebRequest __instance, UnityWebRequestAsyncOperation __result)
@@ -65,18 +76,14 @@ internal static class UnityWebRequestPatch
         if (BAUModdedSupportFlags.HasFlag(BAUModdedSupportFlags.Disable_BAUHttpHeader))
             return;
 
-        var path = new Uri(__instance.url).AbsolutePath;
-        if (path.Contains("/api/games"))
+        if (IsGameApiRequest(__instance))
         {
-            // Add callback when request completes
             __result.add_completed((Action<AsyncOperation>)(_ =>
             {
                 if (!HttpUtils.IsSuccess(__instance.responseCode))
                     return;
 
-                // Check if server supports BAU mod
                 var responseHeader = __instance.GetResponseHeader("BAU-Mod-Processed");
-
                 if (responseHeader != null)
                 {
                     BAUPlugin.Logger.Log("Connected to a supported Better Among Us matchmaking server");

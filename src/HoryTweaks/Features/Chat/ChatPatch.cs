@@ -166,25 +166,34 @@ internal static class ChatPatch
         SetChatTheme();
     }
 
+    private static nint _lastThemeControllerPtr;
+    private static bool? _lastDarkModeApplied;
+
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Update))]
     [HarmonyPrefix]
     [HarmonyPriority(Priority.First)]
     private static void ChatController_Update_Prefix(ChatController __instance)
     {
-        // Apply dark/light theme to chat input field
-        if (BAUConfigs.ChatDarkMode.Value)
+        // Only update chat input field colors when dark mode setting or controller instance changes
+        bool darkMode = BAUConfigs.ChatDarkMode.Value;
+        nint ptr = __instance.Pointer;
+        if (_lastThemeControllerPtr != ptr || _lastDarkModeApplied != darkMode)
         {
-            // Free chat color
-            __instance.freeChatField.background.color = new Color32(40, 40, 40, byte.MaxValue);
-            __instance.freeChatField.textArea.compoText.Color(Color.white);
-            __instance.freeChatField.textArea.outputText.color = Color.white;
-        }
-        else
-        {
-            // Free chat color
-            __instance.freeChatField.background.color = new Color32(255, 255, 255, byte.MaxValue);
-            __instance.freeChatField.textArea.compoText.Color(Color.black);
-            __instance.freeChatField.textArea.outputText.color = Color.black;
+            _lastThemeControllerPtr = ptr;
+            _lastDarkModeApplied = darkMode;
+
+            if (darkMode)
+            {
+                __instance.freeChatField.background.color = new Color32(40, 40, 40, byte.MaxValue);
+                __instance.freeChatField.textArea.compoText.Color(Color.white);
+                __instance.freeChatField.textArea.outputText.color = Color.white;
+            }
+            else
+            {
+                __instance.freeChatField.background.color = new Color32(255, 255, 255, byte.MaxValue);
+                __instance.freeChatField.textArea.compoText.Color(Color.black);
+                __instance.freeChatField.textArea.outputText.color = Color.black;
+            }
         }
 
         // Ctrl+x to cut text to clipboard

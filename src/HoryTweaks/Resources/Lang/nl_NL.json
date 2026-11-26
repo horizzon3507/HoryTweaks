@@ -335,5 +335,9 @@
   "BetterOption.NetworkOptimization": "Netwerkoptimalisatie",
   "Network.Warning.HighPing": "Hoge ping ({0}ms)",
   "Network.Warning.HighJitter": "Instabiele ping (±{0}ms)",
-  "Network.Warning.PacketLoss": "Pakketverlies ({0} herpogingen)"
+  "Network.Warning.PacketLoss": "Pakketverlies ({0} herpogingen)",
+  "Performance.Warning.LowFps": "Lage FPS ({0})",
+  "Performance.Warning.FrameHitch": "Frame-hapering ({0}ms)",
+  "Performance.Warning.VSyncConflict": "VSync is ingeschakeld bij Video — FPS ontgrendelen wordt begrensd door VSync.",
+  "Performance.Warning.FpsClamped": "FPS ontgrendelen begrensd op {0} FPS voor netwerk- en CPU-stabiliteit."
 }

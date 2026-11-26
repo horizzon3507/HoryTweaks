@@ -18,6 +18,11 @@ namespace HoryTweaks.Features.Lobby;
 [HarmonyPatch]
 internal static class LobbyPatch
 {
+    private static Transform? GameStartObj;
+    private static bool _lobbyThemeStopped;
+    private static int _lastDisplayedLobbySeconds = -1;
+    private static string? _lastStartButtonText;
+
     [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.Start))]
     [HarmonyPostfix]
     private static void LobbyBehaviour_Start_Postfix()
@@ -25,9 +30,8 @@ internal static class LobbyPatch
         // Reset player selection options when lobby starts
         OptionPlayerItem.ResetAllValues();
         WindowAlertManager.ResetLobby();
+        _lobbyThemeStopped = false;
     }
-
-    private static Transform? GameStartObj;
 
     // Disable annoying lobby music if setting is enabled
     [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.Update))]
@@ -35,7 +39,17 @@ internal static class LobbyPatch
     private static void LobbyBehaviour_Update_Postfix()
     {
         if (BAUConfigs.DisableLobbyTheme.Value)
-            SoundManager.instance.StopSound(LobbyBehaviour.Instance.MapTheme);
+        {
+            if (!_lobbyThemeStopped && LobbyBehaviour.Instance != null)
+            {
+                SoundManager.instance.StopSound(LobbyBehaviour.Instance.MapTheme);
+                _lobbyThemeStopped = true;
+            }
+        }
+        else
+        {
+            _lobbyThemeStopped = false;
+        }
 
         // Adjust GameStartManager position for better UI layout
         if (GameStartObj == null)
@@ -43,9 +57,13 @@ internal static class LobbyPatch
             if (HudManager.InstanceExists)
             {
                 GameStartObj = HudManager.Instance.transform.Find("GameStartManager");
+                if (GameStartObj != null)
+                {
+                    GameStartObj.SetLocalY(-2.8f);
+                }
             }
         }
-        else
+        else if (Mathf.Abs(GameStartObj.localPosition.y - (-2.8f)) > 0.001f)
         {
             GameStartObj.SetLocalY(-2.8f);
         }
@@ -83,6 +101,8 @@ internal static class LobbyPatch
     private static void GameStartManager_Start_Postfix(GameStartManager __instance)
     {
         lobbyTimer = 600f; // Reset timer
+        _lastDisplayedLobbySeconds = -1;
+        _lastStartButtonText = null;
 
         var extendedPassiveButton = IMonoExtension.AddExtension<ExtendedPassiveButton>(__instance.StartButton);
         extendedPassiveButton.OnHoldOrShiftClick += () =>
@@ -112,11 +132,16 @@ internal static class LobbyPatch
     [HarmonyPrefix]
     private static void GameStartManager_Update_Prefix(GameStartManager __instance)
     {
-        // Update lobby timer countdown
-        lobbyTimer = Mathf.Max(0f, lobbyTimer -= Time.deltaTime);
-        int minutes = (int)lobbyTimer / 60;
-        int seconds = (int)lobbyTimer % 60;
-        lobbyTimerDisplay = $"{minutes:00}:{seconds:00}";
+        // Update lobby timer countdown and only reformat string when whole seconds change
+        lobbyTimer = Mathf.Max(0f, lobbyTimer - Time.deltaTime);
+        int totalSeconds = (int)lobbyTimer;
+        if (totalSeconds != _lastDisplayedLobbySeconds)
+        {
+            _lastDisplayedLobbySeconds = totalSeconds;
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+            lobbyTimerDisplay = $"{minutes:00}:{seconds:00}";
+        }
 
         __instance.MinPlayers = 1; // Allow starting with just 1 player
     }
@@ -131,23 +156,32 @@ internal static class LobbyPatch
         // Hide start button for non-hosts
         if (!GameState.IsHost)
         {
-            __instance.StartButton.gameObject.SetActive(false);
+            if (__instance.StartButton.gameObject.activeSelf)
+            {
+                __instance.StartButton.gameObject.SetActive(false);
+            }
             return;
         }
 
         // Custom start button behavior for hosts
-        __instance.GameStartTextParent.SetActive(false);
-        __instance.StartButton.gameObject.SetActive(true);
-
-        if (__instance.startState == GameStartManager.StartingStates.Countdown)
+        if (__instance.GameStartTextParent.activeSelf)
         {
-            // Show cancel button with countdown
-            __instance.StartButton.buttonText.text = string.Format("{0}: {1}", Translator.GetString(StringNames.Cancel), (int)__instance.countDownTimer + 1);
+            __instance.GameStartTextParent.SetActive(false);
         }
-        else
+
+        if (!__instance.StartButton.gameObject.activeSelf)
         {
-            // Show normal start button
-            __instance.StartButton.buttonText.text = Translator.GetString(StringNames.StartLabel);
+            __instance.StartButton.gameObject.SetActive(true);
+        }
+
+        string label = __instance.startState == GameStartManager.StartingStates.Countdown
+            ? $"{Translator.GetString(StringNames.Cancel)}: {(int)__instance.countDownTimer + 1}"
+            : Translator.GetString(StringNames.StartLabel);
+
+        if (!string.Equals(_lastStartButtonText, label, StringComparison.Ordinal))
+        {
+            __instance.StartButton.buttonText.text = label;
+            _lastStartButtonText = label;
         }
     }
 

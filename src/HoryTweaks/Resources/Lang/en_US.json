@@ -335,5 +335,9 @@
   "BetterOption.NetworkOptimization": "Network Optimization",
   "Network.Warning.HighPing": "High ping ({0}ms)",
   "Network.Warning.HighJitter": "Unstable ping (±{0}ms)",
-  "Network.Warning.PacketLoss": "Packet loss ({0} resends)"
+  "Network.Warning.PacketLoss": "Packet loss ({0} resends)",
+  "Performance.Warning.LowFps": "Low FPS ({0})",
+  "Performance.Warning.FrameHitch": "Frame hitch ({0}ms)",
+  "Performance.Warning.VSyncConflict": "VSync is enabled in Video settings — Unlock FPS is capped by VSync.",
+  "Performance.Warning.FpsClamped": "Unlock FPS capped at {0} FPS for network and CPU stability."
 }

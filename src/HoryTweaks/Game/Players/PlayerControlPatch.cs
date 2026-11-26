@@ -137,18 +137,39 @@ internal static class PlayerControlPatch
     [HarmonyPostfix]
     private static void PlayerControl_SetName_Postfix(PlayerControl __instance, string playerName)
     {
-        // Store the last set name in player's BetterData
+        if (__instance == null)
+            return;
+
+        // Fast path: set immediately without allocating a coroutine when extended data is already attached
+        var extended = __instance.Data != null ? __instance.Data.ExtendedData() : null;
+        if (extended != null)
+        {
+            extended.NameSetAsLast = playerName;
+            return;
+        }
+
         __instance.StartCoroutine(CoSetLastName(__instance, playerName));
     }
 
     private static IEnumerator CoSetLastName(PlayerControl player, string playerName)
     {
-        while (player.Data == null || player.Data.ExtendedData() == null)
+        float deadline = Time.unscaledTime + 10f;
+        while (player != null && (player.Data == null || player.Data.ExtendedData() == null))
         {
+            if (Time.unscaledTime > deadline)
+                yield break;
+
             yield return null;
         }
 
-        player.ExtendedData().NameSetAsLast = playerName;
+        if (player != null && player.Data != null)
+        {
+            var extended = player.Data.ExtendedData();
+            if (extended != null)
+            {
+                extended.NameSetAsLast = playerName;
+            }
+        }
     }
 
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.BootFromVent))]

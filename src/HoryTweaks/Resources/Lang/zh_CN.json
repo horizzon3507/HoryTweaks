@@ -335,5 +335,9 @@
   "BetterOption.NetworkOptimization": "网络优化",
   "Network.Warning.HighPing": "高延迟 ({0}ms)",
   "Network.Warning.HighJitter": "延迟不稳定 (±{0}ms)",
-  "Network.Warning.PacketLoss": "丢包 ({0} 次重发)"
+  "Network.Warning.PacketLoss": "丢包 ({0} 次重发)",
+  "Performance.Warning.LowFps": "低帧率 ({0})",
+  "Performance.Warning.FrameHitch": "画面卡顿 ({0}ms)",
+  "Performance.Warning.VSyncConflict": "视频设置中已开启垂直同步 — 解锁帧率将受垂直同步限制。",
+  "Performance.Warning.FpsClamped": "为保证网络和 CPU 稳定，解锁帧率已限制为 {0} FPS。"
 }

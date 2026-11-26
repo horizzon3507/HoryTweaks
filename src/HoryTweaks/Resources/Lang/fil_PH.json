@@ -335,5 +335,9 @@
   "BetterOption.NetworkOptimization": "Pag-optimize ng Network",
   "Network.Warning.HighPing": "Mataas na ping ({0}ms)",
   "Network.Warning.HighJitter": "Hindi matatag na ping (±{0}ms)",
-  "Network.Warning.PacketLoss": "Nawawalang packet ({0} muling padala)"
+  "Network.Warning.PacketLoss": "Nawawalang packet ({0} muling padala)",
+  "Performance.Warning.LowFps": "Mababang FPS ({0})",
+  "Performance.Warning.FrameHitch": "Pag-lag ng frame ({0}ms)",
+  "Performance.Warning.VSyncConflict": "Naka-on ang VSync sa Video settings — nililimitahan ng VSync ang Unlock FPS.",
+  "Performance.Warning.FpsClamped": "Nilimitahan ang Unlock FPS sa {0} FPS para sa katatagan ng network at CPU."
 }

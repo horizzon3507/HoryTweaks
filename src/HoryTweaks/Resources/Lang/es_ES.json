@@ -335,5 +335,9 @@
   "BetterOption.NetworkOptimization": "Optimización de Red",
   "Network.Warning.HighPing": "Ping alto ({0}ms)",
   "Network.Warning.HighJitter": "Ping inestable (±{0}ms)",
-  "Network.Warning.PacketLoss": "Pérdida de paquetes ({0} reenvíos)"
+  "Network.Warning.PacketLoss": "Pérdida de paquetes ({0} reenvíos)",
+  "Performance.Warning.LowFps": "FPS bajos ({0})",
+  "Performance.Warning.FrameHitch": "Tirón de fotograma ({0}ms)",
+  "Performance.Warning.VSyncConflict": "VSync está activado en Vídeo — Desbloquear FPS queda limitado por VSync.",
+  "Performance.Warning.FpsClamped": "Desbloquear FPS limitado a {0} FPS para estabilidad de red y CPU."
 }

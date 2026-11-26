@@ -56,16 +56,22 @@ internal static class MiniMapBehaviourPatch
         __instance.ColorControl.SetColor(new Color(1f, 0.3f, 0f, 1f));
     }
 
+    private static readonly Color AdminNormalColor = new(0.2f, 0.5f, 0f, 1f);
+    private static bool? _lastAdminSabotaged;
+
     [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.OnEnable))]
     [HarmonyPostfix]
     private static void MapCountOverlay_OnEnable_Postfix(MapCountOverlay __instance)
     {
+        // Leave _lastAdminSabotaged null so the first Update always syncs isSab, BackgroundColor, and SabotageText.
+        _lastAdminSabotaged = null;
         if (!BAUConfigs.BetterMinimapColors.Value)
         {
             return;
         }
 
-        __instance.BackgroundColor.SetColor(PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer) ? Palette.DisabledGrey : new Color(0.2f, 0.5f, 0f, 1f));
+        bool isSabotaged = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer);
+        __instance.BackgroundColor.SetColor(isSabotaged ? Palette.DisabledGrey : AdminNormalColor);
     }
 
     [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
@@ -77,17 +83,18 @@ internal static class MiniMapBehaviourPatch
             return;
         }
 
-        if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))
+        bool isSabotaged = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer);
+        if (_lastAdminSabotaged == isSabotaged)
         {
-            __instance.isSab = true;
-            __instance.BackgroundColor.SetColor(Palette.DisabledGrey);
-            __instance.SabotageText.gameObject.SetActive(true);
+            return;
         }
-        else
+
+        _lastAdminSabotaged = isSabotaged;
+        __instance.isSab = isSabotaged;
+        __instance.BackgroundColor.SetColor(isSabotaged ? Palette.DisabledGrey : AdminNormalColor);
+        if (__instance.SabotageText.gameObject.activeSelf != isSabotaged)
         {
-            __instance.isSab = false;
-            __instance.BackgroundColor.SetColor(new Color(0.2f, 0.5f, 0f, 1f));
-            __instance.SabotageText.gameObject.SetActive(false);
+            __instance.SabotageText.gameObject.SetActive(isSabotaged);
         }
     }
 

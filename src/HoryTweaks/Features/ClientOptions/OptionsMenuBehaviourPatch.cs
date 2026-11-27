@@ -7,7 +7,6 @@ using HoryTweaks.Generated;
 using HoryTweaks.Utilities;
 
 using HarmonyLib;
-using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using HoryTweaks.Features.Chat;
@@ -298,12 +297,10 @@ internal static class OptionsMenuBehaviourPatch
         if (!File.Exists(BetterDataManager.Files.dataFilePath))
             return;
 
-        Process.Start(new ProcessStartInfo
+        if (!HoryTweaks.Infrastructure.Platform.ShellOpener.TryOpen(BetterDataManager.Files.dataFilePath, isDirectory: false))
         {
-            FileName = BetterDataManager.Files.dataFilePath,
-            UseShellExecute = true,
-            Verb = "open"
-        });
+            BetterNotificationManager.Notify(TranslationStrings.Shell_OpenFailed.LocalizedString, 2.5f);
+        }
     }
 
     private static void ConvertAllSettingFiles()

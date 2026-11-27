@@ -10,6 +10,16 @@ namespace HoryTweaks.Features.MatchHistory;
 internal sealed record MatchHistoryEntry(string FileName, MatchRecord Record);
 
 /// <summary>
+/// One row in the match history list: either a recorded 2D match (optionally with a paired POV video)
+/// or a standalone POV video saved when a match ended early without a 2D record.
+/// </summary>
+internal sealed record MatchHistoryListItem(string FileName, DateTime StartedUtc, MatchRecord? Record, string? VideoPath)
+{
+    internal bool IsVideoOnly => Record == null && !string.IsNullOrEmpty(VideoPath);
+    internal bool HasVideo => !string.IsNullOrEmpty(VideoPath);
+}
+
+/// <summary>
 /// Disk storage for recorded matches. Reads are gated by <see cref="MatchHistoryRules.CanView"/>
 /// so recorded data is never readable while a match is in progress.
 /// </summary>
@@ -76,6 +86,66 @@ internal static class MatchHistoryStore
         }
 
         return entries;
+    }
+
+    /// <summary>
+    /// Lists every viewable history item newest-first: recorded matches (with paired videos attached)
+    /// plus standalone POV videos whose match record was never saved because the match ended early.
+    /// </summary>
+    internal static IReadOnlyList<MatchHistoryListItem> ListAll()
+    {
+        if (!MatchHistoryRules.CanView(MatchHistoryGameState.Current) || !Directory.Exists(Folder))
+            return [];
+
+        var items = new List<MatchHistoryListItem>();
+        try
+        {
+            var allFiles = Directory.GetFiles(Folder).Select(Path.GetFileName).OfType<string>().ToList();
+            var fileSet = new HashSet<string>(allFiles, StringComparer.Ordinal);
+            var pairedVideoFiles = new HashSet<string>(StringComparer.Ordinal);
+
+            var fileNames = MatchHistoryRetention.NewestFirst(allFiles);
+            foreach (string fileName in fileNames)
+            {
+                var record = ReadRecord(fileName, includeFrames: false);
+                if (record == null)
+                    continue;
+
+                string? videoPath = null;
+                string? videoFile = MatchVideoRetention.VideoFileNameForMatchFile(fileName);
+                if (videoFile != null && fileSet.Contains(videoFile))
+                {
+                    videoPath = Path.Combine(Folder, videoFile);
+                    pairedVideoFiles.Add(videoFile);
+                }
+
+                items.Add(new MatchHistoryListItem(fileName, record.StartedUtc, record, videoPath));
+            }
+
+            foreach (string fileName in allFiles)
+            {
+                if (!MatchVideoRetention.IsVideoFile(fileName))
+                    continue;
+
+                // Skip videos paired with a successfully decoded match record; a corrupt .htmatch
+                // must not hide its valid .mp4, which still appears as a standalone video row.
+                if (pairedVideoFiles.Contains(fileName))
+                    continue;
+
+                if (!MatchVideoRetention.TryParseStartedUtc(fileName, out var startedUtc))
+                    continue;
+
+                items.Add(new MatchHistoryListItem(fileName, startedUtc, null, Path.Combine(Folder, fileName)));
+            }
+
+            items.Sort((a, b) => b.StartedUtc.CompareTo(a.StartedUtc));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            BAUPlugin.Logger.Error(ex, LogTag);
+        }
+
+        return items;
     }
 
     /// <summary>

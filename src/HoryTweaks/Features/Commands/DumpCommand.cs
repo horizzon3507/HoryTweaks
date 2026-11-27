@@ -72,12 +72,7 @@ internal sealed class DumpCommand : BaseCommand
             File.WriteAllText(Path.Combine(logFolderPath, logFileName), decryptedLog);
             File.WriteAllText(Path.Combine(logFolderPath, reportFileName), BuildDiagnosticReport(log));
 
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
-            {
-                FileName = logFolderPath,
-                UseShellExecute = true,
-                Verb = "open"
-            });
+            HoryTweaks.Infrastructure.Platform.ShellOpener.TryOpen(logFolderPath, isDirectory: true);
 
             CommandResultText(TranslationStrings.Command_Dump_Success.Format(logFolderPath));
             CommandResultText(TranslationStrings.Command_Dump_ReportSaved.Format(reportFileName));

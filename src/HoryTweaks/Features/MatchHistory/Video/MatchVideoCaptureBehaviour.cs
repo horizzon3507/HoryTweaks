@@ -1,32 +1,48 @@
 using System.Collections;
+using System.Diagnostics;
 using BepInEx.Unity.IL2CPP.Utils;
 using HoryTweaks.Core.MatchHistory;
 using HoryTweaks.Plugin.Registration;
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 namespace HoryTweaks.Features.MatchHistory.Video;
 
 /// <summary>
-/// Hidden persistent MonoBehaviour that captures downscaled game frames at end-of-frame while a match video is recording.
+/// Hidden persistent MonoBehaviour that captures downscaled game frames at end-of-frame while a match
+/// video is recording. Uses non-blocking AsyncGPUReadback with ping-pong render targets: the main thread
+/// never waits on the GPU, so capture cannot stall gameplay the way synchronous ReadPixels did.
 /// </summary>
 [RegisterInIl2Cpp]
 internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
 {
     private const string LogTag = "MatchVideo";
+    private const int MaxInFlight = 2;
+
+    private struct InFlightSlot
+    {
+        public bool Active;
+        public int ElapsedMs;
+        public NativeAsyncGpuReadbackRequest Request;
+    }
 
     private static MatchVideoCaptureBehaviour? _instance;
 
+    private readonly InFlightSlot[] _slots = new InFlightSlot[MaxInFlight];
+    private readonly VideoCaptureScheduler _scheduler = new();
+    private readonly Stopwatch _workWatch = new();
+
     private RenderTexture? _fullRt;
-    private RenderTexture? _scaledRt;
-    private Texture2D? _readbackTex;
+    private readonly RenderTexture?[] _scaledRts = new RenderTexture?[MaxInFlight];
     private int _fullWidth;
     private int _fullHeight;
     private int _scaledWidth;
     private int _scaledHeight;
     private float _captureStartRealtime;
-    private float _nextCaptureTime;
     private bool _wasCapturing;
+    private bool _loggedAvailability;
+    private int _consecutiveReadbackErrors;
 
     internal static void EnsureRunning()
     {
@@ -68,35 +84,146 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (!MatchVideoRecorder.IsCapturing)
+        {
+            if (_wasCapturing)
+            {
+                _wasCapturing = false;
+                _loggedAvailability = false;
+                _consecutiveReadbackErrors = 0;
+                _scheduler.Reset();
+                ReleaseResources();
+            }
+
+            return;
+        }
+
+        PollInFlightSlots();
+    }
+
+    [HideFromIl2Cpp]
+    private void PollInFlightSlots()
+    {
+        double nowSec = Time.unscaledTimeAsDouble;
+        float frameDelta = Time.unscaledDeltaTime;
+
+        for (int i = 0; i < MaxInFlight; i++)
+        {
+            if (!_slots[i].Active)
+                continue;
+
+            _workWatch.Restart();
+            var request = _slots[i].Request;
+            NativeAsyncGpuReadback.Update(ref request);
+            _slots[i].Request = request;
+
+            if (!NativeAsyncGpuReadback.IsDone(ref request))
+                continue;
+
+            bool errored = NativeAsyncGpuReadback.HasError(ref request);
+            if (errored)
+            {
+                _slots[i].Active = false;
+                _consecutiveReadbackErrors++;
+                _workWatch.Stop();
+                FeedScheduler(_workWatch.Elapsed.TotalMilliseconds, frameDelta, nowSec);
+
+                if (_consecutiveReadbackErrors >= 3)
+                {
+                    BAUPlugin.Logger.Warning("AsyncGPUReadback failed repeatedly; stopping POV video capture to protect game FPS.", LogTag);
+                    MatchVideoRecorder.StopForPerformance("AsyncGPUReadback error", keepViableVideo: true);
+                    ReleaseResources();
+                    return;
+                }
+
+                continue;
+            }
+
+            byte[]? buffer = MatchVideoRecorder.RentCaptureBuffer(out int targetW, out int targetH);
+            bool submitted = false;
+            if (buffer != null && targetW > 0 && targetH > 0)
+            {
+                if (NativeAsyncGpuReadback.TryCopyRgbaData(ref request, targetW, targetH, buffer))
+                {
+                    MatchVideoRecorder.SubmitCapturedFrame(buffer, _slots[i].ElapsedMs);
+                    submitted = true;
+                }
+            }
+
+            if (!submitted && buffer != null)
+            {
+                MatchVideoRecorder.ReturnUnusedBuffer(buffer);
+            }
+
+            _slots[i].Active = false;
+            _consecutiveReadbackErrors = 0;
+            _workWatch.Stop();
+            FeedScheduler(_workWatch.Elapsed.TotalMilliseconds, frameDelta, nowSec);
+        }
+    }
+
+    [HideFromIl2Cpp]
+    private void FeedScheduler(double workMs, float frameDelta, double nowSec)
+    {
+        var stopReason = _scheduler.RecordMainThreadWork(workMs, frameDelta, nowSec);
+        if (stopReason == VideoCaptureStopReason.None)
+            return;
+
+        BAUPlugin.Logger.Warning(
+            $"Stopping POV video capture to protect gameplay smoothness ({stopReason}, capture {MatchVideoRecorder.TargetWidth}x{MatchVideoRecorder.TargetHeight}). Viable footage is still saved.",
+            LogTag);
+        MatchVideoRecorder.StopForPerformance(stopReason.ToString(), keepViableVideo: true);
+        ReleaseResources();
+    }
+
     [HideFromIl2Cpp]
     private IEnumerator CaptureLoop()
     {
         var endOfFrame = new WaitForEndOfFrame();
-        float interval = 1f / MatchVideoRules.TargetFps;
 
         while (true)
         {
-            if (!MatchVideoRecorder.IsCapturing)
+            if (!MatchVideoRecorder.IsCapturing || !MatchVideoRecorder.IsEncoderReady)
             {
-                if (_wasCapturing)
-                {
-                    _wasCapturing = false;
-                    ReleaseResources();
-                }
-
                 yield return null;
                 continue;
             }
 
-            float now = Time.realtimeSinceStartup;
             if (!_wasCapturing)
             {
                 _wasCapturing = true;
-                _captureStartRealtime = now;
-                _nextCaptureTime = now;
+                _captureStartRealtime = Time.realtimeSinceStartup;
+                _scheduler.Reset();
             }
 
-            if (now < _nextCaptureTime)
+            if (!_loggedAvailability && !NativeAsyncGpuReadback.IsAvailable)
+            {
+                _loggedAvailability = true;
+                BAUPlugin.Logger.Warning("AsyncGPUReadback is unavailable on this GPU/driver; POV MP4 capture disabled to protect game FPS.", LogTag);
+                MatchVideoRecorder.Discard();
+                ReleaseResources();
+                yield return null;
+                continue;
+            }
+
+            int inFlightCount = 0;
+            int freeSlot = -1;
+            for (int i = 0; i < MaxInFlight; i++)
+            {
+                if (_slots[i].Active)
+                {
+                    inFlightCount++;
+                }
+                else if (freeSlot < 0)
+                {
+                    freeSlot = i;
+                }
+            }
+
+            double nowSec = Time.unscaledTimeAsDouble;
+            if (freeSlot < 0 || !_scheduler.ShouldStartCapture(nowSec, MatchVideoRecorder.IsEncoderReady, inFlightCount, MaxInFlight))
             {
                 yield return null;
                 continue;
@@ -104,15 +231,13 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
 
             yield return endOfFrame;
 
-            if (!MatchVideoRecorder.IsCapturing)
+            if (!MatchVideoRecorder.IsCapturing || !MatchVideoRecorder.IsEncoderReady)
                 continue;
 
-            float captureNow = Time.realtimeSinceStartup;
-            _nextCaptureTime = Math.Max(_nextCaptureTime + interval, captureNow + interval * 0.5f);
-
+            _workWatch.Restart();
             try
             {
-                CaptureOneFrame((int)Math.Min((captureNow - _captureStartRealtime) * 1000f, int.MaxValue));
+                ScheduleCapture(freeSlot);
             }
             catch (Exception ex)
             {
@@ -120,57 +245,51 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
                 MatchVideoRecorder.Discard();
                 ReleaseResources();
             }
+
+            _workWatch.Stop();
+            if (MatchVideoRecorder.IsCapturing)
+            {
+                FeedScheduler(_workWatch.Elapsed.TotalMilliseconds, Time.unscaledDeltaTime, Time.unscaledTimeAsDouble);
+            }
         }
     }
 
     [HideFromIl2Cpp]
-    private void CaptureOneFrame(int elapsedMs)
+    private void ScheduleCapture(int slot)
     {
         int screenW = Screen.width;
         int screenH = Screen.height;
         if (screenW <= 0 || screenH <= 0)
             return;
 
-        byte[]? buffer = MatchVideoRecorder.RentCaptureBuffer(out int targetW, out int targetH);
-        if (buffer == null || targetW <= 0 || targetH <= 0)
+        int targetW = MatchVideoRecorder.TargetWidth;
+        int targetH = MatchVideoRecorder.TargetHeight;
+        if (targetW <= 0 || targetH <= 0)
             return;
 
-        bool submitted = false;
-        try
+        EnsureRenderTargets(screenW, screenH, targetW, targetH);
+        var scaled = _scaledRts[slot];
+        if (_fullRt == null || scaled == null)
+            return;
+
+        float captureNow = Time.realtimeSinceStartup;
+        int elapsedMs = (int)Math.Min((captureNow - _captureStartRealtime) * 1000f, int.MaxValue);
+
+        ScreenCapture.CaptureScreenshotIntoRenderTexture(_fullRt);
+        Graphics.Blit(_fullRt, scaled);
+
+        if (!NativeAsyncGpuReadback.TryRequestRgba32(scaled, out var request))
         {
-            EnsureRenderTargets(screenW, screenH, targetW, targetH);
-            if (_fullRt == null || _scaledRt == null || _readbackTex == null)
-                return;
-
-            ScreenCapture.CaptureScreenshotIntoRenderTexture(_fullRt);
-            Graphics.Blit(_fullRt, _scaledRt);
-
-            RenderTexture? previous = RenderTexture.active;
-            try
-            {
-                RenderTexture.active = _scaledRt;
-                _readbackTex.ReadPixels(new Rect(0, 0, targetW, targetH), 0, 0, false);
-            }
-            finally
-            {
-                RenderTexture.active = previous;
-            }
-
-            var raw = _readbackTex.GetRawTextureData();
-            if (raw == null || raw.Length < buffer.Length)
-                return;
-
-            raw.CopyTo(buffer, 0);
-            MatchVideoRecorder.SubmitCapturedFrame(buffer, elapsedMs);
-            submitted = true;
+            BAUPlugin.Logger.Warning("AsyncGPUReadback request failed; stopping POV video capture to protect game FPS.", LogTag);
+            MatchVideoRecorder.StopForPerformance("AsyncGPUReadback request failed", keepViableVideo: true);
+            ReleaseResources();
+            return;
         }
-        finally
-        {
-            if (!submitted)
-            {
-                MatchVideoRecorder.ReturnUnusedBuffer(buffer);
-            }
-        }
+
+        _slots[slot].Active = true;
+        _slots[slot].ElapsedMs = elapsedMs;
+        _slots[slot].Request = request;
+        _scheduler.RecordCaptureScheduled(Time.unscaledTimeAsDouble);
     }
 
     [HideFromIl2Cpp]
@@ -194,57 +313,58 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
             _fullHeight = screenH;
         }
 
-        if (_scaledRt == null || _readbackTex == null || _scaledWidth != targetW || _scaledHeight != targetH)
+        if (_scaledWidth != targetW || _scaledHeight != targetH)
         {
-            if (_scaledRt != null)
+            for (int i = 0; i < MaxInFlight; i++)
             {
-                _scaledRt.Release();
-                UnityEngine.Object.Destroy(_scaledRt);
+                if (_scaledRts[i] != null)
+                {
+                    _scaledRts[i]!.Release();
+                    UnityEngine.Object.Destroy(_scaledRts[i]);
+                    _scaledRts[i] = null;
+                }
             }
 
-            if (_readbackTex != null)
-            {
-                UnityEngine.Object.Destroy(_readbackTex);
-            }
+            _scaledWidth = targetW;
+            _scaledHeight = targetH;
+        }
 
-            _scaledRt = new RenderTexture(targetW, targetH, 0, RenderTextureFormat.ARGB32)
+        for (int i = 0; i < MaxInFlight; i++)
+        {
+            if (_scaledRts[i] != null)
+                continue;
+
+            _scaledRts[i] = new RenderTexture(targetW, targetH, 0, GraphicsFormat.R8G8B8A8_UNorm)
             {
                 hideFlags = HideFlags.HideAndDontSave,
                 filterMode = FilterMode.Bilinear
             };
-            _scaledRt.Create();
-
-            _readbackTex = new Texture2D(targetW, targetH, TextureFormat.RGBA32, false)
-            {
-                hideFlags = HideFlags.HideAndDontSave
-            };
-
-            _scaledWidth = targetW;
-            _scaledHeight = targetH;
+            _scaledRts[i]!.Create();
         }
     }
 
     [HideFromIl2Cpp]
     private void ReleaseResources()
     {
+        // Never block on pending readbacks: in-flight requests die with their render targets.
+        for (int i = 0; i < MaxInFlight; i++)
+        {
+            _slots[i].Active = false;
+            _slots[i].Request = default;
+
+            if (_scaledRts[i] != null)
+            {
+                _scaledRts[i]!.Release();
+                UnityEngine.Object.Destroy(_scaledRts[i]);
+                _scaledRts[i] = null;
+            }
+        }
+
         if (_fullRt != null)
         {
             _fullRt.Release();
             UnityEngine.Object.Destroy(_fullRt);
             _fullRt = null;
-        }
-
-        if (_scaledRt != null)
-        {
-            _scaledRt.Release();
-            UnityEngine.Object.Destroy(_scaledRt);
-            _scaledRt = null;
-        }
-
-        if (_readbackTex != null)
-        {
-            UnityEngine.Object.Destroy(_readbackTex);
-            _readbackTex = null;
         }
 
         _fullWidth = 0;

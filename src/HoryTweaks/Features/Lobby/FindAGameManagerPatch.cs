@@ -18,21 +18,35 @@ internal static class FindAGameManagerPatch
     private static void FindAGameManager_Start_Prefix(FindAGameManager __instance)
     {
         // Apply custom UI colors to all Find Game menu buttons
-        __instance.refreshButton.gameObject.SetUIColors();
-        __instance.BackButton.gameObject.SetUIColors();
-        __instance.clearFilterButton.gameObject.SetUIColors("Disabled");
-        __instance.serverButton.gameObject.SetUIColors("Inactive", "Disabled", "Background");
-        __instance.serverButton.activeTextColor = Color.cyan * 0.3f;
+        if (__instance.refreshButton != null)
+            __instance.refreshButton.gameObject.SetUIColors();
+        if (__instance.BackButton != null)
+            __instance.BackButton.gameObject.SetUIColors();
+        if (__instance.clearFilterButton != null)
+            __instance.clearFilterButton.gameObject.SetUIColors("Disabled");
+        if (__instance.serverButton != null)
+        {
+            __instance.serverButton.gameObject.SetUIColors("Inactive", "Disabled", "Background");
+            __instance.serverButton.activeTextColor = Color.cyan * 0.3f;
+        }
+
+        if (__instance.gameContainers == null || __instance.gameContainers.Length == 0)
+            return;
 
         // Modify game container hover colors
         foreach (var con in __instance.gameContainers)
         {
+            if (con == null)
+                continue;
             var roll = con.GetComponent<ButtonRolloverHandler>();
-            roll.OverColor = (roll.OverColor * 0.6f) + (Colors.Theme * 0.5f);
+            if (roll != null)
+                roll.OverColor = (roll.OverColor * 0.6f) + (Colors.Theme * 0.5f);
         }
 
         // Create scrollable container for game listings
-        var prefab = __instance.gameContainers[4];
+        var prefab = __instance.gameContainers[^1];
+        if (prefab == null)
+            return;
         var list = new GameObject("GameListScroller");
         list.transform.SetParent(prefab.transform.parent);
 
@@ -51,6 +65,8 @@ internal static class FindAGameManagerPatch
         // Move existing game containers into scrollable list
         foreach (var con in __instance.gameContainers)
         {
+            if (con == null)
+                continue;
             con.transform.SetParent(list.transform);
             var oldPos = con.transform.position;
             con.transform.position = new Vector3(oldPos.x, oldPos.y, 25);
@@ -88,6 +104,9 @@ internal static class FindAGameManagerPatch
     [HarmonyPostfix]
     private static void FindAGameManager_HandleList_Postfix(FindAGameManager __instance, HttpMatchmakerManager.FindGamesListFilteredResponse response)
     {
+        if (__instance == null || __instance.gameContainers == null || response == null || response.Games == null)
+            return;
+
         // Clear existing containers before populating with new data
         __instance.ResetContainers();
         GameListing[] games = response.Games.ToArray();
@@ -100,7 +119,7 @@ internal static class FindAGameManagerPatch
         // Populate visible containers with available games
         while (count < __instance.gameContainers.Length && count < games.Count())
         {
-            if (games[count].Options != null)
+            if (games[count].Options != null && __instance.gameContainers[gameNum] != null)
             {
                 __instance.gameContainers[gameNum].gameObject.SetActive(true);
                 __instance.gameContainers[gameNum].SetGameListing(games[count]);
@@ -113,7 +132,13 @@ internal static class FindAGameManagerPatch
         // Add true host name and platform info to each game container
         foreach (var container in __instance.gameContainers)
         {
+            if (container == null)
+                continue;
+
             Transform child = container.transform.Find("Container");
+            if (child == null)
+                continue;
+
             Transform tmproObject = child.Find("TrueHostName_TMP");
 
             TMP_Text? tmpro = null;
@@ -121,6 +146,13 @@ internal static class FindAGameManagerPatch
             if (tmproObject != null)
             {
                 tmpro = tmproObject.GetComponent<TextMeshPro>();
+            }
+
+            if (!container.gameObject.activeSelf || container.gameListing == null)
+            {
+                if (tmpro != null)
+                    tmpro.text = string.Empty;
+                continue;
             }
 
             if (tmpro == null)
@@ -172,7 +204,7 @@ internal static class FindAGameManagerPatch
             texture.Apply();
             texture.hideFlags |= HideFlags.HideAndDontSave;
 
-            _cachedBlackSquareSprite = Sprite.Create(texture, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 1f);
+            _cachedBlackSquareSprite = Sprite.Create(texture, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 100f);
             _cachedBlackSquareSprite.hideFlags |= HideFlags.HideAndDontSave;
         }
 

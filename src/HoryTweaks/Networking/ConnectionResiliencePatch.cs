@@ -21,7 +21,6 @@ internal static class ConnectionResiliencePatch
     private readonly record struct UdpBaseline(
         nint ConnectionPtr,
         int DisconnectTimeoutMs,
-        int ResendTimeoutMs,
         int ResendLimit,
         float ResendPingMultiplier
     );
@@ -56,7 +55,10 @@ internal static class ConnectionResiliencePatch
 
         if (BAUConfigs.NetworkOptimization.Value)
         {
-            ApplyUdpSettings(udp);
+            if (udp.State == Hazel.ConnectionState.Connected)
+            {
+                ApplyUdpSettings(udp);
+            }
         }
         else
         {
@@ -85,20 +87,6 @@ internal static class ConnectionResiliencePatch
         }
     }
 
-    [HarmonyPatch(typeof(UnityUdpClientConnection), nameof(UnityUdpClientConnection.ConnectAsync))]
-    [HarmonyPrefix]
-    private static void UnityUdpClientConnection_ConnectAsync_Prefix(UnityUdpClientConnection __instance)
-    {
-        if (__instance == null)
-            return;
-
-        CaptureBaselineIfNew(__instance);
-        if (BAUConfigs.NetworkOptimization.Value)
-        {
-            ApplyUdpSettings(__instance);
-        }
-    }
-
     [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.Start))]
     [HarmonyPostfix]
     private static void InnerNetClient_Start_Postfix(InnerNetClient __instance)
@@ -122,19 +110,6 @@ internal static class ConnectionResiliencePatch
         HealthTracker.Reset();
         NetworkManager.ResetSession();
         ApplyClientSettings();
-
-        if (__instance.connection != null)
-        {
-            var udp = __instance.connection.TryCast<UdpConnection>();
-            if (udp != null)
-            {
-                CaptureBaselineIfNew(udp);
-                if (BAUConfigs.NetworkOptimization.Value)
-                {
-                    ApplyUdpSettings(udp);
-                }
-            }
-        }
     }
 
     [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.Update))]
@@ -144,18 +119,22 @@ internal static class ConnectionResiliencePatch
         if (__instance == null)
             return;
 
-        if (__instance.connection != null)
+        if (__instance.AmConnected && __instance.connection != null)
         {
             nint connPtr = __instance.connection.Pointer;
-            if (connPtr != _lastObservedConnectionPtr)
+            if (connPtr != _lastObservedConnectionPtr || (!_tuningAppliedToCurrentConnection && BAUConfigs.NetworkOptimization.Value))
             {
-                _lastObservedConnectionPtr = connPtr;
-                _tuningAppliedToCurrentConnection = false;
                 var udp = __instance.connection.TryCast<UdpConnection>();
-                if (udp != null)
+                if (udp != null && udp.State == Hazel.ConnectionState.Connected)
                 {
-                    CaptureBaselineIfNew(udp);
-                    if (BAUConfigs.NetworkOptimization.Value)
+                    if (connPtr != _lastObservedConnectionPtr)
+                    {
+                        _lastObservedConnectionPtr = connPtr;
+                        _tuningAppliedToCurrentConnection = false;
+                        CaptureBaselineIfNew(udp);
+                    }
+
+                    if (!_tuningAppliedToCurrentConnection && BAUConfigs.NetworkOptimization.Value)
                     {
                         ApplyUdpSettings(udp);
                     }
@@ -223,7 +202,6 @@ internal static class ConnectionResiliencePatch
         _currentUdpBaseline = new UdpBaseline(
             ConnectionPtr: ptr,
             DisconnectTimeoutMs: udp.DisconnectTimeoutMs,
-            ResendTimeoutMs: udp.ResendTimeoutMs,
             ResendLimit: udp.ResendLimit,
             ResendPingMultiplier: udp.ResendPingMultiplier);
     }
@@ -259,9 +237,7 @@ internal static class ConnectionResiliencePatch
             baseline.ResendPingMultiplier,
             _originalSecondsSuspended!.Value);
 
-        udp.KeepAliveInterval = tuned.KeepAliveIntervalMs;
         udp.DisconnectTimeoutMs = tuned.DisconnectTimeoutMs;
-        udp.ResendTimeoutMs = tuned.ResendTimeoutMs;
         udp.ResendLimit = tuned.ResendLimit;
         udp.ResendPingMultiplier = tuned.ResendPingMultiplier;
 
@@ -270,7 +246,7 @@ internal static class ConnectionResiliencePatch
         _tuningAppliedToCurrentConnection = true;
 
         BAUPlugin.Logger.Log(
-            $"Applied Hazel UDP tuning (keepAlive={tuned.KeepAliveIntervalMs}ms, timeout={tuned.DisconnectTimeoutMs}ms, resendLimit={tuned.ResendLimit}, resendMult={tuned.ResendPingMultiplier:F1}, suspend={tuned.SecondsSuspendedBeforeDisconnect}s)",
+            $"Applied Hazel UDP tuning (timeout={tuned.DisconnectTimeoutMs}ms, resendLimit={tuned.ResendLimit}, resendMult={tuned.ResendPingMultiplier:F1}, suspend={tuned.SecondsSuspendedBeforeDisconnect}s)",
             "NetworkTuning");
     }
 
@@ -281,7 +257,6 @@ internal static class ConnectionResiliencePatch
 
         var baseline = _currentUdpBaseline.Value;
         udp.DisconnectTimeoutMs = baseline.DisconnectTimeoutMs;
-        udp.ResendTimeoutMs = baseline.ResendTimeoutMs;
         udp.ResendLimit = baseline.ResendLimit;
         udp.ResendPingMultiplier = baseline.ResendPingMultiplier;
         _tuningAppliedToCurrentConnection = false;

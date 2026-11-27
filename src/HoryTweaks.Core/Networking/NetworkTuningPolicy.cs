@@ -4,9 +4,7 @@ namespace HoryTweaks.Core.Networking;
 /// Computed client-side Hazel UDP and suspension tolerances applied to an active connection.
 /// </summary>
 internal readonly record struct TunedConnectionSettings(
-    int KeepAliveIntervalMs,
     int DisconnectTimeoutMs,
-    int ResendTimeoutMs,
     int ResendLimit,
     float ResendPingMultiplier,
     int SecondsSuspendedBeforeDisconnect
@@ -18,14 +16,8 @@ internal readonly record struct TunedConnectionSettings(
 /// </summary>
 internal static class NetworkTuningPolicy
 {
-    /// <summary>Keepalive cadence in milliseconds (keeps NAT pinholes open without spamming servers).</summary>
-    internal const int TargetKeepAliveIntervalMs = 1500;
-
     /// <summary>Client-side disconnect timeout in milliseconds (vanilla defaults around 5000 ms).</summary>
     internal const int TargetDisconnectTimeoutMs = 12000;
-
-    /// <summary>Adaptive resend timeout (0 lets Hazel derive delay from RTT * ResendPingMultiplier).</summary>
-    internal const int TargetResendTimeoutMs = 0;
 
     /// <summary>
     /// Minimum finite resend attempts for a reliable packet before disconnecting (vanilla defaults around 6).
@@ -51,10 +43,11 @@ internal static class NetworkTuningPolicy
         float currentResendPingMultiplier,
         int currentSecondsSuspended)
     {
+        // Hazel's KeepAliveInterval and ResendTimeoutMs are intentionally preserved:
+        // mutating KeepAliveInterval restarts Hazel's keepAliveTimer mid-connection, and
+        // overwriting ResendTimeoutMs can corrupt adaptive resend behavior.
         return new TunedConnectionSettings(
-            KeepAliveIntervalMs: TargetKeepAliveIntervalMs,
             DisconnectTimeoutMs: Math.Max(currentDisconnectTimeoutMs, TargetDisconnectTimeoutMs),
-            ResendTimeoutMs: TargetResendTimeoutMs,
             ResendLimit: currentResendLimit == 0 ? 0 : Math.Max(currentResendLimit, TargetResendLimit),
             ResendPingMultiplier: Math.Max(currentResendPingMultiplier, TargetResendPingMultiplier),
             SecondsSuspendedBeforeDisconnect: Math.Max(currentSecondsSuspended, TargetSecondsSuspendedBeforeDisconnect));

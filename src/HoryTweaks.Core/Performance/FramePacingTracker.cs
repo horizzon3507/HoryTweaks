@@ -21,12 +21,14 @@ internal sealed class FramePacingTracker
     internal const double LowFpsSustainSeconds = 3.0;
     internal const double WarningCooldownSeconds = 12.0;
     internal const double HitchBannerDurationSeconds = 5.0;
+    internal const double SceneTransitionGraceSeconds = 2.5;
 
     private float _emaDeltaSeconds;
     private bool _initialized;
     private double _lowFpsSince = double.NegativeInfinity;
     private double _lastWarningTime = double.NegativeInfinity;
     private double _hitchBannerUntil = double.NegativeInfinity;
+    private double _ignoreHitchesUntil = double.NegativeInfinity;
 
     internal float SmoothedFps => _emaDeltaSeconds > 0.0001f ? 1f / _emaDeltaSeconds : 0f;
     internal float LastFrameMs { get; private set; }
@@ -34,6 +36,16 @@ internal sealed class FramePacingTracker
     internal int HitchCount { get; private set; }
     internal int LastHitchMs { get; private set; }
     internal FrameWarningKind ActiveWarning { get; private set; } = FrameWarningKind.None;
+
+    /// <summary>
+    /// Suppresses hitch and low-FPS detection for <see cref="SceneTransitionGraceSeconds"/>
+    /// after a scene transition or HUD setup, since asset loading stalls are expected.
+    /// </summary>
+    internal void NotifySceneTransition(double nowSeconds)
+    {
+        _ignoreHitchesUntil = Math.Max(_ignoreHitchesUntil, nowSeconds + SceneTransitionGraceSeconds);
+        _lowFpsSince = double.NegativeInfinity;
+    }
 
     /// <summary>
     /// Records one rendered frame's unscaled delta time (in seconds).
@@ -51,23 +63,31 @@ internal sealed class FramePacingTracker
         float frameMs = unscaledDeltaSeconds * 1000f;
         LastFrameMs = frameMs;
 
-        if (frameMs > PeakFrameMs && frameMs < 10_000f)
+        bool inGracePeriod = nowSeconds < _ignoreHitchesUntil;
+
+        if (!inGracePeriod && frameMs > PeakFrameMs && frameMs < 10_000f)
         {
             PeakFrameMs = frameMs;
         }
 
-        float clampedDelta = Math.Min(unscaledDeltaSeconds, 0.5f);
-        if (!_initialized)
+        // During the grace window, only normal fast frames feed the EMA so it warms up
+        // without load-stall deltas dragging SmoothedFps below the low-FPS threshold.
+        bool skipSlowDeltaForEma = inGracePeriod && frameMs >= HitchThresholdMs;
+        if (!skipSlowDeltaForEma)
         {
-            _emaDeltaSeconds = clampedDelta;
-            _initialized = true;
-        }
-        else
-        {
-            _emaDeltaSeconds = (_emaDeltaSeconds * 0.9f) + (clampedDelta * 0.1f);
+            float clampedDelta = Math.Min(unscaledDeltaSeconds, 0.5f);
+            if (!_initialized)
+            {
+                _emaDeltaSeconds = clampedDelta;
+                _initialized = true;
+            }
+            else
+            {
+                _emaDeltaSeconds = (_emaDeltaSeconds * 0.9f) + (clampedDelta * 0.1f);
+            }
         }
 
-        bool isHitch = frameMs >= HitchThresholdMs && frameMs < 5000f;
+        bool isHitch = !inGracePeriod && frameMs >= HitchThresholdMs && frameMs < 5000f;
         if (isHitch)
         {
             HitchCount++;
@@ -75,7 +95,7 @@ internal sealed class FramePacingTracker
             _hitchBannerUntil = nowSeconds + HitchBannerDurationSeconds;
         }
 
-        bool isLowFps = _initialized && SmoothedFps < LowFpsThreshold;
+        bool isLowFps = !inGracePeriod && _initialized && SmoothedFps < LowFpsThreshold;
         if (isLowFps)
         {
             if (double.IsNegativeInfinity(_lowFpsSince))
@@ -126,6 +146,7 @@ internal sealed class FramePacingTracker
         _lowFpsSince = double.NegativeInfinity;
         _lastWarningTime = double.NegativeInfinity;
         _hitchBannerUntil = double.NegativeInfinity;
+        _ignoreHitchesUntil = double.NegativeInfinity;
         LastFrameMs = 0f;
         PeakFrameMs = 0f;
         HitchCount = 0;

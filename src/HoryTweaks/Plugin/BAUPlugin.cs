@@ -229,6 +229,8 @@ internal partial class BAUPlugin : BasePlugin
     }
     private static void OnSceneLoaded(Scene scene, LoadSceneMode _)
     {
+        BetterPingTracker.FrameTracker.NotifySceneTransition(Time.unscaledTimeAsDouble);
+
         if (AmongUsClient.Instance != null)
         {
             if (scene.name == AmongUsClient.Instance.MainMenuScene)

@@ -67,6 +67,7 @@ internal sealed class BetterPingTracker : MonoBehaviour
         }
 
         Instance = this;
+        FrameTracker.NotifySceneTransition(Time.unscaledTimeAsDouble);
         _text = pingText;
         _aspectPosition = pingAspectPosition;
         _aspectPosition.Alignment = AspectPosition.EdgeAlignments.RightTop;

@@ -163,8 +163,10 @@ internal sealed class VideoCaptureScheduler
                     _fastSinceSec = nowSec;
                 }
             }
-            else if (workMs > FastRecoveryWorkMs)
+            else
             {
+                // Any non-healthy frame — including 20-39 FPS game play even when capture work is
+                // cheap — resets the recovery window so FPS never steps up into a degraded game.
                 _fastSinceSec = double.NegativeInfinity;
             }
         }

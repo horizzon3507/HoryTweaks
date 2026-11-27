@@ -180,4 +180,75 @@ public class VideoCaptureSchedulerTests
         Assert.Equal(VideoCaptureStopReason.None, scheduler.RecordMainThreadWork(2.0, -1.0, 1.2));
         Assert.Equal(VideoCaptureStopReason.None, scheduler.RecordMainThreadWork(2.0, 0.0, 1.3));
     }
+
+    [Fact]
+    public void Combined_perframe_work_above_budget_never_recovers_and_stops()
+    {
+        var scheduler = new VideoCaptureScheduler();
+
+        // Simulates schedule+poll work of ~15ms per captured frame (> 12ms budget) at healthy 60fps.
+        // Fast poll-only frames must not decay the streak enough to avoid stepping down.
+        double t = 0;
+        VideoCaptureStopReason reason = VideoCaptureStopReason.None;
+        int iterations = 0;
+        for (; iterations < 40 && reason == VideoCaptureStopReason.None; iterations++)
+        {
+            t += 1.0 / 15.0;
+            reason = scheduler.RecordMainThreadWork(15.0, 0.016, t);
+        }
+
+        Assert.Equal(VideoCaptureStopReason.MainThreadBudgetExceeded, reason);
+        Assert.Equal(5, scheduler.CurrentFps);
+        Assert.True(iterations <= 10);
+    }
+
+    [Fact]
+    public void Fps_dipping_into_20_to_39_range_resets_recovery_timer()
+    {
+        var scheduler = new VideoCaptureScheduler();
+
+        // Step down once so recovery is possible.
+        for (int i = 0; i < 3; i++)
+        {
+            scheduler.RecordMainThreadWork(20.0, 0.016, i * 0.1);
+        }
+
+        Assert.Equal(10, scheduler.CurrentFps);
+
+        // 8 seconds of healthy 60fps frames with cheap work: recovery window building up.
+        double t = 1.0;
+        for (int i = 0; i < 480; i++)
+        {
+            t += 0.016;
+            scheduler.RecordMainThreadWork(2.0, 0.016, t);
+        }
+
+        Assert.Equal(10, scheduler.CurrentFps);
+
+        // Game dips into 25 FPS for a second even though capture work stays cheap.
+        for (int i = 0; i < 25; i++)
+        {
+            t += 0.04;
+            scheduler.RecordMainThreadWork(2.0, 0.04, t);
+        }
+
+        // Back to 60 FPS for 5 more seconds: recovery must NOT fire yet (window reset by the dip),
+        // because less than 10 seconds of uninterrupted healthy frames have passed.
+        for (int i = 0; i < 312; i++)
+        {
+            t += 0.016;
+            scheduler.RecordMainThreadWork(2.0, 0.016, t);
+        }
+
+        Assert.Equal(10, scheduler.CurrentFps);
+
+        // After 10+ total uninterrupted healthy seconds recovery finally steps back up.
+        for (int i = 0; i < 600 && scheduler.CurrentFps == 10; i++)
+        {
+            t += 0.016;
+            scheduler.RecordMainThreadWork(2.0, 0.016, t);
+        }
+
+        Assert.Equal(15, scheduler.CurrentFps);
+    }
 }

@@ -35,7 +35,25 @@ internal static class ShellOpener
                     Arguments = attempt.Arguments,
                     UseShellExecute = attempt.UseShellExecute
                 };
-                Process.Start(psi);
+                using var proc = Process.Start(psi);
+                if (proc == null)
+                {
+                    lastError = new InvalidOperationException($"Process.Start returned null for '{attempt.FileName}'.");
+                    continue;
+                }
+
+                if (!attempt.UseShellExecute)
+                {
+                    // Synchronous launchers (winebrowser/cmd/xdg-open) exit fast: a nonzero exit code
+                    // within 150ms means the launcher itself failed, so fall through to the next candidate.
+                    if (proc.WaitForExit(150) && proc.ExitCode != 0)
+                    {
+                        lastError = new InvalidOperationException($"'{attempt.FileName}' exited immediately with code {proc.ExitCode}.");
+                        BAUPlugin.Logger.Warning($"Shell open attempt failed: {attempt.FileName} exited with code {proc.ExitCode}.", LogTag);
+                        continue;
+                    }
+                }
+
                 return true;
             }
             catch (Exception ex)

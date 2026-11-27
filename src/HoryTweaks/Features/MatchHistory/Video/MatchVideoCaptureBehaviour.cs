@@ -24,6 +24,8 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
     {
         public bool Active;
         public int ElapsedMs;
+        public long Sequence;
+        public double ScheduleWorkMs;
         public NativeAsyncGpuReadbackRequest Request;
     }
 
@@ -40,6 +42,8 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
     private int _scaledWidth;
     private int _scaledHeight;
     private float _captureStartRealtime;
+    private long _nextCaptureSequence;
+    private long _lastSubmittedSequence;
     private bool _wasCapturing;
     private bool _loggedAvailability;
     private int _consecutiveReadbackErrors;
@@ -93,6 +97,8 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
                 _wasCapturing = false;
                 _loggedAvailability = false;
                 _consecutiveReadbackErrors = 0;
+                _nextCaptureSequence = 0;
+                _lastSubmittedSequence = 0;
                 _scheduler.Reset();
                 ReleaseResources();
             }
@@ -109,8 +115,14 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
         double nowSec = Time.unscaledTimeAsDouble;
         float frameDelta = Time.unscaledDeltaTime;
 
-        for (int i = 0; i < MaxInFlight; i++)
+        // GPU readbacks complete in FIFO order; polling oldest-first and bailing out when the oldest
+        // is unfinished preserves exact chronological frame order in the encoded video.
+        int first = (_slots[0].Active && (!_slots[1].Active || _slots[0].Sequence <= _slots[1].Sequence)) ? 0 : 1;
+        int second = 1 - first;
+
+        for (int order = 0; order < 2; order++)
         {
+            int i = order == 0 ? first : second;
             if (!_slots[i].Active)
                 continue;
 
@@ -120,15 +132,21 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
             _slots[i].Request = request;
 
             if (!NativeAsyncGpuReadback.IsDone(ref request))
-                continue;
+            {
+                // The oldest in-flight readback is not done yet: submitting the newer one now would
+                // reorder frames, so wait one frame instead.
+                return;
+            }
 
             bool errored = NativeAsyncGpuReadback.HasError(ref request);
             if (errored)
             {
+                double erroredWorkMs = _slots[i].ScheduleWorkMs;
                 _slots[i].Active = false;
+                _slots[i].ScheduleWorkMs = 0;
                 _consecutiveReadbackErrors++;
                 _workWatch.Stop();
-                FeedScheduler(_workWatch.Elapsed.TotalMilliseconds, frameDelta, nowSec);
+                FeedScheduler(erroredWorkMs + _workWatch.Elapsed.TotalMilliseconds, frameDelta, nowSec);
 
                 if (_consecutiveReadbackErrors >= 3)
                 {
@@ -147,8 +165,12 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
             {
                 if (NativeAsyncGpuReadback.TryCopyRgbaData(ref request, targetW, targetH, buffer))
                 {
-                    MatchVideoRecorder.SubmitCapturedFrame(buffer, _slots[i].ElapsedMs);
-                    submitted = true;
+                    if (_slots[i].Sequence > _lastSubmittedSequence)
+                    {
+                        MatchVideoRecorder.SubmitCapturedFrame(buffer, _slots[i].ElapsedMs);
+                        _lastSubmittedSequence = _slots[i].Sequence;
+                        submitted = true;
+                    }
                 }
             }
 
@@ -157,10 +179,12 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
                 MatchVideoRecorder.ReturnUnusedBuffer(buffer);
             }
 
+            double scheduleWorkMs = _slots[i].ScheduleWorkMs;
             _slots[i].Active = false;
+            _slots[i].ScheduleWorkMs = 0;
             _consecutiveReadbackErrors = 0;
             _workWatch.Stop();
-            FeedScheduler(_workWatch.Elapsed.TotalMilliseconds, frameDelta, nowSec);
+            FeedScheduler(scheduleWorkMs + _workWatch.Elapsed.TotalMilliseconds, frameDelta, nowSec);
         }
     }
 
@@ -244,13 +268,15 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
                 BAUPlugin.Logger.Error(ex, LogTag);
                 MatchVideoRecorder.Discard();
                 ReleaseResources();
+                _workWatch.Stop();
+                if (MatchVideoRecorder.IsCapturing)
+                {
+                    FeedScheduler(_workWatch.Elapsed.TotalMilliseconds, Time.unscaledDeltaTime, Time.unscaledTimeAsDouble);
+                }
             }
 
-            _workWatch.Stop();
-            if (MatchVideoRecorder.IsCapturing)
-            {
-                FeedScheduler(_workWatch.Elapsed.TotalMilliseconds, Time.unscaledDeltaTime, Time.unscaledTimeAsDouble);
-            }
+            // Successful captures feed the scheduler once per frame when the readback completes,
+            // combining schedule + poll/copy work into the true per-frame main-thread cost.
         }
     }
 
@@ -288,6 +314,8 @@ internal sealed class MatchVideoCaptureBehaviour : MonoBehaviour
 
         _slots[slot].Active = true;
         _slots[slot].ElapsedMs = elapsedMs;
+        _slots[slot].Sequence = ++_nextCaptureSequence;
+        _slots[slot].ScheduleWorkMs = _workWatch.Elapsed.TotalMilliseconds;
         _slots[slot].Request = request;
         _scheduler.RecordCaptureScheduled(Time.unscaledTimeAsDouble);
     }

@@ -30,6 +30,19 @@ internal static class MatchVideoRecorder
         }
     }
 
+    /// <summary>
+    /// True once the background encoder thread has successfully initialized an encoder.
+    /// Capture must not schedule GPU work before this point.
+    /// </summary>
+    internal static bool IsEncoderReady
+    {
+        get
+        {
+            var session = Volatile.Read(ref _activeSession);
+            return session != null && session.IsEncoderReady;
+        }
+    }
+
     internal static int TargetWidth
     {
         get
@@ -66,13 +79,14 @@ internal static class MatchVideoRecorder
             string tempPath = Path.Combine(folder, finalName[..^".mp4".Length] + TempSuffix);
 
             int generation = Volatile.Read(ref _clearGeneration);
-            // Texture2D.ReadPixels always supplies bottom-up CPU rows regardless of graphicsUVStartsAtTop.
+            // AsyncGPUReadback reads raw texture memory: top-down rows on Direct3D/Vulkan (UV starts at
+            // top) and bottom-up rows on OpenGL, so only OpenGL needs the vertical flip in conversion.
             var session = new RecordingSession(
                 width,
                 height,
                 MatchVideoRules.TargetFps,
                 MatchVideoRules.TargetBitrateBps,
-                flipVertical: true,
+                flipVertical: !SystemInfo.graphicsUVStartsAtTop,
                 tempPath,
                 finalPath,
                 generation);
@@ -135,6 +149,39 @@ internal static class MatchVideoRecorder
         }
 
         session?.RequestStop(finalizeVideo: true);
+    }
+
+    /// <summary>
+    /// Stops capturing and finalizes the MP4 only when enough footage exists to be worth watching
+    /// (>= <see cref="MatchVideoRules.MinSaveableFrames"/> frames, or at least
+    /// <see cref="MatchVideoRules.MinSaveableDurationMs"/> of footage); otherwise the temp file is deleted.
+    /// </summary>
+    internal static void FinishIfViable()
+    {
+        RecordingSession? session;
+        lock (StateLock)
+        {
+            session = _activeSession;
+            _activeSession = null;
+        }
+
+        session?.RequestStopViabilityGated();
+    }
+
+    /// <summary>
+    /// Stops capture because continuing would hurt gameplay smoothness, keeping viable footage.
+    /// </summary>
+    internal static void StopForPerformance(string reason, bool keepViableVideo)
+    {
+        BAUPlugin.Logger.Warning($"Stopping POV video capture: {reason}.", LogTag);
+        if (keepViableVideo)
+        {
+            FinishIfViable();
+        }
+        else
+        {
+            Discard();
+        }
     }
 
     /// <summary>
@@ -246,10 +293,14 @@ internal static class MatchVideoRecorder
         private int _capturing = 1;
         private int _stopRequested;
         private int _finalizeVideo;
+        private int _viabilityGated;
+        private int _encoderReady;
+        private int _lastElapsedMs;
 
         internal int Width { get; }
         internal int Height { get; }
         internal bool IsCapturing => Volatile.Read(ref _capturing) != 0;
+        internal bool IsEncoderReady => Volatile.Read(ref _encoderReady) != 0;
 
         internal RecordingSession(int width, int height, int fps, int bitrateBps, bool flipVertical, string tempPath, string finalPath, int generation)
         {
@@ -343,6 +394,12 @@ internal static class MatchVideoRecorder
             }
         }
 
+        internal void RequestStopViabilityGated()
+        {
+            Interlocked.Exchange(ref _viabilityGated, 1);
+            RequestStop(finalizeVideo: true);
+        }
+
         private void RunEncoderLoop()
         {
             IMatchVideoEncoder? encoder = null;
@@ -361,6 +418,7 @@ internal static class MatchVideoRecorder
                     return;
                 }
 
+                Volatile.Write(ref _encoderReady, 1);
                 BAUPlugin.Logger.Log($"Started POV replay capture ({Width}x{Height}@{_fps}fps via {encoder.BackendName})", LogTag);
                 byte[] yuv = new byte[PixelConverter.Nv12BufferSize(Width, Height)];
                 bool useI420 = encoder.ExpectsI420;
@@ -405,6 +463,7 @@ internal static class MatchVideoRecorder
                         lastPts = pts100ns;
                         nextFallbackPts = pts100ns + frameDuration100ns;
                         framesEncoded++;
+                        Volatile.Write(ref _lastElapsedMs, frame.ElapsedMs);
                     }
 
                     if (Volatile.Read(ref _stopRequested) != 0)
@@ -413,9 +472,16 @@ internal static class MatchVideoRecorder
                     _signal.WaitOne(100);
                 }
 
+                bool viable = framesEncoded >= MatchVideoRules.MinSaveableFrames
+                    || (Volatile.Read(ref _lastElapsedMs) >= MatchVideoRules.MinSaveableDurationMs && framesEncoded > 0);
                 bool shouldFinalize = Volatile.Read(ref _finalizeVideo) != 0
                     && framesEncoded > 0
+                    && (Volatile.Read(ref _viabilityGated) == 0 || viable)
                     && Volatile.Read(ref _clearGeneration) == _generation;
+                if (Volatile.Read(ref _viabilityGated) != 0 && !viable && framesEncoded > 0)
+                {
+                    BAUPlugin.Logger.Log($"Discarding partial POV video ({framesEncoded} frames below viability threshold).", LogTag);
+                }
                 if (shouldFinalize && encoder.Finish())
                 {
                     bool published = false;

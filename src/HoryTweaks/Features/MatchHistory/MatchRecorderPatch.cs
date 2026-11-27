@@ -38,11 +38,11 @@ internal static class MatchRecorderPatch
 
     [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.DisconnectInternal))]
     [HarmonyPostfix]
-    private static void InnerNetClient_DisconnectInternal_Postfix() => Guard(MatchRecorder.Discard);
+    private static void InnerNetClient_DisconnectInternal_Postfix() => Guard(() => MatchRecorder.Discard(keepViableVideo: true));
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.ExitGame))]
     [HarmonyPostfix]
-    private static void AmongUsClient_ExitGame_Postfix() => Guard(MatchRecorder.Discard);
+    private static void AmongUsClient_ExitGame_Postfix() => Guard(() => MatchRecorder.Discard(keepViableVideo: true));
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
     [HarmonyPostfix]

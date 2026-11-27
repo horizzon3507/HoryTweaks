@@ -17,6 +17,8 @@ internal sealed unsafe class OpenH264Mp4Encoder : IMatchVideoEncoder
     private const int VideoFrameTypeIdr = 1;
     private const int VideoFrameTypeSkip = 4;
     private const int EncoderOptionIdrInterval = 1;
+    private const int EncoderOptionComplexityMode = 19;
+    private const int LowComplexity = 0;
     private const int EncoderOptionSpsPpsIdStrategy = 22;
     private const int SpsPpsConstantId = 0;
     private const int EncoderOptionTraceLevel = 25;
@@ -92,6 +94,10 @@ internal sealed unsafe class OpenH264Mp4Encoder : IMatchVideoEncoder
 
             int idrInterval = Math.Max(fps * 2, 1);
             SetOption(encoder, EncoderOptionIdrInterval, &idrInterval);
+
+            // LOW_COMPLEXITY halves CPU cost of motion estimation; 2D art compresses cleanly regardless.
+            int lowComplexity = LowComplexity;
+            SetOption(encoder, EncoderOptionComplexityMode, &lowComplexity);
 
             // Keep SPS/PPS IDs constant (0) so MP4 avc1 decoder configuration stays minimal and universally playable.
             int constantId = SpsPpsConstantId;

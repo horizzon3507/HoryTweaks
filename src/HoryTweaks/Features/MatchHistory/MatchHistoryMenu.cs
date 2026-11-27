@@ -1,6 +1,5 @@
 using AmongUs.GameOptions;
 using HarmonyLib;
-using System.Diagnostics;
 using HoryTweaks.Core.Formatting;
 using HoryTweaks.Core.MatchHistory;
 using HoryTweaks.Features.ClientOptions;
@@ -48,7 +47,7 @@ internal static class MatchHistoryMenu
     private static readonly List<GameObject> hiddenSiblings = [];
 
     // List screen
-    private static IReadOnlyList<MatchHistoryEntry> entries = [];
+    private static IReadOnlyList<MatchHistoryListItem> entries = [];
     private static int page;
     private static ToggleButtonBehaviour? deleteButton;
     private static float pendingDeleteUntil;
@@ -178,7 +177,7 @@ internal static class MatchHistoryMenu
         }
 
         root.SetActive(true);
-        entries = MatchHistoryStore.List();
+        entries = MatchHistoryStore.ListAll();
         page = 0;
         pendingDeleteUntil = 0f;
         BuildList();
@@ -292,8 +291,20 @@ internal static class MatchHistoryMenu
                 break;
 
             var entry = entries[index];
-            var button = OptionsPageWidgets.CreateButton(parent, template, EntryLabel(entry.Record), new Vector3(0f, 1.55f - 0.45f * i, Z), 1.6f, () => OpenMatch(entry.FileName));
-            OptionsPageWidgets.SetButtonColor(button, entry.Record.LocalWon ? OptionsPageWidgets.SelectedColor : OptionsPageWidgets.IdleColor);
+            if (entry.IsVideoOnly)
+            {
+                string videoLabel = $"{entry.StartedUtc.ToLocalTime():dd/MM HH:mm} · [MP4]";
+                var videoPath = entry.VideoPath!;
+                var videoRowButton = OptionsPageWidgets.CreateButton(parent, template, videoLabel, new Vector3(0f, 1.55f - 0.45f * i, Z), 1.6f, () => OpenVideoPath(videoPath));
+                OptionsPageWidgets.SetButtonColor(videoRowButton, OptionsPageWidgets.IdleColor);
+            }
+            else
+            {
+                string label = EntryLabel(entry.Record!) + (entry.HasVideo ? " · [MP4]" : string.Empty);
+                var fileName = entry.FileName;
+                var button = OptionsPageWidgets.CreateButton(parent, template, label, new Vector3(0f, 1.55f - 0.45f * i, Z), 1.6f, () => OpenMatch(fileName));
+                OptionsPageWidgets.SetButtonColor(button, entry.Record!.LocalWon ? OptionsPageWidgets.SelectedColor : OptionsPageWidgets.IdleColor);
+            }
         }
 
         if (page > 0)
@@ -333,18 +344,15 @@ internal static class MatchHistoryMenu
         try
         {
             Directory.CreateDirectory(folder);
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = folder,
-                UseShellExecute = true,
-                Verb = "open"
-            });
         }
         catch (Exception ex)
         {
             BAUPlugin.Logger.Error(ex, LogTag);
-            GUIUtility.systemCopyBuffer = folder;
-            BetterNotificationManager.Notify(TranslationStrings.MatchHistory_OpenVideoFailed.LocalizedString, 2.5f);
+        }
+
+        if (!HoryTweaks.Infrastructure.Platform.ShellOpener.TryOpen(folder, isDirectory: true))
+        {
+            BetterNotificationManager.Notify(TranslationStrings.Shell_OpenFailed.LocalizedString, 2.5f);
         }
     }
 
@@ -371,7 +379,7 @@ internal static class MatchHistoryMenu
             pendingDeleteUntil = 0f;
             MatchHistoryStore.DeleteAll();
             BetterNotificationManager.Notify(TranslationStrings.MatchHistory_Deleted.LocalizedString, 2.5f);
-            entries = MatchHistoryStore.List();
+            entries = MatchHistoryStore.ListAll();
             page = 0;
             BuildList();
             return;
@@ -585,20 +593,14 @@ internal static class MatchHistoryMenu
         if (!MatchHistoryRules.CanView(MatchHistoryGameState.Current) || string.IsNullOrEmpty(currentVideoPath) || !File.Exists(currentVideoPath))
             return;
 
-        try
+        OpenVideoPath(currentVideoPath);
+    }
+
+    private static void OpenVideoPath(string path)
+    {
+        if (!HoryTweaks.Infrastructure.Platform.ShellOpener.TryOpen(path, isDirectory: false))
         {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = currentVideoPath,
-                UseShellExecute = true,
-                Verb = "open"
-            });
-        }
-        catch (Exception ex)
-        {
-            BAUPlugin.Logger.Error(ex, LogTag);
-            GUIUtility.systemCopyBuffer = currentVideoPath;
-            BetterNotificationManager.Notify(TranslationStrings.MatchHistory_OpenVideoFailed.LocalizedString, 2.5f);
+            BetterNotificationManager.Notify(TranslationStrings.Shell_OpenFailed.LocalizedString, 2.5f);
         }
     }
 

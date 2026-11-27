@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "低幀率 ({0})",
   "Performance.Warning.FrameHitch": "畫面卡頓 ({0}ms)",
   "Performance.Warning.VSyncConflict": "視訊設定中已開啟垂直同步 — 解鎖幀率將受垂直同步限制。",
-  "Performance.Warning.FpsClamped": "為確保網路與 CPU 穩定，解鎖幀率已限制為 {0} FPS。"
+  "Performance.Warning.FpsClamped": "為確保網路與 CPU 穩定，解鎖幀率已限制為 {0} FPS。",
+  "Shell.OpenFailed": "無法開啟檔案或資料夾"
 }

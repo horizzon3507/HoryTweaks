@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "FPS baixo ({0})",
   "Performance.Warning.FrameHitch": "Travamento ({0}ms)",
   "Performance.Warning.VSyncConflict": "VSync está ativado nas opções de Vídeo — Destravar FPS fica limitado pelo VSync.",
-  "Performance.Warning.FpsClamped": "Destravar FPS limitado a {0} FPS para estabilidade de rede e CPU."
+  "Performance.Warning.FpsClamped": "Destravar FPS limitado a {0} FPS para estabilidade de rede e CPU.",
+  "Shell.OpenFailed": "Não foi possível abrir o arquivo ou a pasta"
 }

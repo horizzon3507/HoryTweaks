@@ -14,17 +14,20 @@ internal sealed class FfmpegMp4Encoder : IMatchVideoEncoder
     private readonly string _tempPath;
     private readonly Process _process;
     private readonly Stream _stdin;
+    private readonly FfmpegFramePacer _pacer;
+    private byte[]? _previousFrame;
     private bool _closed;
     private bool _disposed;
 
     public string BackendName => "FFmpeg";
     public bool ExpectsI420 => false;
 
-    private FfmpegMp4Encoder(string tempPath, Process process)
+    private FfmpegMp4Encoder(string tempPath, Process process, int fps)
     {
         _tempPath = tempPath;
         _process = process;
         _stdin = process.StandardInput.BaseStream;
+        _pacer = new FfmpegFramePacer(10_000_000L / Math.Max(fps, 1));
     }
 
     internal static FfmpegMp4Encoder? TryCreate(string ffmpegPath, string tempMp4Path, int width, int height, int fps, out string? error)
@@ -63,7 +66,7 @@ internal sealed class FfmpegMp4Encoder : IMatchVideoEncoder
                 return null;
             }
 
-            return new FfmpegMp4Encoder(tempMp4Path, process);
+            return new FfmpegMp4Encoder(tempMp4Path, process, fps);
         }
         catch (Exception ex)
         {
@@ -81,7 +84,21 @@ internal sealed class FfmpegMp4Encoder : IMatchVideoEncoder
 
         try
         {
+            // Raw pipes carry no timestamps: repeat the previous frame across capture gaps so a
+            // constant-framerate encode keeps 1x playback speed when capture FPS steps down.
+            int duplicates = _pacer.ComputeDuplicatesBeforeNextFrame(timestamp100ns);
+            if (_previousFrame == null || _previousFrame.Length < length)
+            {
+                _previousFrame = new byte[length];
+            }
+
+            for (int i = 0; i < duplicates; i++)
+            {
+                _stdin.Write(_previousFrame, 0, length);
+            }
+
             _stdin.Write(yuvBuffer, 0, length);
+            Buffer.BlockCopy(yuvBuffer, 0, _previousFrame, 0, length);
             return true;
         }
         catch

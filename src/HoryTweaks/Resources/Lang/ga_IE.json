@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "FPS íseal ({0})",
   "Performance.Warning.FrameHitch": "Moill fhráma ({0}ms)",
   "Performance.Warning.VSyncConflict": "Tá VSync cumasaithe i socruithe Físe — tá teorainn VSync ar Dhíghlasáil FPS.",
-  "Performance.Warning.FpsClamped": "Díghlasáil FPS teoranta do {0} FPS ar mhaithe le cobhsaíocht líonra agus LAP."
+  "Performance.Warning.FpsClamped": "Díghlasáil FPS teoranta do {0} FPS ar mhaithe le cobhsaíocht líonra agus LAP.",
+  "Shell.OpenFailed": "Níorbh fhéidir an comhad nó an fillteán a oscailt"
 }

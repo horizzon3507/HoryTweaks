@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "Low FPS ({0})",
   "Performance.Warning.FrameHitch": "Frame hitch ({0}ms)",
   "Performance.Warning.VSyncConflict": "VSync is enabled in Video settings — Unlock FPS is capped by VSync.",
-  "Performance.Warning.FpsClamped": "Unlock FPS capped at {0} FPS for network and CPU stability."
+  "Performance.Warning.FpsClamped": "Unlock FPS capped at {0} FPS for network and CPU stability.",
+  "Shell.OpenFailed": "Could not open the file or folder"
 }

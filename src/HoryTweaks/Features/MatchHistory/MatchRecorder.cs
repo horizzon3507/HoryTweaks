@@ -65,7 +65,7 @@ internal static class MatchRecorder
             // Ended: wait for EndGameManager to call Finish. Anything else means the match was abandoned.
             if (state != ClientGameState.Ended)
             {
-                Discard();
+                Discard(keepViableVideo: true);
             }
 
             return;
@@ -110,9 +110,10 @@ internal static class MatchRecorder
     }
 
     /// <summary>
-    /// Drops the current recording without saving.
+    /// Drops the current recording without saving. When <paramref name="keepViableVideo"/> is true
+    /// (player exited or disconnected mid-match), any viable partial POV video is still finalized.
     /// </summary>
-    internal static void Discard()
+    internal static void Discard(bool keepViableVideo = false)
     {
         armed = false;
         recording = false;
@@ -120,7 +121,14 @@ internal static class MatchRecorder
         frames.Clear();
         activeSabotages.Clear();
         tasksDonePlayers.Clear();
-        MatchVideoRecorder.Discard();
+        if (keepViableVideo)
+        {
+            MatchVideoRecorder.FinishIfViable();
+        }
+        else
+        {
+            MatchVideoRecorder.Discard();
+        }
     }
 
     /// <summary>

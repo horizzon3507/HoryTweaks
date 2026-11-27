@@ -48,6 +48,25 @@ internal static class MatchVideoRetention
     }
 
     /// <summary>
+    /// Parses the UTC recording start time embedded in a valid video file name.
+    /// </summary>
+    internal static bool TryParseStartedUtc(string videoFileName, out DateTime startedUtc)
+    {
+        startedUtc = default;
+        if (!IsVideoFile(videoFileName))
+            return false;
+
+        // Strip "match-" prefix and ".mp4" suffix to get the yyyyMMdd'T'HHmmssfff'Z' timestamp.
+        string stamp = videoFileName["match-".Length..^".mp4".Length];
+        return DateTime.TryParseExact(
+            stamp,
+            "yyyyMMdd'T'HHmmssfff'Z'",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+            out startedUtc);
+    }
+
+    /// <summary>
     /// Selects oldest video files to delete so both the count limit and total byte cap are respected.
     /// Always keeps at least the newest single video if at least one valid file is present and <paramref name="maxVideos"/> &gt; 0.
     /// </summary>

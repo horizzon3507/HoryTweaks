@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "Lage FPS ({0})",
   "Performance.Warning.FrameHitch": "Frame-hapering ({0}ms)",
   "Performance.Warning.VSyncConflict": "VSync is ingeschakeld bij Video — FPS ontgrendelen wordt begrensd door VSync.",
-  "Performance.Warning.FpsClamped": "FPS ontgrendelen begrensd op {0} FPS voor netwerk- en CPU-stabiliteit."
+  "Performance.Warning.FpsClamped": "FPS ontgrendelen begrensd op {0} FPS voor netwerk- en CPU-stabiliteit.",
+  "Shell.OpenFailed": "Kon het bestand of de map niet openen"
 }

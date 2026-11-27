@@ -8,19 +8,29 @@ namespace HoryTweaks.Tests.MatchHistory;
 public class MatchVideoTests
 {
     [Theory]
-    [InlineData(1920, 1080, 848, 480)]
-    [InlineData(1280, 720, 848, 480)]
-    [InlineData(2560, 1080, 864, 368)]
-    [InlineData(640, 480, 640, 480)]
+    [InlineData(1920, 1080, 640, 360)]
+    [InlineData(1280, 720, 640, 360)]
+    [InlineData(2560, 1080, 640, 272)]
+    [InlineData(640, 480, 480, 360)]
     [InlineData(100, 80, 160, 112)]
-    [InlineData(0, 0, 848, 480)]
-    public void ComputeScaledDimensions_preserves_aspect_and_aligns_to_16(int inW, int inH, int expW, int expH)
+    [InlineData(0, 0, 640, 360)]
+    public void ComputeScaledDimensions_preserves_aspect_within_640x360_cap(int inW, int inH, int expW, int expH)
     {
         var (w, h) = MatchVideoRules.ComputeScaledDimensions(inW, inH);
         Assert.Equal(expW, w);
         Assert.Equal(expH, h);
-        Assert.Equal(0, w % 16);
-        Assert.Equal(0, h % 16);
+        // 4:2:0 chroma subsampling requires even dimensions.
+        Assert.Equal(0, w % 2);
+        Assert.Equal(0, h % 2);
+    }
+
+    [Fact]
+    public void Capture_defaults_are_lightweight_360p_15fps()
+    {
+        Assert.Equal(15, MatchVideoRules.TargetFps);
+        Assert.Equal(5, MatchVideoRules.MinAdaptiveFps);
+        Assert.Equal(640, MatchVideoRules.MaxWidth);
+        Assert.Equal(360, MatchVideoRules.MaxHeight);
     }
 
     [Fact]
@@ -55,6 +65,27 @@ public class MatchVideoTests
 
         var huge = new[] { (videoFile, 500L * 1024 * 1024) };
         Assert.Empty(MatchVideoRetention.SelectForDeletion(huge, maxVideos: 5, maxTotalBytes: 100L * 1024 * 1024));
+    }
+
+    [Fact]
+    public void TryParseStartedUtc_roundtrips_with_FileNameFor()
+    {
+        var started = new DateTime(2026, 11, 24, 22, 30, 15, 123, DateTimeKind.Utc);
+        string videoFile = MatchVideoRetention.FileNameFor(started);
+
+        Assert.True(MatchVideoRetention.TryParseStartedUtc(videoFile, out var parsed));
+        Assert.Equal(started, parsed);
+        Assert.Equal(DateTimeKind.Utc, parsed.Kind);
+    }
+
+    [Fact]
+    public void TryParseStartedUtc_rejects_invalid_names()
+    {
+        Assert.False(MatchVideoRetention.TryParseStartedUtc("not-a-video.mp4", out _));
+        Assert.False(MatchVideoRetention.TryParseStartedUtc("match-20261124T223015Z.mp4", out _)); // missing milliseconds
+        Assert.False(MatchVideoRetention.TryParseStartedUtc("match-20261124T223015123Z.mp4.tmp", out _));
+        Assert.False(MatchVideoRetention.TryParseStartedUtc("match-99999999T999999999Z.mp4", out _));
+        Assert.False(MatchVideoRetention.TryParseStartedUtc(string.Empty, out _));
     }
 
     [Fact]

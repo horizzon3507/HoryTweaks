@@ -1,3 +1,6 @@
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
 namespace HoryTweaks.Core.MatchHistory;
 
 /// <summary>
@@ -38,6 +41,10 @@ internal static class PixelConverter
         int stride = width * 4;
         int uvPlaneOffset = width * height;
 
+        // Length was validated up front, so raw refs let the JIT skip all per-pixel bounds checks.
+        ref byte src = ref MemoryMarshal.GetReference(rgba);
+        ref byte dst = ref MemoryMarshal.GetReference(nv12);
+
         for (int y = 0; y < height; y += 2)
         {
             int srcY0 = flipVertical ? (height - 1 - y) : y;
@@ -55,23 +62,23 @@ internal static class PixelConverter
                 int i10 = srcRow1 + x * 4;
                 int i11 = i10 + 4;
 
-                int r00 = rgba[i00], g00 = rgba[i00 + 1], b00 = rgba[i00 + 2];
-                int r01 = rgba[i01], g01 = rgba[i01 + 1], b01 = rgba[i01 + 2];
-                int r10 = rgba[i10], g10 = rgba[i10 + 1], b10 = rgba[i10 + 2];
-                int r11 = rgba[i11], g11 = rgba[i11 + 1], b11 = rgba[i11 + 2];
+                int r00 = Unsafe.Add(ref src, i00), g00 = Unsafe.Add(ref src, i00 + 1), b00 = Unsafe.Add(ref src, i00 + 2);
+                int r01 = Unsafe.Add(ref src, i01), g01 = Unsafe.Add(ref src, i01 + 1), b01 = Unsafe.Add(ref src, i01 + 2);
+                int r10 = Unsafe.Add(ref src, i10), g10 = Unsafe.Add(ref src, i10 + 1), b10 = Unsafe.Add(ref src, i10 + 2);
+                int r11 = Unsafe.Add(ref src, i11), g11 = Unsafe.Add(ref src, i11 + 1), b11 = Unsafe.Add(ref src, i11 + 2);
 
-                nv12[yRow0 + x] = RgbToY(r00, g00, b00);
-                nv12[yRow0 + x + 1] = RgbToY(r01, g01, b01);
-                nv12[yRow1 + x] = RgbToY(r10, g10, b10);
-                nv12[yRow1 + x + 1] = RgbToY(r11, g11, b11);
+                Unsafe.Add(ref dst, yRow0 + x) = RgbToY(r00, g00, b00);
+                Unsafe.Add(ref dst, yRow0 + x + 1) = RgbToY(r01, g01, b01);
+                Unsafe.Add(ref dst, yRow1 + x) = RgbToY(r10, g10, b10);
+                Unsafe.Add(ref dst, yRow1 + x + 1) = RgbToY(r11, g11, b11);
 
                 // 2x2 box average for chroma preserves crisp text and UI edges in 4:2:0 subsampling.
                 int rAvg = (r00 + r01 + r10 + r11 + 2) >> 2;
                 int gAvg = (g00 + g01 + g10 + g11 + 2) >> 2;
                 int bAvg = (b00 + b01 + b10 + b11 + 2) >> 2;
 
-                nv12[uvRow + x] = RgbToU(rAvg, gAvg, bAvg);
-                nv12[uvRow + x + 1] = RgbToV(rAvg, gAvg, bAvg);
+                Unsafe.Add(ref dst, uvRow + x) = RgbToU(rAvg, gAvg, bAvg);
+                Unsafe.Add(ref dst, uvRow + x + 1) = RgbToV(rAvg, gAvg, bAvg);
             }
         }
     }
@@ -103,6 +110,10 @@ internal static class PixelConverter
         int uPlaneOffset = yPlaneSize;
         int vPlaneOffset = yPlaneSize + (yPlaneSize >> 2);
 
+        // Length was validated up front, so raw refs let the JIT skip all per-pixel bounds checks.
+        ref byte src = ref MemoryMarshal.GetReference(rgba);
+        ref byte dst = ref MemoryMarshal.GetReference(i420);
+
         for (int y = 0; y < height; y += 2)
         {
             int srcY0 = flipVertical ? (height - 1 - y) : y;
@@ -120,23 +131,23 @@ internal static class PixelConverter
                 int i10 = srcRow1 + x * 4;
                 int i11 = i10 + 4;
 
-                int r00 = rgba[i00], g00 = rgba[i00 + 1], b00 = rgba[i00 + 2];
-                int r01 = rgba[i01], g01 = rgba[i01 + 1], b01 = rgba[i01 + 2];
-                int r10 = rgba[i10], g10 = rgba[i10 + 1], b10 = rgba[i10 + 2];
-                int r11 = rgba[i11], g11 = rgba[i11 + 1], b11 = rgba[i11 + 2];
+                int r00 = Unsafe.Add(ref src, i00), g00 = Unsafe.Add(ref src, i00 + 1), b00 = Unsafe.Add(ref src, i00 + 2);
+                int r01 = Unsafe.Add(ref src, i01), g01 = Unsafe.Add(ref src, i01 + 1), b01 = Unsafe.Add(ref src, i01 + 2);
+                int r10 = Unsafe.Add(ref src, i10), g10 = Unsafe.Add(ref src, i10 + 1), b10 = Unsafe.Add(ref src, i10 + 2);
+                int r11 = Unsafe.Add(ref src, i11), g11 = Unsafe.Add(ref src, i11 + 1), b11 = Unsafe.Add(ref src, i11 + 2);
 
-                i420[yRow0 + x] = RgbToY(r00, g00, b00);
-                i420[yRow0 + x + 1] = RgbToY(r01, g01, b01);
-                i420[yRow1 + x] = RgbToY(r10, g10, b10);
-                i420[yRow1 + x + 1] = RgbToY(r11, g11, b11);
+                Unsafe.Add(ref dst, yRow0 + x) = RgbToY(r00, g00, b00);
+                Unsafe.Add(ref dst, yRow0 + x + 1) = RgbToY(r01, g01, b01);
+                Unsafe.Add(ref dst, yRow1 + x) = RgbToY(r10, g10, b10);
+                Unsafe.Add(ref dst, yRow1 + x + 1) = RgbToY(r11, g11, b11);
 
                 int rAvg = (r00 + r01 + r10 + r11 + 2) >> 2;
                 int gAvg = (g00 + g01 + g10 + g11 + 2) >> 2;
                 int bAvg = (b00 + b01 + b10 + b11 + 2) >> 2;
 
                 int uvIdx = uvRowOffset + (x >> 1);
-                i420[uPlaneOffset + uvIdx] = RgbToU(rAvg, gAvg, bAvg);
-                i420[vPlaneOffset + uvIdx] = RgbToV(rAvg, gAvg, bAvg);
+                Unsafe.Add(ref dst, uPlaneOffset + uvIdx) = RgbToU(rAvg, gAvg, bAvg);
+                Unsafe.Add(ref dst, vPlaneOffset + uvIdx) = RgbToV(rAvg, gAvg, bAvg);
             }
         }
     }

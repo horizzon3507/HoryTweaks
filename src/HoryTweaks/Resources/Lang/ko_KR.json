@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "낮은 FPS ({0})",
   "Performance.Warning.FrameHitch": "프레임 끊김 ({0}ms)",
   "Performance.Warning.VSyncConflict": "비디오 설정에서 VSync가 켜져 있어 FPS 잠금 해제가 VSync로 제한됩니다.",
-  "Performance.Warning.FpsClamped": "네트워크와 CPU 안정성을 위해 FPS 상한을 {0} FPS로 제한했습니다."
+  "Performance.Warning.FpsClamped": "네트워크와 CPU 안정성을 위해 FPS 상한을 {0} FPS로 제한했습니다.",
+  "Shell.OpenFailed": "파일 또는 폴더를 열 수 없습니다"
 }

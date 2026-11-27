@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "Niedrige FPS ({0})",
   "Performance.Warning.FrameHitch": "Frame-Ruckler ({0}ms)",
   "Performance.Warning.VSyncConflict": "VSync ist in den Videoeinstellungen aktiv — FPS-Freigabe wird von VSync begrenzt.",
-  "Performance.Warning.FpsClamped": "FPS-Freigabe auf {0} FPS für Netzwerk- und CPU-Stabilität begrenzt."
+  "Performance.Warning.FpsClamped": "FPS-Freigabe auf {0} FPS für Netzwerk- und CPU-Stabilität begrenzt.",
+  "Shell.OpenFailed": "Datei oder Ordner konnte nicht geöffnet werden"
 }

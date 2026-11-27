@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "低FPS ({0})",
   "Performance.Warning.FrameHitch": "フレーム停止 ({0}ms)",
   "Performance.Warning.VSyncConflict": "ビデオ設定でVSyncが有効です — FPS上限解除はVSyncに制限されます。",
-  "Performance.Warning.FpsClamped": "通信とCPUの安定性のためFPS上限を {0} FPS に制限しました。"
+  "Performance.Warning.FpsClamped": "通信とCPUの安定性のためFPS上限を {0} FPS に制限しました。",
+  "Shell.OpenFailed": "ファイルまたはフォルダーを開けませんでした"
 }

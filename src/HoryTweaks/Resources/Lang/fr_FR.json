@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "FPS bas ({0})",
   "Performance.Warning.FrameHitch": "Micro-gel ({0}ms)",
   "Performance.Warning.VSyncConflict": "VSync est activé dans Vidéo — Débloquer les FPS est limité par VSync.",
-  "Performance.Warning.FpsClamped": "FPS débloqués limités à {0} FPS pour la stabilité réseau et CPU."
+  "Performance.Warning.FpsClamped": "FPS débloqués limités à {0} FPS pour la stabilité réseau et CPU.",
+  "Shell.OpenFailed": "Impossible d'ouvrir le fichier ou le dossier"
 }

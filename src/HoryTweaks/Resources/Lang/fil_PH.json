@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "Mababang FPS ({0})",
   "Performance.Warning.FrameHitch": "Pag-lag ng frame ({0}ms)",
   "Performance.Warning.VSyncConflict": "Naka-on ang VSync sa Video settings — nililimitahan ng VSync ang Unlock FPS.",
-  "Performance.Warning.FpsClamped": "Nilimitahan ang Unlock FPS sa {0} FPS para sa katatagan ng network at CPU."
+  "Performance.Warning.FpsClamped": "Nilimitahan ang Unlock FPS sa {0} FPS para sa katatagan ng network at CPU.",
+  "Shell.OpenFailed": "Hindi mabuksan ang file o folder"
 }

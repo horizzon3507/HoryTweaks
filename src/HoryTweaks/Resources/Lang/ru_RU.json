@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "Низкий FPS ({0})",
   "Performance.Warning.FrameHitch": "Фриз кадра ({0}ms)",
   "Performance.Warning.VSyncConflict": "В настройках видео включён VSync — разблокировка FPS ограничена VSync.",
-  "Performance.Warning.FpsClamped": "Разблокировка FPS ограничена {0} FPS для стабильности сети и CPU."
+  "Performance.Warning.FpsClamped": "Разблокировка FPS ограничена {0} FPS для стабильности сети и CPU.",
+  "Shell.OpenFailed": "Не удалось открыть файл или папку"
 }

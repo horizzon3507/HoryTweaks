@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "FPS baixo ({0})",
   "Performance.Warning.FrameHitch": "Engasgo de fotograma ({0}ms)",
   "Performance.Warning.VSyncConflict": "O VSync está ativo nas definições de Vídeo — Destravar FPS fica limitado pelo VSync.",
-  "Performance.Warning.FpsClamped": "Destravar FPS limitado a {0} FPS para estabilidade de rede e CPU."
+  "Performance.Warning.FpsClamped": "Destravar FPS limitado a {0} FPS para estabilidade de rede e CPU.",
+  "Shell.OpenFailed": "Não foi possível abrir o ficheiro ou a pasta"
 }

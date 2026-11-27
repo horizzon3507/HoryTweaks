@@ -339,5 +339,6 @@
   "Performance.Warning.LowFps": "FPS bassi ({0})",
   "Performance.Warning.FrameHitch": "Blocco fotogramma ({0}ms)",
   "Performance.Warning.VSyncConflict": "VSync è attivo nelle impostazioni Video — Sblocca FPS è limitato da VSync.",
-  "Performance.Warning.FpsClamped": "Sblocca FPS limitato a {0} FPS per stabilità di rete e CPU."
+  "Performance.Warning.FpsClamped": "Sblocca FPS limitato a {0} FPS per stabilità di rete e CPU.",
+  "Shell.OpenFailed": "Impossibile aprire il file o la cartella"
 }
